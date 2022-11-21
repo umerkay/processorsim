@@ -1,3 +1,7 @@
 #regs > .register {
     padding: 1px;
 }
+
+#mem > .memory {
+    padding: 1px;
+}
