@@ -51,12 +51,7 @@ let instrSet = {
                     MOD = "00";
                     code = hexToBinary(op2.code);
                     imORadd = code.substring(8) + code.substring(0,8);
-                } else {
-                    //code for mov [1234], 1234 goes here
-                    // I don't know how to convert this type I can't find any info 😭😭😭
-
                 }
-
             }
             W = op1.length === 16 ? "1": "0";
 
