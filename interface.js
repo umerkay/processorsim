@@ -1,9 +1,9 @@
 function getRegValue(reg) {
-    return document.getElementById("r" + regs[reg]).innerHTML;
+    return document.getElementById("r" + regs[reg].code).innerHTML;
 }
 
 function setRegValue(reg,value) {
-    document.getElementById("r"+regs[reg]).innerHTML = value;
+    document.getElementById("r"+regs[reg].code).innerHTML = value;
 }
 
 function getMemValue(address) {

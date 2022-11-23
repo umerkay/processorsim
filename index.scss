@@ -1,5 +1,122 @@
-#regs {
-    .register {
-        padding: 16px;
+* {
+    box-sizing: border-box;
+    font-family: 'Raleway';
+}
+
+body {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0px;
+    margin: 0px;
+
+}
+
+#main {
+    width: 100%;
+    max-width: 1000px;
+    .card {
+        background-color: white;
+        box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.099);
+        transition-duration: 200ms;
+        &:hover {
+            box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.199);
+            transition-duration: 200ms;
+
+        }
+        border-radius: 1rem;
+    }
+
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    height: 100vh;
+    padding: 5rem;
+    gap: 2rem;
+
+    #rightUI {
+        display: grid;
+        grid-template-rows: 4fr 2fr;
+        gap: 1rem;
+    }
+
+    #leftUI {
+        display: grid;
+        grid-template-rows: 2fr 2fr;
+        gap: 1rem;
+    }
+
+    #asminp {
+    }
+
+    #regs {
+        padding: 2rem;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: 1fr 1fr 1fr 1fr; 
+        column-gap: 10px;
+        row-gap: 15px;
+        justify-content: center;
+        align-items: center;
+      
+        .register {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+            align-items: center;
+            .title {
+                font-weight: bold;
+            }
+            .value {
+                background-color: rgb(228, 228, 228);
+                border-radius: 100rem;
+                padding: 0.2rem 1rem;
+                letter-spacing: 6px;
+            }
+        }
+    }
+
+    #mem {
+        padding: 2rem;
+
+        .heading {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        #memlocs {
+            display: grid;
+            font-size: 0.8rem;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr; 
+            column-gap: 10px;
+            row-gap: 15px;
+            justify-content: center;
+            align-items: center;
+            
+            justify-content: start;
+            align-items: center;
+
+            max-height: 100%;
+
+            .memloc {
+                display: flex;
+                gap: 0.5rem;
+                justify-content: center;
+                align-items: center;
+
+                .addr {
+                    font-weight: bold;
+                }
+
+                .value {
+                    background-color: rgb(228, 228, 228);
+                    border-radius: 100rem;
+                    padding: 0.2rem 1rem;
+                    letter-spacing: 6px;
+                }
+            }
+        }
     }
 }
