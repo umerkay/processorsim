@@ -3,7 +3,20 @@ let memLocs = 16;
 
 let instrSet = {
     "MOV": {
-        opcode: "100101"
+        opcode: "100101",
+        finalParse: function(op1, op2) {
+            let D = "0"; //decide D
+            let W = "1"; //decide W
+            let MOD = "11"; //decide MOD
+            let Reg = "010"; //calc reg
+            let RsM = "111"; //calc RsM
+
+            // console.log(op, operands);
+
+            //if(instrSet[op] == undefined) console.error("Operation undefined at line " + i);
+            //else
+            return instrSet[op].opcode + D + W + MOD + Reg + RsM;
+        }
     },
     "ADD": {
         opcode: "101101"
