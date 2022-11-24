@@ -29,18 +29,13 @@ function instructionToMachine(instr, i) {
     let op = instr.split(" ")[0].toUpperCase();
     let operands = instr.split(" ").slice(1).join("").toUpperCase().split(",");
 
-    operands.map(parseOperand);
-    
-    let D = "0"; //decide D
-    let W = "1"; //decide W
-    let MOD = "11"; //decide MOD
-    let Reg = "010"; //calc reg
-    let RsM = "111"; //calc RsM
+    //operands = operands.map(parseOperand);
 
-    console.log(op, operands);
+    let op1 = parseOperand(operands[0]);
+    let op2 = parseOperand(operands[1]);
     
-    if(instrSet[op] == undefined) console.error("Operation undefined at line " + i);
-    else return instrSet[op].opcode + D + W + MOD + Reg + RsM;
+    return instrSet[op].finalParse(op1, op2);
+    //return instrSet[op].finalParse(...operands);
 }
 
 parseAssembly(code);
