@@ -6,7 +6,7 @@ let instrSet = {
         opcode: "100010",
         finalParse: function(op1, op2) {
             let opcode = this.opcode;
-            let D, Reg, RsM = "", MOD = "", W;
+            let D = "", Reg = "", RsM = "", MOD = "", W = "";
             let imORadd = "";
             if (op1.isMemory === false) {
                 D = "1";
@@ -55,8 +55,7 @@ let instrSet = {
             }
             W = op1.length === 16 ? "1": "0";
 
-
-            return opcode + D + W + MOD + Reg + RsM + imORadd;
+            return {opcode, D, W, MOD, Reg, RsM, imORadd, machCode: opcode + D + W + MOD + Reg + RsM + imORadd}
         }
     },
     "ADD": {
