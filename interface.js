@@ -3,13 +3,16 @@ function getRegValue(reg) {
 }
 
 function setRegValue(reg,value) {
-    document.getElementById("r"+reg).innerHTML = value;
+    console.log("r" + reg, value);
+    document.getElementById("r"+reg).innerHTML = value.padStart(4, '0').toUpperCase();
 }
 
 function getMemValue(address) {
-    return document.getElementById("m" + address).innerHTML;
+    console.log(address);
+    return document.getElementById("m" + address.padStart(5, '0').toUpperCase()).innerHTML;
 }
 
 function setMemValue(address, value) {
-    document.getElementById("m"+address).innerHTML = value;
+    console.log(address);
+    document.getElementById("m"+address.padStart(5, '0').toUpperCase()).innerHTML = value.padStart(4, '0').toUpperCase();
 }

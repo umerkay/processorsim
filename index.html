@@ -13,7 +13,25 @@
     <div id="main">
         <div id="leftUI">
             <div id="asminp" class="card">
-
+                <div id="asminpheader">
+                    <div class="heading">Assembly Code</div>
+                    <button id="asmbbtn" class="tooltip">
+                        <span class="tooltiptext">Assemble</span>
+                        <img src="src/file-text (1).svg" alt="">
+                    </button>
+                    <button id="execbtn" onclick="executeAll()" class="tooltip">
+                        <span class="tooltiptext">Execute All</span>
+                        <img class="invert" src="src/fast-forward.svg" alt="">
+                    </button>
+                    <button id="execbtn" onclick="executeNext()" class="tooltip">
+                        <span class="tooltiptext">Execute Next</span>
+                        <img class="invert" src="src/skip-forward.svg" alt="">
+                    </button>
+                </div>
+                <div id="asminpcontainer">
+                    <textarea id="asminptext" spellcheck="false"></textarea>
+                    <textarea disabled readonly id="asmoutput"></textarea>
+                </div>
             </div>
         </div>
         <div id="rightUI">
@@ -32,6 +50,6 @@
 </body>
 <script src="instructionSet8086.js"></script>
 <script src="renderer.js"></script>
-<script src="assembler.js"></script>
 <script src="interface.js"></script>
+<script src="assembler.js"></script>
 </html>

@@ -1,4 +1,4 @@
-let memStart = "0F01B";
+let memStart = "00000";
 let memLocs = 16;
 
 let instrSet = {
@@ -50,6 +50,7 @@ let instrSet = {
                     RsM = op1.code;
                     Reg = "000";
                     MOD = "00";
+                    console.log(op1);
                     code = hexToBinary(op2.code);
                     imORadd = code.substring(8) + code.substring(0,8);
                 }
@@ -95,6 +96,7 @@ let regs = {
     "BL": {
         code: "110",
         length: 8,
+        doRender: false
     },
     "BX": {
         code: "110",
@@ -105,7 +107,7 @@ let regs = {
         length: 16,
     },
     "DS": {
-        code: "110",
+        code: "111",
         length: 16,
     },
     "DI": {

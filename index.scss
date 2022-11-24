@@ -1,6 +1,7 @@
 * {
     box-sizing: border-box;
     font-family: 'Raleway';
+    margin: 0px;
 }
 
 body {
@@ -15,7 +16,7 @@ body {
 
 #main {
     width: 100%;
-    max-width: 1000px;
+    max-width: 1200px;
     .card {
         background-color: white;
         box-shadow: 0px 0px 10px 1px rgba(0, 0, 0, 0.099);
@@ -26,6 +27,13 @@ body {
 
         }
         border-radius: 1rem;
+
+        .heading {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+        padding: 2rem;
     }
 
     display: grid;
@@ -36,7 +44,7 @@ body {
 
     #rightUI {
         display: grid;
-        grid-template-rows: 4fr 2fr;
+        grid-template-rows: 3.5fr 2fr;
         gap: 1rem;
     }
 
@@ -47,6 +55,79 @@ body {
     }
 
     #asminp {
+        // height: 40vh;
+        display: grid;
+        grid-template-rows: 0.75fr 4fr;
+        #asminpheader {
+            display: flex;
+            align-items: flex-start;
+            justify-content: right;
+            gap: 0.25rem;
+
+
+            .heading {
+                font-size: 1.5rem !important;
+                margin: 0px;
+                width: 100%;
+                justify-self: left;
+            }
+
+            button {
+                border-radius: 0.5rem;
+                border: 0px;
+                padding: 0.2rem 0.4rem;
+                cursor: pointer;
+                opacity: 1;
+                transition-duration: 500ms;
+
+                img {
+                    width: 90%;
+                }
+
+                img.invert {
+                    filter: invert(1);
+                }
+
+                background: rgb(113,6,236);
+                background: linear-gradient(90deg, rgb(6, 132, 236) 0%, rgba(0,27,219,1) 49%, rgb(93, 0, 255) 100%);
+                color: white;
+                font-weight: bold;
+                &:hover {
+                    opacity: 0.7;
+                    transition-duration: 500ms;
+                    // background: linear-gradient(90deg, rgba(0,27,219,1) 0%, rgb(93, 0, 255) 100%);
+
+                }
+            }
+        }
+        #asminpcontainer {
+            display: grid;
+            grid-template-columns: 1.75fr 1fr;
+            width: 100%;
+            gap: 0.5rem;
+            #asmoutput {
+                height: 100%;
+                padding: 0.5rem 0.5rem;
+                border-radius: 0.5rem;
+                background-color: rgb(228, 228, 228);
+                // color: white;
+                font-size: 1rem;
+                font-family: 'Courier New', Courier, monospace;
+                border: 0px;
+                resize: none;
+                // background-color: inherit;
+
+            }
+            #asminptext {
+                height: 100%;
+                padding: 1rem;
+                border-radius: 0.5rem;
+                // background-color: rgb(10, 10, 10);
+                // color: white;
+                font-size: 1rem;
+    
+            }
+        }
     }
 
     #regs {
@@ -72,18 +153,14 @@ body {
                 border-radius: 100rem;
                 padding: 0.2rem 1rem;
                 letter-spacing: 6px;
+                font-family: 'Courier New', Courier, monospace;
+
             }
         }
     }
 
     #mem {
         padding: 2rem;
-
-        .heading {
-            font-size: 2rem;
-            font-weight: bold;
-            margin-bottom: 1rem;
-        }
 
         #memlocs {
             display: grid;
@@ -115,8 +192,48 @@ body {
                     border-radius: 100rem;
                     padding: 0.2rem 1rem;
                     letter-spacing: 6px;
+                font-family: 'Courier New', Courier, monospace;
+
                 }
             }
         }
     }
 }
+
+@media only screen and (max-width: 720px) {
+    #main {
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+.tooltip {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted black;
+  }
+  
+  .tooltip .tooltiptext {
+    visibility: hidden;
+    width: 120px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    /* Position the tooltip */
+    position: absolute;
+    z-index: 1;
+    top: -30px;
+    left: 0px;
+    opacity: 0;
+    transition-duration: 300ms;
+    transition-delay: 0ms;
+  }
+  
+  .tooltip:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+    transition-delay: 500ms;
+    transition-duration: 300ms;
+  }

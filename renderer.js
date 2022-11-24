@@ -44,6 +44,12 @@ window.addEventListener("load", () => {
         memsEl.appendChild(memEl);
     }
 
+    // setRegValue(regs["DS"].code, memStart);
+
+    document.getElementById("asmbbtn").addEventListener("click", () => {
+        parseAssembly(document.getElementById("asminptext").value);
+    });
+
     // document.body.appendChild(regsEl);
     // document.body.appendChild(memsEl);
 });
