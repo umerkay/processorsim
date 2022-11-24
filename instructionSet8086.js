@@ -39,6 +39,7 @@ let instrSet = {
                     MOD = "00";
                     RsM = op1.code;
                 } else if (op1.regORhex === "H" && op2.regORhex === "R") {
+                    Reg = op2.code;
                     MOD = "00";
                     RsM = "110";
                     code = hexToBinary(op1.code);
