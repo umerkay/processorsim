@@ -25,10 +25,10 @@ let instrSet = {
                 } else {
                     // for mov ax, 1234h
                     // opcode + 1 + w(1) + MOD(00) + 000 + RsM (registercode or 110) + address, address, immediate
-                    opcode = "110001";
-                    RsM = Reg;
-                    Reg = "000";
-                    MOD = "00";
+                    opcode = "1011";
+                    D = "";
+                    RsM = "";
+                    MOD = "";
                     code = hexToBinary(op2.code);
                     imORadd = code.substring(8) + code.substring(0,8);
                 }
@@ -39,6 +39,7 @@ let instrSet = {
                     MOD = "00";
                     RsM = op1.code;
                 } else if (op1.regORhex === "H" && op2.regORhex === "R") {
+                    Reg = op2.code;
                     MOD = "00";
                     RsM = "110";
                     code = hexToBinary(op1.code);
@@ -53,7 +54,7 @@ let instrSet = {
                     imORadd = code.substring(8) + code.substring(0,8);
                 }
             }
-            W = op1.length === 16 ? "1": "0";
+            W = (op1.length || op2.length) === 16 ? "1": "0";
 
             return {opcode, D, W, MOD, Reg, RsM, imORadd, machCode: opcode + D + W + MOD + Reg + RsM + imORadd}
         }
