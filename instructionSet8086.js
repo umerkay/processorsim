@@ -25,10 +25,10 @@ let instrSet = {
                 } else {
                     // for mov ax, 1234h
                     // opcode + 1 + w(1) + MOD(00) + 000 + RsM (registercode or 110) + address, address, immediate
-                    opcode = "110001";
-                    RsM = Reg;
-                    Reg = "000";
-                    MOD = "00";
+                    opcode = "1011";
+                    D = "";
+                    RsM = "";
+                    MOD = "";
                     code = hexToBinary(op2.code);
                     imORadd = code.substring(8) + code.substring(0,8);
                 }
