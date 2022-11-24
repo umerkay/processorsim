@@ -53,7 +53,7 @@ let instrSet = {
                     imORadd = code.substring(8) + code.substring(0,8);
                 }
             }
-            W = op1.length === 16 ? "1": "0";
+            W = (op1.length || op2.length) === 16 ? "1": "0";
 
 
             return opcode + D + W + MOD + Reg + RsM + imORadd;
