@@ -7,7 +7,7 @@ function parseAssembly(text) {
     instructions = text.split("\n").filter(x => x != 0);
     globalCompilerError = false;
     resetError();
-    setRegValue("PC", "0000");
+    setRegValue(regs["PC"].code, "0000");
     globalRuntimeError = false;
 
     for(let i = 0; i < instructions.length; i++) {

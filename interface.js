@@ -5,8 +5,7 @@ function getRegValue(reg, size = 16) {
 }
 
 function setRegValue(reg,value) {
-    console.log(reg, regs[reg]);
-    document.getElementById("r" + regs[reg].code).innerHTML = value;
+    document.getElementById("r" + reg).innerHTML = value;
 }
 
 function getMemValue(address) {
