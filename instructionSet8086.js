@@ -82,7 +82,7 @@ let instrSet = {
         }
     },
     "ADD": {
-        opcode: "000000",                                              // previous opcode?
+        opcode: "000000",                                             
         opNo: 2,                                              
         finalParse: function(op1, op2) {
             let opcode = this.opcode;

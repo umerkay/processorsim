@@ -1,12 +1,7 @@
-<<<<<<< HEAD
-function getRegValue(reg) {
-    return document.getElementById("r" + regs[reg].code).innerHTML;
-=======
 function getRegValue(reg, size = 16) {
     if(globalRuntimeError) return "";
     if(size === 8) return document.getElementById("r"+reg).innerHTML.slice(0, 2);
     return document.getElementById("r" + reg).innerHTML;
->>>>>>> 7c66f8911a2ac43061012e72c6aebc61305826f9
 }
 
 function setRegValue(reg,value) {
@@ -18,9 +13,6 @@ function getMemValue(address) {
 }
 
 function setMemValue(address, value) {
-<<<<<<< HEAD
-    document.getElementById("m"+address).innerHTML = value;
-=======
     if(globalRuntimeError) return "";
     try {
         document.getElementById("m"+address.padStart(5, '0').toUpperCase()).innerHTML = value.padStart(4, '0').toUpperCase();
@@ -73,5 +65,4 @@ function resetError() {
         document.getElementById("asmoutput").innerHTML = "";
         document.getElementById("asmoutput").classList.remove("err");
     }
->>>>>>> 7c66f8911a2ac43061012e72c6aebc61305826f9
 }
