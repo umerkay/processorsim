@@ -101,6 +101,12 @@ body {
   font-family: "Courier New", Courier, monospace;
   border: 0px;
   resize: none;
+  transition-duration: 300ms;
+}
+#main #asminp #asminpcontainer #asmoutput.err {
+  background-color: rgb(255, 226, 226);
+  color: rgb(255, 63, 63);
+  transition-duration: 300ms;
 }
 #main #asminp #asminpcontainer #asminptext {
   height: 100%;

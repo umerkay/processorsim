@@ -4,6 +4,7 @@ let memLocs = 16;
 let instrSet = {
     "MOV": {
         opcode: "100010",
+        opNo: 2,
         finalParse: function(op1, op2) {
             let opcode = this.opcode;
             let D = "", Reg = "", RsM = "", MOD = "", W = "";

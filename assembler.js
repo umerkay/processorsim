@@ -1,41 +1,53 @@
 let instructions;
 
+let globalCompilerError;
+let globalRuntimeError;
+
 function parseAssembly(text) {
     instructions = text.split("\n").filter(x => x != 0);
-    instructions = instructions.map(instructionToMachine);
-    document.getElementById("asmoutput").innerHTML = instructions.map(x => parseInt(x.machCode, 2).toString(16)).join("\n");
-    // console.log(instructions);
-    // for(let i = 0; i < instructions.length; i++) {
-    //     instructionToMachine(instructions[i],i);
-    // }
+    globalCompilerError = false;
+    resetError();
+    setRegValue(regs["PC"].code, "0000");
+    globalRuntimeError = false;
+
+    for(let i = 0; i < instructions.length; i++) {
+        instructions[i] = instructionToMachine(instructions[i],i);
+        if(typeof instructions[i] === "string") {
+            globalCompilerError = true;
+            displayError("Error occured at line " + (i+1) + ": " + instructions[i]);
+            instructions = [];
+            break;
+        }
+    }
+    if(!globalCompilerError)
+        document.getElementById("asmoutput").innerHTML = instructions.map(x => parseInt(x.machCode, 2).toString(16)).join("\n");
 }
 
 function parseOperand(op) {
     let result = {};
-    if (op[0] == '[') {
-        result.isMemory = true;
-        inner = op.match(/\[([^)]+)\]/)[1];
-        if (regs[inner] != undefined) {
-            result.regORhex = "R";
-            result.code = regs[inner].code;
-            result.length = regs[inner].length;
-        } else {
-            result.regORhex = "H";
-            result.code = inner;
-            result.length = 0;
-        }
+    result.isMemory = op[0] == '[';
+
+    if(result.isMemory && op[op.length-1] !== "]") return "Expected ]";
+
+    inner = result.isMemory ? op.match(/\[([^)]+)\]/)[1] : op;
+    if (regs[inner] != undefined) {
+        result.regORhex = "R";
+        result.code = regs[inner].code;
+        result.length = regs[inner].length;
     } else {
-        result.isMemory = false;
-        if (regs[op] != undefined) {
-            result.regORhex = "R";
-            result.code = regs[op].code;
-            result.length = regs[op].length;
-        } else {
-            result.regORhex = "H";
-            result.code = op;
-            result.length = 0;
-        }
+        result.regORhex = "H";
+        //conv all other radix to hex
+        if(op[op.length-1].toUpperCase() === "B")
+            result.code = parseInt(inner, 2).toString(16);
+        else if (op[op.length-1].toUpperCase() !== "H")
+            result.code = parseInt(inner).toString(16);
+        else result.code = inner;
+        
+        if(result.code === "NaN") return "Invalid operand"
+
+        result.length = result.code.length * 4;
     }
+
     return result;
     
 }
@@ -44,23 +56,22 @@ function instructionToMachine(instr, i) {
     // console.log(instr);
     let op = instr.split(" ")[0].toUpperCase();
     let operands = instr.split(" ").slice(1).join("").toUpperCase().split(",");
+    let op1, op2;
+    
+    if(instrSet[op] === undefined) return "Instruction not supported";
+    if(instrSet[op].opNo > operands.length) return "Too few operands, expected " + instrSet[op].opNo;
+    if(instrSet[op].opNo < operands.length) return "Too many operands, expected " + instrSet[op].opNo;
 
-    let op1 = parseOperand(operands[0]);
-    let op2 = parseOperand(operands[1]);
-    return instrSet[op].finalParse(op1, op2);
-}
+    if(operands.length > 0 && operands[0] !== "")
+        op1 = parseOperand(operands[0]);
+    if(operands.length > 1)
+        op2 = parseOperand(operands[1]);
 
-function executeAll() {
-    setRegValue(regs["PC"].code, "0000")
-    instructions.forEach(executeInstruction);
-}
+    if(typeof op1 === "string") return op1;
+    if(typeof op2 === "string") return op2;
 
-function executeNext() {
-    if(parseInt(getRegValue(regs["PC"].code), 16) < instructions.length) {
-        executeInstruction(instructions[parseInt(getRegValue(regs['PC'].code),16)]);
-    } else {
-        console.log("All instructions executed");
-    }
+    let finalParsed = instrSet[op].finalParse(op1, op2);
+    return finalParsed; //string if error otherwise parsed object
 }
 
 function executeInstruction(instruction) {
@@ -72,7 +83,7 @@ function executeInstruction(instruction) {
                 setRegValue(Reg, getRegValue(RsM), W == "1" ? 16 : 8)
             } else { //MOD == 00
                 //mox ax, [bx OR 1234H]
-                setRegValue(Reg, getMemValue(((RsM === "110" && imORadd !== "") ? imORaddCNV : getRegValue(RsM))));
+                setRegValue(Reg, getMemValue(((RsM === "110" && imORadd !== "") ? imORaddCNV : getRegValue(RsM))), W == "1" ? 16 : 8);
             }
         } else { //D == 0
             //mov [ax], bx
@@ -80,11 +91,14 @@ function executeInstruction(instruction) {
             setMemValue((RsM === "110" && imORadd !== "") ? imORaddCNV : getRegValue(RsM), getRegValue(Reg));
         }
     } else if (opcode === "110001") setMemValue(getRegValue(RsM), imORaddCNV);
-    else if(opcode === "1011") setRegValue(Reg, imORaddCNV);
+    else if(opcode === "1011") setRegValue(Reg, imORaddCNV, W == "1" ? 16 : 8);
 
-    setRegValue(regs["PC"].code, (parseInt(getRegValue(regs["PC"].code), 16) + 1).toString(16))
+    if(globalRuntimeError) {
+        displayError("Runtime error: " + globalRuntimeError);
+    }
+
+    setRegValue(regs["PC"].code, (parseInt(getRegValue(regs["PC"].code), 16) + 1).toString(16), W == "1" ? 16 : 8);
 }
-
 
 function hexToBinary(hex) {
     let result;
