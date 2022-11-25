@@ -4,19 +4,12 @@ function getRegValue(reg, size = 16) {
     return document.getElementById("r" + reg).innerHTML;
 }
 
-function setRegValue(reg, value, size = 16) {
-    if(globalRuntimeError) return "";
-    if(size === 8) document.getElementById("r"+reg).innerHTML = document.getElementById("r"+reg).innerHTML.slice(0, 2) + value.padStart(2, '0').toUpperCase();
-    else document.getElementById("r"+reg).innerHTML = value.padStart(4, '0').toUpperCase();
+function setRegValue(reg,value) {
+    document.getElementById("r"+regs[reg].code).innerHTML = value;
 }
 
 function getMemValue(address) {
-    if(globalRuntimeError) return "";
-    try {
-        return document.getElementById("m" + address.padStart(5, '0').toUpperCase()).innerHTML;
-    } catch(e) {
-        globalRuntimeError = "Error writing to memory"
-    }
+    return document.getElementById("m" + address).innerHTML;
 }
 
 function setMemValue(address, value) {
