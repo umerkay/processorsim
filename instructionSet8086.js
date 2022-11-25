@@ -4,7 +4,27 @@ let memLocs = 16;
 let instrSet = {
     "MOV": {
         opcode: "100010",
-        opNo: 2,
+        opNo: 2, //total operands
+        // ALUfunction: (dest, source) => source,
+        //input are two operands in format
+        // {
+        // code: "000" to "111"
+        // isMemory: false/true
+        // length: 16 or 8
+        // regORhex: "R" or "h"
+        // }, 
+        // {
+        // code: "000" to "111"
+        // isMemory: false/true
+        // length: 16 or 8
+        // regORhex: "R" or "h"
+        // }
+        //finalParse should calculate all values and return
+            // {opcode, D, W, MOD, Reg, RsM, imORadd, machCode: opcode + D + W + MOD + Reg + RsM + imORadd}
+        //if, for example, d or w does not exist in format, return empty string ""
+        //if there is an error i.e operand types are not supported (word length unequal, writing to memory, displacement)
+        //return string with error text in string format only "Unequal operand length"
+
         finalParse: function(op1, op2) {
             let opcode = this.opcode;
             let D = "", Reg = "", RsM = "", MOD = "", W = "";

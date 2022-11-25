@@ -1,5 +1,12 @@
+<<<<<<< HEAD
 function getRegValue(reg) {
     return document.getElementById("r" + regs[reg].code).innerHTML;
+=======
+function getRegValue(reg, size = 16) {
+    if(globalRuntimeError) return "";
+    if(size === 8) return document.getElementById("r"+reg).innerHTML.slice(0, 2);
+    return document.getElementById("r" + reg).innerHTML;
+>>>>>>> 7c66f8911a2ac43061012e72c6aebc61305826f9
 }
 
 function setRegValue(reg,value) {
@@ -11,5 +18,60 @@ function getMemValue(address) {
 }
 
 function setMemValue(address, value) {
+<<<<<<< HEAD
     document.getElementById("m"+address).innerHTML = value;
+=======
+    if(globalRuntimeError) return "";
+    try {
+        document.getElementById("m"+address.padStart(5, '0').toUpperCase()).innerHTML = value.padStart(4, '0').toUpperCase();
+    } catch(e) {
+        globalRuntimeError = "Error writing to memory";
+    }
+}
+
+async function executeAll() {
+    if(globalRuntimeError || globalCompilerError) return;
+    resetError("");
+    setRegValue(regs["PC"].code, "0000");
+    instructions.forEach(executeInstruction);
+
+    // for(let i = 0; i < instructions.length; i++) {
+    //     await (new Promise(() => setTimeout(() => executeInstruction(instructions[i]), 500)));
+    // }
+}
+
+function executeNext() {
+    if(globalRuntimeError || globalCompilerError) return;
+    resetError("");
+    if(parseInt(getRegValue(regs["PC"].code), 16) < instructions.length) {
+        executeInstruction(instructions[parseInt(getRegValue(regs['PC'].code),16)]);
+    } else {
+        console.log("All instructions executed");
+    }
+}
+
+function reset() {
+    globalRuntimeError = false;
+    resetError("");
+
+    for(reg in regs) {
+        setRegValue(regs[reg].code, "0000");
+    }
+
+    for(let i = 0; i < memLocs; i++) {
+        setMemValue(i.toString(16), "0000");
+    }
+}
+
+function displayError(err) {
+    document.getElementById("asmoutput").innerHTML = err;
+    document.getElementById("asmoutput").classList.add("err");
+}
+
+function resetError() {
+    if(document.getElementById("asmoutput").classList.contains("err")) {
+        document.getElementById("asmoutput").innerHTML = "";
+        document.getElementById("asmoutput").classList.remove("err");
+    }
+>>>>>>> 7c66f8911a2ac43061012e72c6aebc61305826f9
 }
