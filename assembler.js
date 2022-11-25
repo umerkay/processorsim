@@ -7,7 +7,7 @@ function parseAssembly(text) {
     instructions = text.split("\n").filter(x => x != 0);
     globalCompilerError = false;
     resetError();
-    setRegValue(regs["PC"].code, "0000");
+    setRegValue("PC", "0000");
     globalRuntimeError = false;
 
     for(let i = 0; i < instructions.length; i++) {
@@ -93,7 +93,7 @@ function executeInstruction(instruction) {
             setMemValue((RsM === "110" && imORadd !== "") ? imORaddCNV : getRegValue(RsM), getRegValue(Reg));
         }
     } else if (opcode === "110001") setMemValue(getRegValue(RsM), imORaddCNV); //mov [ax], 1234h
-    else if(opcode === "1011") setRegValue(Reg, imORaddCNV, W == "1" ? 16 : 8); //mov ax, 1234h
+    else if(opcode === "1011") console.log(Reg, imORaddCNV); setRegValue(Reg, imORaddCNV, W == "1" ? 16 : 8); //mov ax, 1234h
 
 
     if(globalRuntimeError) {

@@ -282,7 +282,7 @@ let instrSet = {
         }
     }
 }
-}
+};
 
 let regs = {
     "AX": {
