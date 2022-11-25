@@ -27,15 +27,19 @@ function setMemValue(address, value) {
     }
 }
 
-function executeAll() {
-    if(globalRuntimeError) return;
+async function executeAll() {
+    if(globalRuntimeError || globalCompilerError) return;
     resetError("");
     setRegValue(regs["PC"].code, "0000");
     instructions.forEach(executeInstruction);
+
+    // for(let i = 0; i < instructions.length; i++) {
+    //     await (new Promise(() => setTimeout(() => executeInstruction(instructions[i]), 500)));
+    // }
 }
 
 function executeNext() {
-    if(globalRuntimeError) return;
+    if(globalRuntimeError || globalCompilerError) return;
     resetError("");
     if(parseInt(getRegValue(regs["PC"].code), 16) < instructions.length) {
         executeInstruction(instructions[parseInt(getRegValue(regs['PC'].code),16)]);
@@ -63,6 +67,8 @@ function displayError(err) {
 }
 
 function resetError() {
-    document.getElementById("asmoutput").innerHTML = "";
-    document.getElementById("asmoutput").classList.remove("err");
+    if(document.getElementById("asmoutput").classList.contains("err")) {
+        document.getElementById("asmoutput").innerHTML = "";
+        document.getElementById("asmoutput").classList.remove("err");
+    }
 }
