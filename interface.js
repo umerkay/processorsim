@@ -5,7 +5,8 @@ function getRegValue(reg, size = 16) {
 }
 
 function setRegValue(reg,value) {
-    document.getElementById("r" + reg).innerHTML = value;
+    console.log(value);
+    document.getElementById("r" + reg).innerHTML = value.padStart(4, "0").toUpperCase();
 }
 
 function getMemValue(address) {

@@ -93,7 +93,7 @@ function executeInstruction(instruction) {
             setMemValue((RsM === "110" && imORadd !== "") ? imORaddCNV : getRegValue(RsM), getRegValue(Reg));
         }
     } else if (opcode === "110001") setMemValue(getRegValue(RsM), imORaddCNV); //mov [ax], 1234h
-    else if(opcode === "1011") console.log(Reg, imORaddCNV); setRegValue(Reg, imORaddCNV, W == "1" ? 16 : 8); //mov ax, 1234h
+    else if(opcode === "1011") setRegValue(Reg, imORaddCNV, W == "1" ? 16 : 8); //mov ax, 1234h
 
 
     if(globalRuntimeError) {
