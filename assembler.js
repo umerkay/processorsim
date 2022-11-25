@@ -70,7 +70,7 @@ function instructionToMachine(instr, i) {
     if(typeof op1 === "string") return op1;
     if(typeof op2 === "string") return op2;
 
-    let finalParsed = instrSet[op].finalParse(op1, op2);
+    let finalParsed = generalizedFinalParse(instrSet[op].opcode, op1, op2);
     return finalParsed; //string if error otherwise parsed object
 }
 
