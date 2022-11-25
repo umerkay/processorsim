@@ -22,19 +22,22 @@ function generalizedFinalParse(Opcode, op1, op2) {
         } else {
             opcode = Opcode[1];
             if (Opcode[0] === "100010") {
-                D = "";
+                D = ""; // the reg-imm for mov is identified by absence of D, RsM and mod
                 RsM = "";
                 MOD = "";
             } else if (Opcode[0] === "000000") {
-                Reg = "000";
+                              // given their same immediate opcode (100000)
+                Reg = "000"; // the reg-imm for add is identified by Reg="000"
                 RsM = op1.code;
                 MOD = "00";
             } else if (Opcode[0] === "000101") {
-                Reg = "101";
+                                // given their same immediate opcode
+                Reg = "101";    // the reg-imm for sub is identified by Reg="101"
                 RsM = op1.code;
                 MOD = "00";
             } else if (Opcode[0] === "001000") {
-                Reg = "100";
+                                // given their same immediate opcode
+                Reg = "100";    // the reg-imm for and is identified by Reg="100"
                 RsM = op1.code;
                 MOD = "00";
             }
@@ -59,11 +62,14 @@ function generalizedFinalParse(Opcode, op1, op2) {
             RsM = op1.code;
             if (Opcode[0] === "100010") {
                 Reg = "000";
-            } else if (Opcode[0] === "000000") {
+            }
+            // Given their same [reg]-immediate opcodes
+            // The add, sub, and instructions are differenciated by reg values as given
+            else if (Opcode[0] === "000000") { // for add
                 Reg = "000";
-            } else if (Opcode[0] === "000101") {
+            } else if (Opcode[0] === "000101") { // for sub
                 Reg = "101";
-            } else if (Opcode[0] === "001000") {
+            } else if (Opcode[0] === "001000") { // for and
                 Reg = "100";
             }
             MOD = "00";
