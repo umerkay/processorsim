@@ -85,7 +85,109 @@ let instrSet = {
         opcode: "101101",
         opNo: 2,
         // ALUfunction: (dest, source) => dest + source,
+    },
+    "AND":{
+        opcode:"001000",
+        opNo:2,
+        finalParse: function(op1, op2) {
+            let opcode = this.opcode;
+            let D = "", Reg = "", RsM = "", MOD = "", W = "";
+            let imORadd = "";
+            if (op1.isMemory === false) {
+                D = "1";
+                Reg = op1.code;
+                if (op2.isMemory === false && op2.regORhex === "R") {
+                    RsM = op2.code;
+                    MOD = "11";                    
+                } else if (op2.isMemory && op2.regORhex === "R") {
+                    RsM = op2.code;
+                    MOD = "00";
+                    //AND operate with same opcode for reg,reg mem,reg reg,mem
+                } else if (op2.isMemory && op2.RegORhex === "H") {
+                    MOD = "00";
+                    RsM = "110";
+                    code = hexToBinary(op2.code);
+                    imORadd = code.substring(8) + code.substring(0, 8);
+                } else {
+                    // for and ax, 1234h
+                    // opcode + 1 + w(1) + MOD(00) + 000 + RsM (registercode or 110) + address, address, immediate
+                    opcode = "100000";
+                    D = "";
+                    RsM = "";
+                    MOD = "";
+                    code = hexToBinary(op2.code);
+                    imORadd = code.substring(8) + code.substring(0,8);
+                }
+            } else {
+                D = "0";
+                if (op1.regORhex === "R" && op2.regORhex === "R") {
+                    Reg = op2.code;
+                    MOD = "00";
+                    RsM = op1.code;
+                } else if (op1.regORhex === "H" && op2.regORhex === "R") {
+                    Reg = op2.code;
+                    MOD = "00";
+                    RsM = "110";
+                    code = hexToBinary(op1.code);
+                    imORadd = code.substring(8) + code.substring(0, 8);
+                } else if (op1.regORhex === "R" && op2.regORhex === "H") {
+                    // code for mov [bx], 1234h goes here
+                    opcode = "100000";
+                    RsM = op1.code;
+                    Reg = "000";
+                    MOD = "00";
+                    console.log(op1);
+                    code = hexToBinary(op2.code);
+                    imORadd = code.substring(8) + code.substring(0,8);
+                }
+            }
+            W = (op1.length || op2.length) === 16 ? "1": "0";
+
+            return {opcode, D, W, MOD, Reg, RsM, imORadd, machCode: opcode + D + W + MOD + Reg + RsM + imORadd}
+        }
+
+        
+
+    },
+    "XOR":{
+        //same with diff opcode
+        //000110dw oorrrmmm disp 
+        //when xor ax,1234h //when xor mem, 1234h 
+        // change to 100000sw oo110mmm data
+    },
+    "NOT":{
+        opcode:"1111011",
+        opNo:1,
+        finalParse: function(op) {
+            let opcode = this.opcode;
+            //1111011w oo010mmm 
+            let D = "1", Reg = "011", RsM = "", MOD = "", W = "";
+            let imORadd = "";
+            if (op.isMemory === false) {
+                //reg field fixed in unary ops, rsm act as reg here
+                MOD="11";
+                RsM = op.code;
+                }
+             else {
+                
+                if (op.regORhex === "R") {
+
+                    MOD = "00";
+                    RsM = op.code;
+                } else if (op.regORhex === "H" ) {
+                    
+                    MOD = "00";
+                    RsM = "110";
+                    code = hexToBinary(op1.code);
+                    imORadd = code.substring(8) + code.substring(0, 8);
+            }
+            W = op.length === 16 ? "1": "0";
+
+            return {opcode, D, W, MOD, Reg, RsM, imORadd, machCode: opcode + D + W + MOD + Reg + RsM + imORadd}
+        }
     }
+}
+
 };
 
 let regs = {
