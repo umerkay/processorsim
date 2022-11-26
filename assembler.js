@@ -14,13 +14,13 @@ function parseAssembly(text) {
         instructions[i] = instructionToMachine(instructions[i],i);
         if(typeof instructions[i] === "string") {
             globalCompilerError = true;
-            displayError("Error occured at line " + (i+1) + ": " + instructions[i]);
+            displayError("Assembler error at line " + (i+1) + ": " + instructions[i]);
             instructions = [];
             break;
         }
     }
     if(!globalCompilerError)
-        document.getElementById("asmoutput").innerHTML = instructions.map(x => parseInt(x.machCode, 2).toString(16)).join("\n").toUpperCase();
+        document.getElementById("asmoutput").innerHTML = instructions.map(x => parseInt(x.machCode, 2).toString(16).padStart(x.machCode.length/4, "0")).join("\n").toUpperCase();
 }
 
 function parseOperand(op) {
@@ -61,7 +61,7 @@ function instructionToMachine(instr, i) {
     if(instrSet[op] === undefined) return "Instruction not supported";
     if(instrSet[op].opNo > operands.length) return "Too few operands, expected " + instrSet[op].opNo;
     if(instrSet[op].opNo < operands.length) return "Too many operands, expected " + instrSet[op].opNo;
-
+    
     if(operands.length > 0 && operands[0] !== "")
         op1 = parseOperand(operands[0]);
     if(operands.length > 1)
@@ -75,30 +75,57 @@ function instructionToMachine(instr, i) {
 }
 
 function executeInstruction(instruction) {
-    let {opcode, D, W, MOD, Reg, RsM, imORadd} = instruction;
-    let imORaddCNV = parseInt(imORadd.substring(8) + imORadd.substring(0,8), 2).toString(16); //little endian se normal convert
     //fetch PC, CIR
     //decode CU
-    //fetch operand memory to reg
-    //execute ALU
-    //store reg to memory
+    let {opcode, D, W, MOD, Reg, RsM, imORadd, op1, op2, instrTYPE} = instruction;
+    let imORaddCNV = parseInt(imORadd.substring(8) + imORadd.substring(0,8), 2).toString(16); //little endian se normal convert
+    
+    // let instrTYPE = instruction.operation;
+    let destVal, srcVal;
 
-    //general function for an instruction
-    if(opcode == instrSet["MOV"].opcode[0]) {
+    //decode operands and fetch operands if required
+    if(instrSet[instrTYPE].opNo === 2) {
+        if(opcode === instrSet[instrTYPE].opcode[0]) {
+            if(D === "1") {
+                //MOD != 11 is fetch operand case
+                if(MOD !== "11") srcVal = getMemValue(((RsM === "110" && imORadd !== "") ? imORaddCNV : getRegValue(RsM)));
+                if(MOD === "11") srcVal = getRegValue(RsM, W == "1" ? 16 : 8);
+                destVal = getRegValue(Reg);
+            } else {//D === 0
+                //fetch operand case
+                destVal = getMemValue((RsM === "110" && imORadd !== "") ? imORaddCNV : getRegValue(RsM));
+                srcVal = getRegValue(Reg);
+            }
+        } else if(opcode === instrSet[instrTYPE].opcode[1]) {
+            destVal = getRegValue(opcode === "100000" ? RsM : Reg, W == "1" ? 16 : 8);
+            srcVal = imORaddCNV;
+        } else if(opcode === instrSet[instrTYPE].opcode[2]) {
+            //fetch operand case
+            destVal = getMemValue(getRegValue(RsM));
+            srcVal = imORaddCNV;
+        }
+    }
+    
+    //execute ALU
+
+    let ALUResult = instrSet[instrTYPE].ALUfunction(destVal, srcVal);
+
+    //store reg to memory
+    if(opcode == instrSet[instrTYPE].opcode[0]) {
         if(D === "1") {
             if(MOD === "11") { //mov ax, bx
-                setRegValue(Reg, getRegValue(RsM), W == "1" ? 16 : 8)
+                setRegValue(Reg, ALUResult, W == "1" ? 16 : 8)
             } else { //MOD == 00
                 //mox ax, [bx OR 1234H]
-                setRegValue(Reg, getMemValue(((RsM === "110" && imORadd !== "") ? imORaddCNV : getRegValue(RsM))), W == "1" ? 16 : 8);
+                setRegValue(Reg, ALUResult, W == "1" ? 16 : 8);
             }
         } else { //D == 0
             //mov [ax], bx
             //mov [1234], bx
-            setMemValue((RsM === "110" && imORadd !== "") ? imORaddCNV : getRegValue(RsM), getRegValue(Reg));
+            setMemValue((RsM === "110" && imORadd !== "") ? imORaddCNV : getRegValue(RsM), ALUResult);
         }
-    } else if (opcode === instrSet["MOV"].opcode[1]) setRegValue(Reg, imORaddCNV, W == "1" ? 16 : 8); //mov ax, 1234h
-    else if(opcode === instrSet["MOV"].opcode[2]) setMemValue(getRegValue(RsM), imORaddCNV); //mov [ax], 1234h
+    } else if (opcode === instrSet[instrTYPE].opcode[1]) setRegValue(opcode === "100000" ? RsM : Reg, ALUResult, W == "1" ? 16 : 8); //mov ax, 1234h
+    else if(opcode === instrSet[instrTYPE].opcode[2]) setMemValue(getRegValue(RsM), ALUResult); //mov [ax], 1234h
 
 
     if(globalRuntimeError) {

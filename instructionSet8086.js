@@ -3,6 +3,7 @@ let memLocs = 16;
 
 function generalizedFinalParse(operation, op1, op2) {
     let Opcode = instrSet[operation].opcode;
+
     let opcode = Opcode[0];
     let D = "", Reg = "", RsM = "", MOD = "", W = "";
     let imORadd = "";
@@ -87,14 +88,14 @@ function generalizedFinalParse(operation, op1, op2) {
     }
     W = (op1.length || op2.length) === 16 ? "1": "0";
 
-    return {opcode, D, W, MOD, Reg, RsM, imORadd, machCode: opcode + D + W + MOD + Reg + RsM + imORadd}
+    return {opcode, D, W, MOD, Reg, RsM, imORadd, machCode: opcode + D + W + MOD + Reg + RsM + imORadd, instrTYPE: operation, op1, op2}
 }
 
 let instrSet = {
     "MOV": {
         opcode: ["100010","1011", "110001"],
         opNo: 2, //total operands
-        // ALUfunction: (dest, source) => source,
+        ALUfunction: (dest, source) => source,
         //input are two operands in format
         // {
         // code: "000" to "111"
@@ -171,21 +172,34 @@ let instrSet = {
     },
     "ADD": {
         opcode: ["000000","100000", "100000"],                                       
-        opNo: 2, 
+        opNo: 2,
+        ALUfunction: (dest, source) => (parseInt(dest, 16) + parseInt(source, 16)).toString(16),
     },
     "SUB": {
         opcode: ["000101","100000","100000"],
-        opNo: 2, 
+        opNo: 2,
+        ALUfunction: (dest, source) => (parseInt(dest, 16) - parseInt(source, 16)).toString(16),
+
     },
     "AND":{
         opcode:["001000", "100000","100000"],
         opNo:2,
+        ALUfunction: (dest, source) => (parseInt(dest, 16) & parseInt(source, 16)).toString(16),
+    },
+    "OR":{
+        opcode:["000010", "100000","100000"],
+        opNo:2,
+        ALUfunction: (dest, source) => (parseInt(dest, 16) | parseInt(source, 16)).toString(16),
     },
     "XOR":{
         //same with diff opcode
         //000110dw oorrrmmm disp 
         //when xor ax,1234h //when xor mem, 1234h 
         // change to 100000sw oo110mmm data
+        opcode:["000110", "100000","100000"],
+        opNo:2,
+        ALUfunction: (dest, source) => (parseInt(dest, 16) ^ parseInt(source, 16)).toString(16),
+    
     },
     "NOT":{
         opcode:"1111011",
