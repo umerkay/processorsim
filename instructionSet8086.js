@@ -1,11 +1,15 @@
 let memStart = "00000";
 let memLocs = 16;
 
-function generalizedFinalParse(Opcode, op1, op2) {
+function generalizedFinalParse(operation, op1, op2) {
+    let Opcode = instrSet[operation].opcode;
     let opcode = Opcode[0];
     let D = "", Reg = "", RsM = "", MOD = "", W = "";
     let imORadd = "";
-    if (op1.isMemory === false) {
+    if (op1.isMemory === false && op1.regORhex === "H") {
+        return "Cannot " + operation + " to immediate value.";
+    }
+    else if (op1.isMemory === false) {
         D = "1";
         Reg = op1.code;
         if (op2.isMemory === false && op2.regORhex === "R") {         
@@ -44,10 +48,14 @@ function generalizedFinalParse(Opcode, op1, op2) {
             code = hexToBinary(op2.code);
             imORadd = code.substring(8) + code.substring(0,8);
         }
-    } 
+    }
     else {
         D = "0";
-        if (op1.regORhex === "R" && op2.regORhex === "R") {         
+        if (op2.isMemory) {
+            return "Cannot " + operation + " memory to memory."
+        } else if (op1.regORhex === "H" && op2.regORhex === "H") {
+            return "Cannot " + operation + " immediate to memory."
+        } else if (op1.regORhex === "R" && op2.regORhex === "R") {         
             Reg = op2.code;
             MOD = "00";
             RsM = op1.code;
