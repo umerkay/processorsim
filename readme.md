@@ -18,13 +18,13 @@ Choose a simple circuit of 8086/88 (preferably circuit but you can also use bloc
 * [Prerequisites](#Prerequisites)
 * [8086 Overview](#8086-Overview)
 * [File names and Description](#File-names-and-Description)
-* [8086 Technologies](#Technologies)
-* [8086 Output Screenshots](#Output-Screenshots)
-* [8086 Lessons Learnt](#Lessons-Learnt)
-* [8086 Setup](#Setup)
-* [8086 FAQ](#FAQ)
-* [8086 Acknowledgements](#Acknowledgements)
-* [8086 Feedback](#Feedback)
+* [Technologies](#Technologies)
+* [Output Screenshots](#Output-Screenshots)
+* [Lessons Learnt](#Lessons-Learnt)
+* [Setup](#Setup)
+* [FAQ](#FAQ)
+* [Acknowledgements](#Acknowledgements)
+* [Feedback](#Feedback)
 
 ## Prerequisites
 
