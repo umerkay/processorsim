@@ -12,7 +12,10 @@ function generalizedFinalParse(operation, op1, op2) {
     else if (op1.isMemory === false) {
         D = "1";
         Reg = op1.code;
-        if (op2.isMemory === false && op2.regORhex === "R") {         
+        if (op2.isMemory === false && op2.regORhex === "R") {
+            if (op1.length != op2.length) {
+                return "Cannot " + operation + " registers of different sizes.";
+            }         
             RsM = op2.code;
             MOD = "11";                    
         } else if (op2.isMemory && op2.regORhex === "R") {           
