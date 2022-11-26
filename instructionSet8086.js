@@ -155,7 +155,7 @@ let instrSet = {
                     RsM = op.code;
                 } else if (op.regORhex === "H" ) {
                     RsM = "110";
-                    code = hexToBinary(op1.code);
+                    code = hexToBinary(op.code);
                     imORadd = code.substring(8) + code.substring(0, 8);
             }
             W = op.length === 16 ? "1": "0";
@@ -163,7 +163,66 @@ let instrSet = {
             return {opcode, D, W, MOD, Reg, RsM, imORadd, machCode: opcode + D + W + MOD + Reg + RsM + imORadd}
         }
     }
+},
+
+"INC":{
+    opcode:["111111"],
+    opNo:1,
+    finalParse: function(op){
+        let opcode = this.opcode[0];
+        //1111111w oo000mmm disp
+        let D = "1", Reg = "000", RsM = "", MOD = "", W = "";
+        let imORadd = "";
+        if (op.isMemory === false) {
+            //reg field fixed in unary ops, rsm act as reg here
+            MOD="11";
+            RsM = op.code;
+            }
+         else {
+            MOD = "00";
+            if (op.regORhex === "R") { 
+                RsM = op.code;
+            } else if (op.regORhex === "H" ) {
+                RsM = "110";
+                code = hexToBinary(op.code);
+                imORadd = code.substring(8) + code.substring(0, 8);
+        }
+        W = op.length === 16 ? "1": "0";
+
+        return {opcode, D, W, MOD, Reg, RsM, imORadd, machCode: opcode + D + W + MOD + Reg + RsM + imORadd}
+        }
+    }
+},
+
+"DEC":{
+    opcode: ["111111"],
+    opNo:1,
+    finalParse: function(op) {
+        let opcode = this.opcode[0];
+       //1111111w oo001mmm 
+        let D = "1", Reg = "001", RsM = "", MOD = "", W = "";
+        let imORadd = "";
+        if (op.isMemory === false) {
+            //reg field fixed in unary ops, rsm act as reg here
+            MOD="11";
+            RsM = op.code;
+            }
+         else {
+            MOD = "00";
+            if (op.regORhex === "R") {
+                RsM = op.code;
+            } else if (op.regORhex === "H" ) {
+                RsM = "110";
+                code = hexToBinary(op.code);
+                imORadd = code.substring(8) + code.substring(0, 8);
+        }
+        W = op.length === 16 ? "1": "0";
+
+        return {opcode, D, W, MOD, Reg, RsM, imORadd, machCode: opcode + D + W + MOD + Reg + RsM + imORadd}
+    }
 }
+},
+
 };
 
 let regs = {
