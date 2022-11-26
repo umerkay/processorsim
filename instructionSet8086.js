@@ -34,19 +34,17 @@ function generalizedFinalParse(operation, op1, op2) {
                 D = ""; // the reg-imm for mov is identified by absence of D, RsM and mod
                 RsM = "";
                 MOD = "";
-            } else if (Opcode[0] === "000000") {
-                              // given their same immediate opcode (100000)
-                Reg = "000"; // the reg-imm for add is identified by Reg="000"
-                RsM = op1.code;
-                MOD = "00";
-            } else if (Opcode[0] === "000101") {
-                                // given their same immediate opcode
-                Reg = "101";    // the reg-imm for sub is identified by Reg="101"
-                RsM = op1.code;
-                MOD = "00";
-            } else if (Opcode[0] === "001000") {
-                                // given their same immediate opcode
-                Reg = "100";    // the reg-imm for and is identified by Reg="100"
+            } else {
+                if (Opcode[0] === "000000") {
+                                // given their same immediate opcode (100000)
+                    Reg = "000"; // the reg-imm for add is identified by Reg="000"
+                } else if (Opcode[0] === "000101") {
+                                    // given their same immediate opcode
+                    Reg = "101";    // the reg-imm for sub is identified by Reg="101"
+                } else if (Opcode[0] === "001000") {
+                                    // given their same immediate opcode
+                    Reg = "100";    // the reg-imm for and is identified by Reg="100"
+                }
                 RsM = op1.code;
                 MOD = "00";
             }
@@ -168,7 +166,11 @@ let instrSet = {
     "AND":{
         opcode:["001000", "100000","100000"],
         opNo:2,
-        ALUfunction: (dest, source) => (parseInt(dest, 16) & parseInt(source, 16)).toString(16),
+        ALUfunction: (dest, source) => {
+            console.log(dest, source);
+            return (parseInt(dest, 16) & parseInt(source, 16)).toString(16)
+        },
+        // ALUfunction: console.log
     },
     "OR":{
         opcode:["000010", "100000","100000"],

@@ -1,4 +1,5 @@
 function getRegValue(reg, size = 16) {
+    console.log(reg);
     if(globalRuntimeError) return "";
     if(size === 8) return document.getElementById("r"+reg).innerHTML.slice(0, 2);
     return document.getElementById("r" + reg).innerHTML;

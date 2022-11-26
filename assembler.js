@@ -75,7 +75,7 @@ function instructionToMachine(instr, i) {
 }
 
 function executeInstruction(instruction) {
-    //fetch PC, CIR
+    //CYCLE: FETCH PC, CIR
     //decode CU
     let {opcode, D, W, MOD, Reg, RsM, imORadd, op1, op2, instrTYPE} = instruction;
     let imORaddCNV = parseInt(imORadd.substring(8) + imORadd.substring(0,8), 2).toString(16); //little endian se normal convert
@@ -83,6 +83,7 @@ function executeInstruction(instruction) {
     // let instrTYPE = instruction.operation;
     let destVal, srcVal;
 
+    //CYCLE: DECODE
     //decode operands and fetch operands if required
     if(instrSet[instrTYPE].opNo === 2) {
         if(opcode === instrSet[instrTYPE].opcode[0]) {
@@ -93,20 +94,23 @@ function executeInstruction(instruction) {
                 destVal = getRegValue(Reg);
             } else {//D === 0
                 //fetch operand case
+                //CYCLE: FETCH OPERAND
                 destVal = getMemValue((RsM === "110" && imORadd !== "") ? imORaddCNV : getRegValue(RsM));
                 srcVal = getRegValue(Reg);
             }
         } else if(opcode === instrSet[instrTYPE].opcode[1]) {
+            
             destVal = getRegValue(opcode === "100000" ? RsM : Reg, W == "1" ? 16 : 8);
             srcVal = imORaddCNV;
         } else if(opcode === instrSet[instrTYPE].opcode[2]) {
-            //fetch operand case
+            //CYCLE: FETCH OPERAND
             destVal = getMemValue(getRegValue(RsM));
             srcVal = imORaddCNV;
         }
     }
     
     //execute ALU
+    //CYCLE: ALU
 
     let ALUResult = instrSet[instrTYPE].ALUfunction(destVal, srcVal);
 
@@ -122,6 +126,7 @@ function executeInstruction(instruction) {
         } else { //D == 0
             //mov [ax], bx
             //mov [1234], bx
+            //CYCLE: STORE
             setMemValue((RsM === "110" && imORadd !== "") ? imORaddCNV : getRegValue(RsM), ALUResult);
         }
     } else if (opcode === instrSet[instrTYPE].opcode[1]) setRegValue(opcode === "100000" ? RsM : Reg, ALUResult, W == "1" ? 16 : 8); //mov ax, 1234h
