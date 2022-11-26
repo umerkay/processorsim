@@ -57,6 +57,7 @@ function instructionToMachine(instr, i) {
     let op = instr.split(" ")[0].toUpperCase();
     let operands = instr.split(" ").slice(1).join("").toUpperCase().split(",");
     let op1, op2;
+    if(operands.length === 1 && operands[0] === "") operands = [];
     
     if(instrSet[op] === undefined) return "Instruction not supported";
     if(instrSet[op].opNo > operands.length) return "Too few operands, expected " + instrSet[op].opNo;
@@ -66,15 +67,20 @@ function instructionToMachine(instr, i) {
         op1 = parseOperand(operands[0]);
     if(operands.length > 1)
         op2 = parseOperand(operands[1]);
-    console.log(op1, op2);
-    if(typeof op1 === "string") return op1;
+
+        if(typeof op1 === "string") return op1;
     if(typeof op2 === "string") return op2;
 
-    let finalParsed = generalizedFinalParse(op, op1, op2);
+    let finalParsed;
+    if(operands.length === 0) finalParsed = { machCode: instrSet[op].opcode };
+    if(operands.length === 1) finalParsed = unaryFinalParse(op, op1);
+    if(operands.length === 2) finalParsed = generalizedFinalParse(op, op1, op2);
+
     return finalParsed; //string if error otherwise parsed object
 }
 
 function executeInstruction(instruction) {
+    if(instruction.machCode === instrSet["NOP"].opcode) return;
     //CYCLE: FETCH PC, CIR
     //decode CU
     let {opcode, D, W, MOD, Reg, RsM, imORadd, op1, op2, instrTYPE} = instruction;

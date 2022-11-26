@@ -129,6 +129,10 @@ function unaryFinalParse(operation, op) {
 
 
 let instrSet = {
+    "NOP": {
+        opcode: "10010000",
+        opNo: 0
+    },
     "MOV": {
         opcode: ["100010","1011", "110001"],
         opNo: 2, //total operands
