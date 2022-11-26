@@ -20,7 +20,7 @@ function parseAssembly(text) {
         }
     }
     if(!globalCompilerError)
-        document.getElementById("asmoutput").innerHTML = instructions.map(x => parseInt(x.machCode, 2).toString(16)).join("\n");
+        document.getElementById("asmoutput").innerHTML = instructions.map(x => parseInt(x.machCode, 2).toString(16)).join("\n").toUpperCase();
 }
 
 function parseOperand(op) {
@@ -77,6 +77,11 @@ function instructionToMachine(instr, i) {
 function executeInstruction(instruction) {
     let {opcode, D, W, MOD, Reg, RsM, imORadd} = instruction;
     let imORaddCNV = parseInt(imORadd.substring(8) + imORadd.substring(0,8), 2).toString(16); //little endian se normal convert
+    //fetch PC, CIR
+    //decode CU
+    //fetch operand memory to reg
+    //execute ALU
+    //store reg to memory
 
     //general function for an instruction
     if(opcode == instrSet["MOV"].opcode) {
