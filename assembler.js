@@ -66,18 +66,18 @@ function instructionToMachine(instr, i) {
         op1 = parseOperand(operands[0]);
     if(operands.length > 1)
         op2 = parseOperand(operands[1]);
-
+    console.log(op1, op2);
     if(typeof op1 === "string") return op1;
     if(typeof op2 === "string") return op2;
 
-    let finalParsed = generalizedFinalParse(instrSet[op].opcode, op1, op2);
+    let finalParsed = generalizedFinalParse(op, op1, op2);
     return finalParsed; //string if error otherwise parsed object
 }
 
 function executeInstruction(instruction) {
     let {opcode, D, W, MOD, Reg, RsM, imORadd} = instruction;
     let imORaddCNV = parseInt(imORadd.substring(8) + imORadd.substring(0,8), 2).toString(16); //little endian se normal convert
-    console.log(instruction);
+    // console.log(instruction);
     //general function for an instruction
     if(opcode == instrSet["MOV"].opcode[0]) {
         if(D === "1") {
