@@ -95,7 +95,7 @@ function generalizedFinalParse(operation, op1, op2) {
 }
 
 
-function unaryFinalParse(operation) {
+function unaryFinalParse(operation, op) {
     let opcode = operation.opcode[0];
     //1111011w oo010mmm 
     let Reg, D = "1", RsM = "", MOD = "", W = "";
