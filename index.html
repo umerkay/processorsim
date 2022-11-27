@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="index.css">
     
 <link href='https://fonts.googleapis.com/css?family=Raleway' rel='stylesheet'>
+<script src="https://cdn.jsdelivr.net/npm/leader-line-new@1.1.9/leader-line.min.js"></script>
 </head>
 <body>
     <div id="main">
@@ -23,11 +24,11 @@
                         <span class="tooltiptext">Execute All</span>
                         <img class="invert" src="src/fast-forward.svg" alt="">
                     </button>
-                    <button id="execbtn" onclick="executeNext()" class="tooltip">
+                    <button id="execOnebtn" onclick="executeNext()" class="tooltip">
                         <span class="tooltiptext">Execute Next</span>
                         <img class="invert" src="src/skip-forward.svg" alt="">
                     </button>
-                    <button id="execbtn" onclick="reset()" class="tooltip">
+                    <button id="resetbtn" onclick="reset()" class="tooltip">
                         <span class="tooltiptext">Reset</span>
                         <img class="invert" src="src/rotate-ccw.svg" alt="">
                     </button>
@@ -36,6 +37,20 @@
                     <textarea id="asminptext" spellcheck="false"></textarea>
                     <textarea disabled readonly id="asmoutput"></textarea>
                 </div>
+            </div>
+            <div id="alu" class="card task2only">
+                <div class="heading">ALU</div>
+                <div>
+                    <div class="value"></div>
+                    <div class="value"></div>
+                </div>
+            </div>
+            <div id="cu" class="card task2only">
+                <div class="heading">Control Unit</div>
+                <div class="value"></div>
+            </div>
+            <div id="bu" class="card task2only">
+                <div class="heading">Bus Interface Unit</div>
             </div>
         </div>
         <div id="rightUI">

@@ -14,13 +14,110 @@ body {
 }
 
 #main {
-  width: 100%;
-  max-width: 1200px;
+  transition-duration: 400ms;
   display: grid;
   grid-template-columns: 2fr 1fr;
   height: 100vh;
   padding: 5rem;
   gap: 2rem;
+  width: 100%;
+  max-width: 1200px;
+}
+#main .task2only {
+  display: none;
+}
+#main.task2 {
+  max-width: 1200px;
+  padding: 2rem;
+  grid-template-columns: 3fr 1fr;
+}
+#main.task2 .task2only {
+  display: unset;
+}
+#main.task2 #rightUI {
+  gap: 4rem;
+}
+#main.task2 #leftUI {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr;
+  gap: 2rem;
+}
+#main.task2 #leftUI > * {
+  width: -webkit-min-content;
+  width: -moz-min-content;
+  width: min-content;
+}
+#main.task2 #leftUI #regs {
+  order: 1;
+  grid-column: 2/4;
+}
+#main.task2 #leftUI #alu {
+  order: 3;
+  grid-column: 2/3;
+  width: 100%;
+  display: grid;
+  align-items: center;
+  justify-content: center;
+  grid-template-columns: 1fr 1fr;
+}
+#main.task2 #leftUI #alu > div {
+  display: grid;
+  gap: 0.25rem;
+}
+#main.task2 #leftUI #alu .value {
+  background-color: rgb(228, 228, 228);
+  min-height: 2rem;
+  width: 100%;
+  border-radius: 0.5rem;
+}
+#main.task2 #leftUI #cu {
+  order: 4;
+  grid-column: 3/2;
+}
+#main.task2 #leftUI #cu .value {
+  background-color: rgb(228, 228, 228);
+  min-height: 3rem;
+  width: 100%;
+  border-radius: 0.5rem;
+}
+#main.task2 #leftUI #bu {
+  order: 5;
+}
+#main.task2 #leftUI #asminp {
+  order: 0;
+  height: -webkit-min-content;
+  height: -moz-min-content;
+  height: min-content;
+  width: -webkit-min-content;
+  width: -moz-min-content;
+  width: min-content;
+  padding: 1rem;
+}
+#main.task2 #leftUI #asminp #asminpheader {
+  align-items: center;
+}
+#main.task2 #leftUI #asminp #asminpheader .heading, #main.task2 #leftUI #asminp #asminpheader #asmbbtn {
+  display: none;
+}
+#main.task2 #leftUI #regs {
+  height: -webkit-min-content;
+  height: -moz-min-content;
+  height: min-content;
+}
+#main.task2 #asminpcontainer {
+  display: flex;
+  width: 100%;
+  grid-template-rows: none !important;
+}
+#main.task2 #asminpcontainer #asminptext {
+  display: none;
+}
+#main.task2 #asminpcontainer #asmoutput {
+  font-size: 0.5rem !important;
+  padding: 0.25rem !important;
+  height: 80px !important;
+  overflow-y: hidden;
 }
 #main .card {
   background-color: white;
@@ -44,7 +141,6 @@ body {
   gap: 1rem;
 }
 #main #leftUI {
-  grid-template-rows: 2fr 2fr;
   gap: 1rem;
   min-height: 50vh;
   display: flex;
@@ -90,6 +186,10 @@ body {
 #main #asminp #asminpheader button:hover {
   opacity: 0.7;
   transition-duration: 500ms;
+}
+#main #asminp #asminpheader button:disabled {
+  opacity: 0.5;
+  cursor: default;
 }
 #main #asminp #asminpcontainer {
   display: grid;
@@ -146,6 +246,14 @@ body {
   padding: 0.2rem 1rem;
   letter-spacing: 6px;
   font-family: "Courier New", Courier, monospace;
+}
+#main #alu {
+  height: -webkit-min-content;
+  height: -moz-min-content;
+  height: min-content;
+}
+#main #alu .heading {
+  margin-bottom: 0rem;
 }
 #main #mem {
   padding: 2rem;
@@ -207,6 +315,7 @@ body {
   position: relative;
   display: inline-block;
   border-bottom: 1px dotted black;
+  outline: none;
 }
 
 .tooltip .tooltiptext {
@@ -231,5 +340,13 @@ body {
   visibility: visible;
   opacity: 1;
   transition-delay: 500ms;
+  transition-duration: 300ms;
+}
+
+.tooltip:focus .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+  transition-delay: 0ms;
+  opacity: 0.75;
   transition-duration: 300ms;
 }/*# sourceMappingURL=index.css.map */

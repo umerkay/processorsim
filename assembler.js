@@ -1,4 +1,4 @@
-let instructions;
+let instructions = [];
 
 let globalCompilerError;
 let globalRuntimeError;
@@ -55,7 +55,7 @@ function parseOperand(op) {
 function instructionToMachine(instr, i) {
     // console.log(instr);
     let op = instr.split(" ")[0].toUpperCase();
-    let operands = instr.split(" ").slice(1).join("").toUpperCase().split(",");
+    let operands = instr.split(" ").slice(1).join("").split(';')[0].toUpperCase().split(",");
     let op1, op2;
     if(operands.length === 1 && operands[0] === "") operands = [];
     
@@ -68,7 +68,7 @@ function instructionToMachine(instr, i) {
     if(operands.length > 1)
         op2 = parseOperand(operands[1]);
 
-        if(typeof op1 === "string") return op1;
+    if(typeof op1 === "string") return op1;
     if(typeof op2 === "string") return op2;
 
     let finalParsed;
@@ -79,7 +79,10 @@ function instructionToMachine(instr, i) {
     return finalParsed; //string if error otherwise parsed object
 }
 
-function executeInstruction(instruction) {
+const delay = (timeToDelay) => new Promise((resolve) => setTimeout(resolve, timeToDelay));
+
+async function executeInstruction(instruction) {
+    if(processorMode) await delay(1000);
     if(instruction.machCode === instrSet["NOP"].opcode) return;
     //CYCLE: FETCH PC, CIR
     //decode CU
@@ -113,12 +116,17 @@ function executeInstruction(instruction) {
             destVal = getMemValue(getRegValue(RsM));
             srcVal = imORaddCNV;
         }
+    } else {
+
     }
     
     //execute ALU
     //CYCLE: ALU
 
     let ALUResult = instrSet[instrTYPE].ALUfunction(destVal, srcVal);
+    if(globalRuntimeError) {
+        displayError("Runtime error: " + globalRuntimeError);
+    }
 
     //store reg to memory
     if(opcode == instrSet[instrTYPE].opcode[0]) {
