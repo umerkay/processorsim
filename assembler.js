@@ -113,31 +113,49 @@ function executeInstruction(instruction) {
             destVal = getMemValue(getRegValue(RsM));
             srcVal = imORaddCNV;
         }
+    } else {
+        if (MOD == "11") {
+            destVal = getRegValue(RsM, W == "1" ? 16 : 8);
+        } else {
+            destVal = getMemValue(getRegValue(RsM, W=="1" ? 16: 8))
+        }
     }
     
     //execute ALU
     //CYCLE: ALU
-
-    let ALUResult = instrSet[instrTYPE].ALUfunction(destVal, srcVal);
+    if (instrSet[instrTYPE].opNo === 2) {
+        let ALUResult = instrSet[instrTYPE].ALUfunction(destVal, srcVal);
+    } else {
+        let ALUResult = instrSet[instrTYPE].ALUfunction(destVal);
+    }
 
     //store reg to memory
-    if(opcode == instrSet[instrTYPE].opcode[0]) {
-        if(D === "1") {
-            if(MOD === "11") { //mov ax, bx
-                setRegValue(Reg, ALUResult, W == "1" ? 16 : 8)
-            } else { //MOD == 00
-                //mox ax, [bx OR 1234H]
-                setRegValue(Reg, ALUResult, W == "1" ? 16 : 8);
+    if (instrSet[instrTYPE].opNo === 2) {
+        if(opcode == instrSet[instrTYPE].opcode[0]) {
+            if(D === "1") {
+                if(MOD === "11") { //mov ax, bx
+                    setRegValue(Reg, ALUResult, W == "1" ? 16 : 8)
+                } else { //MOD == 00
+                    //mox ax, [bx OR 1234H]
+                    setRegValue(Reg, ALUResult, W == "1" ? 16 : 8);
+                }
+            } else { //D == 0
+                //mov [ax], bx
+                //mov [1234], bx
+                //CYCLE: STORE
+                setMemValue((RsM === "110" && imORadd !== "") ? imORaddCNV : getRegValue(RsM), ALUResult);
             }
-        } else { //D == 0
-            //mov [ax], bx
-            //mov [1234], bx
-            //CYCLE: STORE
-            setMemValue((RsM === "110" && imORadd !== "") ? imORaddCNV : getRegValue(RsM), ALUResult);
+        } else if (opcode === instrSet[instrTYPE].opcode[1]) setRegValue(opcode === "100000" ? RsM : Reg, ALUResult, W == "1" ? 16 : 8); //mov ax, 1234h
+        else if(opcode === instrSet[instrTYPE].opcode[2]) setMemValue(getRegValue(RsM), ALUResult); //mov [ax], 1234h    
+    }
+    else {
+        if (MOD == "11") {
+            setRegValue(RsM, ALUResult, W=="1" ? 16: 8);
+        } else {
+            setMemValue(getRegValue(RsM, W=="1"? 16 : 8), ALUResult);
         }
-    } else if (opcode === instrSet[instrTYPE].opcode[1]) setRegValue(opcode === "100000" ? RsM : Reg, ALUResult, W == "1" ? 16 : 8); //mov ax, 1234h
-    else if(opcode === instrSet[instrTYPE].opcode[2]) setMemValue(getRegValue(RsM), ALUResult); //mov [ax], 1234h
-
+    }
+    
 
     if(globalRuntimeError) {
         displayError("Runtime error: " + globalRuntimeError);

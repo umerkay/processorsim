@@ -1,7 +1,6 @@
 let memStart = "00000";
 let memLocs = 16;
 
-
 function generalizedFinalParse(operation, op1, op2) {
     let Opcode = instrSet[operation].opcode;
 
@@ -112,11 +111,11 @@ function unaryFinalParse(operation, op) {
     // This section checks operation type and returns the DWetc object
     if (op.isMemory === false && op.regORhex === "H") {
         return "Cannot perform " + op + " on immediate value.";
-    } else if (op.isMemory === false && op.regORhex === "R") {
+    } else if (op.isMemory === false && op.regORhex === "R") {  // inc ax
         //reg field fixed in unary ops, rsm act as reg here
         MOD="11";
         RsM = op.code;
-    } else if (op.isMemory && op.regORhex === "R") {
+    } else if (op.isMemory && op.regORhex === "R") {   // inc [ax]
         MOD = "00";
         RsM = op.code;
     } else {
@@ -197,13 +196,19 @@ let instrSet = {
     },
 
     "INC":{
-    opcode:["111111"],
-    opNo:1,
+        opcode:["111111"],
+        opNo:1,
+        ALUfunction: (dest) => {
+            return (parseInt(dest, 16) + 1).toString(16);
+        }
     },
 
     "DEC":{
         opcode: ["111111"],
         opNo:1,
+        ALUfunction: (dest) => {
+            return (parseInt(desk, 16) - 1).toString(16);
+        }
 },
 };
 
