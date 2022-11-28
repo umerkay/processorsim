@@ -41,8 +41,7 @@ function parseOperand(op) {
         result.regORhex = "H";
         //conv all other radix to hex
         result.code = operandTo8086Hex(inner);
-        
-        if(result.code === "NaN") return "Invalid operand"
+        if(isNaN(result.code)) return "Invalid operand"
 
         result.length = result.code.length * 4;
     }
@@ -218,8 +217,10 @@ function operandTo8086Hex(op) {
     } else {
         if (parseInt(op) < 0) {
             return parseInt((twosComplement((parseInt(op) * -1).toString(2))).padStart(16, "1"),2).toString(16);
-        } else {
+        } else if (parseInt(op) >= 0) {
             return parseInt(op).toString(16).padStart(4, "0");
+        } else {
+            return NaN;
         }
     }
 }
@@ -243,6 +244,8 @@ function twosComplement(num) {
             result += '1';
         }
     }
+    
     let length = result.length;
-    return (parseInt(result, 2) + 1).toString(2).padStart(length, "0");
+    // console.log(parseInt(result))
+    return isNaN(parseInt(result)) ? NaN : (parseInt(result, 2) + 1).toString(2).padStart(length, "0")
 }

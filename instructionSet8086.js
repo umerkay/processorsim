@@ -289,7 +289,12 @@ let instrSet = {
     },
 
     "NEG":{
-        ///faiz
+        opcode: ["111101"],
+        opNo: 1,
+        defReg: "011",
+        ALUfunction: (dest) => {
+            return operandTo8086Hex((hexToJSInt(dest) * -1).toString()).toString(16);
+        }
     },
 };
 
