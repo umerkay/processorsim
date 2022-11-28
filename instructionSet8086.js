@@ -28,6 +28,7 @@ function generalizedFinalParse(operation, op1, op2) {
             code = hexToBinary(op2.code);
             imORadd = code.substring(8) + code.substring(0, 8);
         } else {
+            if(Opcode.length < 2) return "Instruction format not supported";
             opcode = Opcode[1];
             if (Opcode[0] === "100010") {
                 D = ""; // the reg-imm for mov is identified by absence of D, RsM and mod
@@ -68,6 +69,7 @@ function generalizedFinalParse(operation, op1, op2) {
             code = hexToBinary(op1.code);
             imORadd = code.substring(8) + code.substring(0, 8);
         } else if (op1.regORhex === "R" && op2.regORhex === "H") {
+            if(Opcode.length < 2) return "Instruction format not supported";
             opcode = Opcode[2];
             RsM = op1.code;
             if (Opcode[0] === "100010") {
@@ -89,28 +91,38 @@ function generalizedFinalParse(operation, op1, op2) {
     }
     W = (op1.length || op2.length) === 16 ? "1": "0";
 
+    if(instrSet[operation].finalParse instanceof Function) {
+        instrSet[operation].finalParse(...arguments);
+    }
+
+    if(opcode === "nan") return operation + " does not support this format"
+
     return {opcode, D, W, MOD, Reg, RsM, imORadd, machCode: opcode + D + W + MOD + Reg + RsM + imORadd, instrTYPE: operation, op1, op2}
 }
 
 
 function unaryFinalParse(operation, op) {
-    let opcode = operation.opcode[0];
+    let opcode = instrSet[operation].opcode[0];
     //1111011w oo010mmm 
     let Reg, D = "1", RsM = "", MOD = "", W = "";
     let imORadd = "";
 
     // This section chooses reg value for NOT, INC, or DEC according to book
-    if (opcode[0] === "111101") {   // for NOT
+    if (operation === "NOT") {   // for NOT
         Reg = "010";
-    } else if (opcode[0] === "111111") {    // for INC
+    } else if (operation === "INC") {    // for INC
         Reg = "000";
-    } else if (opcode[0] === "111111") {    // for DEC
+    } else if (operation === "DEC") {    // for DEC
         Reg = "001";
+    } else if(operation === "MUL") { // for MUL
+        Reg = "100"
+    } else {
+        Reg = operation.defReg;
     }
 
     // This section checks operation type and returns the DWetc object
     if (op.isMemory === false && op.regORhex === "H") {
-        return "Cannot perform " + op + " on immediate value.";
+        return "Cannot perform " + operation + " on immediate value.";
     } else if (op.isMemory === false && op.regORhex === "R") {  // inc ax
         //reg field fixed in unary ops, rsm act as reg here
         MOD="11";
@@ -119,20 +131,36 @@ function unaryFinalParse(operation, op) {
         MOD = "00";
         RsM = op.code;
     } else {
-        return "Cannot perform " + op + " on immediate memory adress.";
+        return "Cannot perform " + operation + " on immediate memory adress.";
     }
     W = op.length === 16 ? "1": "0";
 
-    return {opcode, D, W, MOD, Reg, RsM, imORadd, machCode: opcode + D + W + MOD + Reg + RsM + imORadd}
+    if(instrSet[operation].finalParse instanceof Function) {
+        let s = instrSet[operation].finalParse(operation, op);
+        if(s) return s;
+    }
+
+    return {opcode, D, W, MOD, Reg, RsM, imORadd, instrTYPE: operation, machCode: opcode + D + W + MOD + Reg + RsM + imORadd}
 }
 
 
 let instrSet = {
+    "MUL": {//not signed
+        opcode: ["111101", "111101", "111101"],
+        opNo: 1,
+        finalParse: (op, op1) => {
+            if(op1.length === 16) return "Cannot MUL Word with Word";
+        },
+        ALUfunction: (dest) => {
+            return (parseInt(dest, 16) * parseInt(getRegValue(regs["AL"].code, 8), 16)).toString(16);
+        },
+        // doesAcceptImm: true
+    },
     "NOP": {
         opcode: "10010000",
         opNo: 0
     },
-    "MOV": {
+    "MOV": {//no need for conv
         opcode: ["100010","1011", "110001"],
         opNo: 2, //total operands
         ALUfunction: (dest, source) => source,
@@ -155,7 +183,7 @@ let instrSet = {
         //if there is an error i.e operand types are not supported (word length unequal, writing to memory, displacement)
         //return string with error text in string format only "Unequal operand length"
     },
-    "ADD": {
+    "ADD": {//signed
         opcode: ["000000","100000", "100000"],                                       
         opNo: 2,
         ALUfunction: (dest, source) => {
@@ -173,7 +201,7 @@ let instrSet = {
             return res >= 0 ? res.toString(16) : "0000";
         },
 
-    },
+    },//signed
     "AND":{
         opcode:["001000", "100000","100000"],
         opNo:2,
@@ -201,6 +229,9 @@ let instrSet = {
     "NOT":{
         opcode: ["111101"],
         opNo:1,
+        ALUfunction: (dest) => {
+            return parseInt(parseInt(dest, 16).toString(2).padStart(16, "0").split("").map(x => x == "0" ? "1" : "0").join(""), 2).toString(16);
+        }
     },
 
     "INC":{
@@ -209,7 +240,7 @@ let instrSet = {
         ALUfunction: (dest) => {
             return (parseInt(dest, 16) + 1).toString(16);
         }
-    },
+    }, //signed
 
     "DEC":{
         opcode: ["111111"],
@@ -217,27 +248,29 @@ let instrSet = {
         ALUfunction: (dest) => {
             return (parseInt(dest, 16) - 1).toString(16);
         }
-},
+},//signed
     "SHL":{
-        opcode: ["110100"],
-        opNo: 1,
+        opcode: ["nan", "110100", "110100"],
+        opNo: 2,
         //110100 0w ooTTTmmm disp
         //TTT=RRR=100
+        defReg: "100",
         ALUfunction: (dest,steps) => {
             let res = parseInt(dest,16);
-            res = res << steps;
+            res = res << steps; //
             return res.toString(16);
         }
     },
 
     "SHR":{
-        opcode: ["110100"],
-        opNo: 1,
+        opcode: ["nan", "110100", "110100"],
+        opNo: 2,
         //110100 0w ooTTTmmm disp
         //TTT=RRR=100
+        defReg: "101",
         ALUfunction: (dest,steps) => {
             let res = parseInt(dest,16);
-            res = res >> steps;
+            res = res >> steps; //overflow
             return res.toString(16);
         }
     
@@ -250,7 +283,11 @@ let instrSet = {
     },
 
     "CBW":{
+        ///faiz
+    },
 
+    "NEG":{
+        ///faiz
     },
 };
 
