@@ -1,5 +1,4 @@
 function getRegValue(reg, size = 16) {
-    console.log(reg);
     if(globalRuntimeError) return "";
     if(size === 8) return document.getElementById("r"+reg).innerHTML.slice(0, 2);
     return document.getElementById("r" + reg).innerHTML;
@@ -30,14 +29,24 @@ function setMemValue(address, value) {
 }
 
 async function executeAll() {
+    document.getElementById("execbtn").disabled = true;
+    document.getElementById("asmbbtn").disabled = true;
+    document.getElementById("execOnebtn").disabled = true;
+    document.getElementById("resetbtn").disabled = true;
+
     if(globalRuntimeError || globalCompilerError) return;
     resetError("");
     setRegValue(regs["PC"].code, "0000");
-    instructions.forEach(executeInstruction);
+    // instructions.forEach(executeInstruction);
 
-    // for(let i = 0; i < instructions.length; i++) {
-    //     await (new Promise(() => setTimeout(() => executeInstruction(instructions[i]), 500)));
-    // }
+    for(let i = 0; i < instructions.length; i++) {
+        await executeInstruction(instructions[i]);
+    }
+
+    document.getElementById("execbtn").disabled = false;
+    document.getElementById("asmbbtn").disabled = false;
+    document.getElementById("execOnebtn").disabled = false;
+    document.getElementById("resetbtn").disabled = false;
 }
 
 function executeNext() {
@@ -72,5 +81,40 @@ function resetError() {
     if(document.getElementById("asmoutput").classList.contains("err")) {
         document.getElementById("asmoutput").innerHTML = "";
         document.getElementById("asmoutput").classList.remove("err");
+    }
+}
+
+let processorMode = false;
+
+let processorConnections = {};
+
+function connect(a, b, objs = {}) {
+    processorConnections[a+"_"+b] = new LeaderLine(
+        document.getElementById(a),
+        document.getElementById(b),
+        { path: "grid", startPlug: "square", endPlug: "square", color: 'rgba(219, 219, 219 ,1)', ...objs }
+    );
+}
+
+function toggleProcessorMode() {
+    processorMode = !processorMode;
+    if(processorMode) {
+        document.getElementById("main").classList.add("task2");
+        // document.getElementById("rightUI").removeChild(document.getElementById("regs"));
+        document.getElementById("leftUI").appendChild(document.getElementById("regs"));
+        // document.getElementById("mem").appendChild(document.getElementById("asmoutput"));
+        setTimeout(() => {
+            connect("regs", "alu", {startSocket: 'right', endSocket: 'right'});
+            connect("alu", "cu", {startSocket: 'bottom', endSocket: 'top'});
+            connect("cu", "bu");
+            connect("cu", "regs", {startSocket: 'left', endSocket: 'left'});
+            connect("bu", "mem", {startSocket: 'right', endSocket: 'bottom'});
+        }, 200);
+    } else {
+        for(let c in processorConnections) {
+            processorConnections[c]?.remove();
+        }
+        document.getElementById("main").classList.remove("task2");
+        document.getElementById("rightUI").appendChild(document.getElementById("regs"));
     }
 }

@@ -1,3 +1,8 @@
+document.body.addEventListener("keypress", e => {
+    if(e.key === "T" && e.shiftKey) {
+        toggleProcessorMode();
+    }
+});
 window.addEventListener("load", () => {
     let regsEl = document.getElementById("regs");
 

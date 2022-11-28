@@ -158,12 +158,20 @@ let instrSet = {
     "ADD": {
         opcode: ["000000","100000", "100000"],                                       
         opNo: 2,
-        ALUfunction: (dest, source) => (parseInt(dest, 16) + parseInt(source, 16)).toString(16),
+        ALUfunction: (dest, source) => {
+            let res = (parseInt(dest, 16) + parseInt(source, 16)).toString(16);
+            if(res.length > 4) globalRuntimeError = "Overflow in result of ADD";
+            return res.length <= 4 ? res : "FFFF";
+        },
     },
     "SUB": {
         opcode: ["000101","100000","100000"],
         opNo: 2,
-        ALUfunction: (dest, source) => (parseInt(dest, 16) - parseInt(source, 16)).toString(16),
+        ALUfunction: (dest, source) => {
+            let res = parseInt(dest, 16) - parseInt(source, 16);
+            if(res < 0) globalRuntimeError = "Negative value in result of SUB";
+            return res >= 0 ? res.toString(16) : "0000";
+        },
 
     },
     "AND":{
