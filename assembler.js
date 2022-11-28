@@ -123,14 +123,12 @@ async function executeInstruction(instruction) {
             destVal = getMemValue(getRegValue(RsM, W=="1" ? 16: 8))
         }
     }
+
+    
     
     //execute ALU
     //CYCLE: ALU
-    if (instrSet[instrTYPE].opNo === 2) {
-        let ALUResult = instrSet[instrTYPE].ALUfunction(destVal, srcVal);
-    } else {
-        let ALUResult = instrSet[instrTYPE].ALUfunction(destVal);
-    }
+    let ALUResult = instrSet[instrTYPE].ALUfunction(destVal, srcVal);
     if(globalRuntimeError) {
         displayError("Runtime error: " + globalRuntimeError);
     }
