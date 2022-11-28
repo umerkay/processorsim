@@ -215,7 +215,7 @@ let instrSet = {
         opcode: ["111111"],
         opNo:1,
         ALUfunction: (dest) => {
-            return (parseInt(desk, 16) - 1).toString(16);
+            return (parseInt(dest, 16) - 1).toString(16);
         }
 },
 };
