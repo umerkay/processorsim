@@ -223,8 +223,11 @@ let instrSet = {
         opNo: 1,
         //110100 0w ooTTTmmm disp
         //TTT=RRR=100
-        //
-
+        ALUfunction: (dest,steps) => {
+            let res = parseInt(dest,16);
+            res = res << steps;
+            return res.toString(16);
+        }
     },
 
     "LOAD":{
