@@ -230,10 +230,6 @@ let instrSet = {
         }
     },
 
-    "LOAD":{
-
-    },
-
     "SHR":{
         opcode: ["110100"],
         opNo: 1,
@@ -248,7 +244,9 @@ let instrSet = {
     },
 
     "XCHG":{
-
+        opcode: ["100001"],
+        opNo: 2,
+        //1000011w oorrrmmm
     },
 
     "CBW":{
