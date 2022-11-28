@@ -110,10 +110,13 @@ function toggleProcessorMode() {
             connect("cu", "regs", {startSocket: 'left', endSocket: 'left'});
             connect("bu", "mem", {startSocket: 'right', endSocket: 'bottom'});
         }, 200);
+        document.getElementById("asmoutput2").innerHTML = document.getElementById("asmoutput").innerHTML;
+
     } else {
         for(let c in processorConnections) {
             processorConnections[c]?.remove();
         }
+        // document.getElementById("asminpcontainer").appendChild(document.getElementById("asmoutput"));
         document.getElementById("main").classList.remove("task2");
         document.getElementById("rightUI").appendChild(document.getElementById("regs"));
     }

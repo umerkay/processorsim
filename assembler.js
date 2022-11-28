@@ -19,8 +19,11 @@ function parseAssembly(text) {
             break;
         }
     }
-    if(!globalCompilerError)
+    if(!globalCompilerError) {
         document.getElementById("asmoutput").innerHTML = instructions.map(x => parseInt(x.machCode, 2).toString(16).padStart(x.machCode.length/4, "0")).join("\n").toUpperCase();
+        if(processorMode)
+            document.getElementById("asmoutput2").innerHTML = document.getElementById("asmoutput").innerHTML;
+    }
 }
 
 function parseOperand(op) {
@@ -126,11 +129,7 @@ async function executeInstruction(instruction) {
     
     //execute ALU
     //CYCLE: ALU
-    if (instrSet[instrTYPE].opNo === 2) {
-        let ALUResult = instrSet[instrTYPE].ALUfunction(destVal, srcVal);
-    } else {
-        let ALUResult = instrSet[instrTYPE].ALUfunction(destVal);
-    }
+    let ALUResult = instrSet[instrTYPE].ALUfunction(destVal, srcVal);
     if(globalRuntimeError) {
         displayError("Runtime error: " + globalRuntimeError);
     }
