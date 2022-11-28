@@ -96,6 +96,14 @@ function connect(a, b, objs = {}) {
     );
 }
 
+async function animateFetch() {
+
+}
+
+async function animateDecode() {
+
+}
+
 function toggleProcessorMode() {
     processorMode = !processorMode;
     if(processorMode) {
@@ -106,12 +114,15 @@ function toggleProcessorMode() {
         setTimeout(() => {
             connect("regs", "alu", {startSocket: 'right', endSocket: 'right'});
             connect("alu", "cu", {startSocket: 'bottom', endSocket: 'top'});
+            connect("alu", "mem"), {startSocket: 'right', endSocket: 'left'};
             connect("cu", "bu");
             connect("cu", "regs", {startSocket: 'left', endSocket: 'left'});
             connect("bu", "mem", {startSocket: 'right', endSocket: 'bottom'});
         }, 200);
         document.getElementById("asmoutput2").innerHTML = document.getElementById("asmoutput").innerHTML;
 
+
+        
     } else {
         for(let c in processorConnections) {
             processorConnections[c]?.remove();

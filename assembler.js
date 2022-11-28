@@ -126,6 +126,8 @@ async function executeInstruction(instruction) {
             destVal = getMemValue(getRegValue(RsM, W=="1" ? 16: 8))
         }
     }
+
+    
     
     //execute ALU
     //CYCLE: ALU

@@ -218,6 +218,40 @@ let instrSet = {
             return (parseInt(dest, 16) - 1).toString(16);
         }
 },
+    "SHL":{
+        opcode: ["110100"],
+        opNo: 1,
+        //110100 0w ooTTTmmm disp
+        //TTT=RRR=100
+        ALUfunction: (dest,steps) => {
+            let res = parseInt(dest,16);
+            res = res << steps;
+            return res.toString(16);
+        }
+    },
+
+    "SHR":{
+        opcode: ["110100"],
+        opNo: 1,
+        //110100 0w ooTTTmmm disp
+        //TTT=RRR=100
+        ALUfunction: (dest,steps) => {
+            let res = parseInt(dest,16);
+            res = res >> steps;
+            return res.toString(16);
+        }
+    
+    },
+
+    "XCHG":{
+        opcode: ["100001"],
+        opNo: 2,
+        //1000011w oorrrmmm
+    },
+
+    "CBW":{
+
+    },
 };
 
 let regs = {
