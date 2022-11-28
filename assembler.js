@@ -40,11 +40,7 @@ function parseOperand(op) {
     } else {
         result.regORhex = "H";
         //conv all other radix to hex
-        if(op[op.length-1].toUpperCase() === "B")
-            result.code = parseInt(inner, 2).toString(16);
-        else if (op[op.length-1].toUpperCase() !== "H")
-            result.code = parseInt(inner).toString(16);
-        else result.code = inner;
+        result.code = operandTo8086Hex(inner);
         
         if(result.code === "NaN") return "Invalid operand"
 
@@ -204,4 +200,48 @@ function hexToBinary(hex) {
         result = "0" + result;
     }
     return result;
+}
+
+function operandTo8086Hex(op) {
+    if(op[op.length-1].toUpperCase() === "H") {
+        if (parseInt(op, 16) < 0) {
+            return parseInt((twosComplement((parseInt(op, 16) * -1).toString(2))).padStart(16, "1"),2).toString(16);
+        } else {
+            return parseInt(op, 16).toString(16).padStart(4, "0");
+        }
+    } else if (op[op.length-1].toUpperCase() === "B") {
+        if (parseInt(op, 2) < 0) {
+            return parseInt((twosComplement((parseInt(op, 2) * -1).toString(2))).padStart(16, "1"),2).toString(16);
+        } else {
+            return parseInt(op, 2).toString(16).padStart(4, "0");
+        }
+    } else {
+        if (parseInt(op) < 0) {
+            return parseInt((twosComplement((parseInt(op) * -1).toString(2))).padStart(16, "1"),2).toString(16);
+        } else {
+            return parseInt(op).toString(16).padStart(4, "0");
+        }
+    }
+}
+
+function hexToJSInt(num) {
+    if (parseInt(num, 16).toString(2)[0] === "1") {
+        return -1 * parseInt(twosComplement(parseInt(num, 16).toString(2)), 2);
+    } else {
+        return parseInt(twosComplement(parseInt(num, 16).toString(2)), 2);
+    }
+    
+}
+
+function twosComplement(num) {
+    let result = "";
+    for (let i=0; i<num.length; i++) {
+        if (num[i] === '1') {
+            result += "0";
+        } else {
+            result += '1';
+        }
+    }
+    let length = result.length;
+    return (parseInt(result, 2) + 1).toString(2).padStart(length, "0");
 }
