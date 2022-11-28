@@ -19,8 +19,11 @@ function parseAssembly(text) {
             break;
         }
     }
-    if(!globalCompilerError)
+    if(!globalCompilerError) {
         document.getElementById("asmoutput").innerHTML = instructions.map(x => parseInt(x.machCode, 2).toString(16).padStart(x.machCode.length/4, "0")).join("\n").toUpperCase();
+        if(processorMode)
+            document.getElementById("asmoutput2").innerHTML = document.getElementById("asmoutput").innerHTML;
+    }
 }
 
 function parseOperand(op) {

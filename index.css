@@ -36,6 +36,26 @@ body {
 }
 #main.task2 #rightUI {
   gap: 4rem;
+  grid-template-rows: 1fr;
+}
+#main.task2 #rightUI #mem {
+  height: -webkit-min-content;
+  height: -moz-min-content;
+  height: min-content;
+}
+#main.task2 #rightUI #mem #asmoutput2 {
+  width: 100%;
+  margin-top: 1rem;
+  height: 100px;
+  display: block;
+  padding: 0.5rem 0.5rem;
+  border-radius: 0.5rem;
+  background-color: rgb(228, 228, 228);
+  font-size: 1rem;
+  font-family: "Courier New", Courier, monospace;
+  border: 0px;
+  resize: none;
+  transition-duration: 300ms;
 }
 #main.task2 #leftUI {
   display: grid;
@@ -70,16 +90,42 @@ body {
   min-height: 2rem;
   width: 100%;
   border-radius: 0.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(228, 228, 228);
+  border-radius: 100rem;
+  padding: 0.2rem 1rem;
+  letter-spacing: 6px;
+  font-family: "Courier New", Courier, monospace;
 }
 #main.task2 #leftUI #cu {
   order: 4;
   grid-column: 3/2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  grid-template-columns: 1fr 1fr;
+}
+#main.task2 #leftUI #cu > div {
+  width: 100%;
+  display: grid;
+  gap: 0.25rem;
 }
 #main.task2 #leftUI #cu .value {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   background-color: rgb(228, 228, 228);
-  min-height: 3rem;
+  min-height: 2rem;
   width: 100%;
   border-radius: 0.5rem;
+  background-color: rgb(228, 228, 228);
+  border-radius: 100rem;
+  padding: 0.2rem 1rem;
+  letter-spacing: 6px;
+  font-family: "Courier New", Courier, monospace;
 }
 #main.task2 #leftUI #bu {
   order: 5;
@@ -257,6 +303,9 @@ body {
 }
 #main #mem {
   padding: 2rem;
+}
+#main #mem #asmoutput2 {
+  display: none;
 }
 #main #mem #memlocs {
   display: grid;

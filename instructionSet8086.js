@@ -292,8 +292,14 @@ let regs = {
         length: 16,
     },
     "PC": {
-        code: "011",
+        code: "pc",
         length: 16,
+        doRender: false
+    },
+    "IR": {
+        code: "ir",
+        length: 16,
+        doRender: false
     },
     "DS": {
         code: "111",
