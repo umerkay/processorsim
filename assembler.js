@@ -86,7 +86,7 @@ async function executeInstruction(instruction) {
     //CYCLE: FETCH PC, CIR
     //decode CU
     let {opcode, D, W, MOD, Reg, RsM, imORadd, op1, op2, instrTYPE} = instruction;
-    let imORaddCNV = parseInt(imORadd.substring(8) + imORadd.substring(0,8), 2).toString(16); //little endian se normal convert
+    let imORaddCNV = parseInt(imORadd.substring(8) + imORadd.substring(0,8), 2).toString(16).padStart(4, imORadd[0] === "0" ? "0" : "F"); //little endian se normal convert
     
     // let instrTYPE = instruction.operation;
     let destVal, srcVal;
@@ -225,10 +225,11 @@ function operandTo8086Hex(op) {
 }
 
 function hexToJSInt(num) {
-    if (parseInt(num, 16).toString(2)[0] === "1") {
+    let b16bit = num.split("").map(x => parseInt(x, 16));
+    if (b16bit[0] === "1") {
         return -1 * parseInt(twosComplement(parseInt(num, 16).toString(2)), 2);
     } else {
-        return parseInt(twosComplement(parseInt(num, 16).toString(2)), 2);
+        return parseInt(parseInt(num, 16).toString(2), 2);
     }
     
 }

@@ -187,9 +187,11 @@ let instrSet = {
         opcode: ["000000","100000", "100000"],                                       
         opNo: 2,
         ALUfunction: (dest, source) => {
-            let res = operandTo8086Hex((hexToJSInt(dest) + hexToJSInt(source)).toString);
-            if(res.length > 4) globalRuntimeError = "Overflow in result of ADD";
+            console.log(dest, source, hexToJSInt(dest), hexToJSInt(source), hexToJSInt(dest) + hexToJSInt(source))
+            let res = operandTo8086Hex((hexToJSInt(dest) + hexToJSInt(source)).toString());
+            if(res.length > 4) return res.slice(1);
             return res.length <= 4 ? res : "FFFF";
+            return res;
         },
     },
     "SUB": {
