@@ -218,6 +218,30 @@ let instrSet = {
             return (parseInt(dest, 16) - 1).toString(16);
         }
 },
+    "SHL":{
+        opcode: ["110100"],
+        opNo: 1,
+        //110100 0w ooTTTmmm disp
+        //TTT=RRR=100
+        //
+
+    },
+
+    "LOAD":{
+
+    },
+
+    "SHR":{
+    
+    },
+
+    "XCHG":{
+
+    },
+
+    "CBW":{
+
+    },
 };
 
 let regs = {
