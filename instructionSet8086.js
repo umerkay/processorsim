@@ -159,7 +159,7 @@ let instrSet = {
         opcode: ["000000","100000", "100000"],                                       
         opNo: 2,
         ALUfunction: (dest, source) => {
-            let res = (parseInt(dest, 16) + parseInt(source, 16)).toString(16);
+            let res = operandTo8086Hex((hexToJSInt(dest) + hexToJSInt(source)).toString);
             if(res.length > 4) globalRuntimeError = "Overflow in result of ADD";
             return res.length <= 4 ? res : "FFFF";
         },
@@ -168,9 +168,9 @@ let instrSet = {
         opcode: ["000101","100000","100000"],
         opNo: 2,
         ALUfunction: (dest, source) => {
-            let res = parseInt(dest, 16) - parseInt(source, 16);
+            let res = operandTo8086Hex((hexToJSInt(dest) - hexToJSInt(source)).toString());
             if(res < 0) globalRuntimeError = "Negative value in result of SUB";
-            return res >= 0 ? res.toString(16) : "0000";
+            return res;
         },
 
     },
