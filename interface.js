@@ -20,9 +20,15 @@ function getMemValue(address) {
 }
 
 function setMemValue(address, value) {
+    console.log(value);
     if(globalRuntimeError) return "";
     try {
-        document.getElementById("m"+address.padStart(5, '0').toUpperCase()).innerHTML = value.padStart(4, '0').toUpperCase();
+        if (parseInt(value, 16).toString(16).length > 2) {
+            document.getElementById("m" + address.padStart(5, '0').toUpperCase()).innerHTML = value.substring(0,2);
+            document.getElementById("m" + (parseInt(address,16)+1).toString(16).padStart(5, '0').toUpperCase()).innerHTML = value.substring(2);
+        } else {
+            document.getElementById("m"+address.padStart(5, '0').toUpperCase()).innerHTML = parseInt(value, 16).toString(16).padStart(2, '0').toUpperCase();
+        }
     } catch(e) {
         globalRuntimeError = "Error writing to memory";
     }

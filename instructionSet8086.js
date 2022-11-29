@@ -22,9 +22,12 @@ function generalizedFinalParse(operation, op1, op2) {
         } else if (op2.isMemory && op2.regORhex === "R") {           
             RsM = op2.code;
             MOD = "00";
-        } else if (op2.isMemory && op2.RegORhex === "H") {       
+        } else if (op2.isMemory && op2.regORhex === "H") {  
             MOD = "00";
             RsM = "110";
+            if (op2.length > 20) {
+                return "Memory adress out of bound.";
+            }
             code = hexToBinary(op2.code);
             imORadd = code.substring(8) + code.substring(0, 8);
         } else {
@@ -48,7 +51,10 @@ function generalizedFinalParse(operation, op1, op2) {
                 RsM = op1.code;
                 MOD = "00";
             }
-            code = hexToBinary(op2.code);
+            if (op1.length < op2.length) {
+                return "Cannot " + operation + ": Operands of different sizes.";
+            }
+            code = hexToBinary(op2.code, op1.length);
             imORadd = code.substring(8) + code.substring(0,8);
         }
     }
@@ -66,9 +72,15 @@ function generalizedFinalParse(operation, op1, op2) {
             Reg = op2.code;
             MOD = "00";
             RsM = "110";
+            if (op1.length > 20) {
+                return "Memory adress out of bound.";
+            }
             code = hexToBinary(op1.code);
             imORadd = code.substring(8) + code.substring(0, 8);
         } else if (op1.regORhex === "R" && op2.regORhex === "H") {
+            if (op2.length > 16) {
+                return "Cannot move immediate value greater than FFFF to memory.";
+            }
             if(Opcode.length < 2) return "Instruction format not supported";
             opcode = Opcode[2];
             RsM = op1.code;
@@ -187,7 +199,7 @@ let instrSet = {
         opcode: ["000000","100000", "100000"],                                       
         opNo: 2,
         ALUfunction: (dest, source) => {
-            console.log(dest, source, hexToJSInt(dest), hexToJSInt(source), hexToJSInt(dest) + hexToJSInt(source))
+            // console.log(dest, source, hexToJSInt(dest), hexToJSInt(source), hexToJSInt(dest) + hexToJSInt(source))
             let res = operandTo8086Hex((hexToJSInt(dest) + hexToJSInt(source)).toString());
             if(res.length > 4) return res.slice(1);
             return res.length <= 4 ? res : "FFFF";
@@ -216,7 +228,7 @@ let instrSet = {
         opcode:["001000", "100000","100000"],
         opNo:2,
         ALUfunction: (dest, source) => {
-            console.log(dest, source);
+            // console.log(dest, source);
             return (parseInt(dest, 16) & parseInt(source, 16)).toString(16)
         },
         // ALUfunction: console.log
@@ -287,9 +299,39 @@ let instrSet = {
     },
 
     "XCHG":{
-        opcode: ["100001"],
+        opcode : ["99999"],
+    },
+
+    "ROL":{
+        opcode:["nan", "110100", "110100"],
         opNo: 2,
-        //1000011w oorrrmmm
+        //1101000w ooTTTmmm disp
+        //TTT=RRR=000
+        defReg: "000",
+        ALUfunction: (dest,steps) => {
+            steps = parseInt(steps, 16);
+            let b16bit = dest.split("").map(x => parseInt(x, 16).toString(2).padStart(4, "0")).join("");
+            let newbits = b16bit.slice(0, steps);
+            let lostBits = b16bit.slice(steps);
+            return parseInt(lostBits + newbits, 2).toString(16);
+        },
+    },
+
+    "ROR":{
+        opcode:["nan","110100","110100"],
+        opNo: 2,
+        //1101000w ooTTTmmm disp
+        //TTT=RRR=001
+        defReg: "001",
+        ALUfunction: (dest,steps) => {
+            console.log(steps);
+            steps = parseInt(steps, 16);
+            let b16bit = dest.split("").map(x => parseInt(x, 16).toString(2).padStart(4, "0")).join("");
+            let newbits = b16bit.slice(0, (dest.length*4)-steps);
+            let lostBits = b16bit.slice((dest.length*4)-steps);
+            // console.log(b16bit, newbits, lostBits, dest.length, steps);
+            return parseInt(lostBits + newbits, 2).toString(16);
+        },
     },
 
     "CBW":{
@@ -317,7 +359,12 @@ let instrSet = {
     }, 
 
     "NEG":{
-        ///faiz
+        opcode: ["111101"],
+        opNo: 1,
+        defReg: "011",
+        ALUfunction: (dest) => {
+            return operandTo8086Hex((hexToJSInt(dest) * -1).toString()).toString(16);
+        }
     },
 };
 
