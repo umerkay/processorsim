@@ -37,7 +37,7 @@ window.addEventListener("load", () => {
         addr = addr.padStart(5, '0');
         memVal.id = "m" + addr; 
         memAddr.innerHTML = addr; 
-        memVal.innerHTML = "0000";
+        memVal.innerHTML = "00";
 
         memEl.classList.add("memloc");
         memVal.classList.add("value");

@@ -22,9 +22,12 @@ function generalizedFinalParse(operation, op1, op2) {
         } else if (op2.isMemory && op2.regORhex === "R") {           
             RsM = op2.code;
             MOD = "00";
-        } else if (op2.isMemory && op2.RegORhex === "H") {       
+        } else if (op2.isMemory && op2.regORhex === "H") {  
             MOD = "00";
             RsM = "110";
+            if (op2.length > 20) {
+                return "Memory adress out of bound.";
+            }
             code = hexToBinary(op2.code);
             imORadd = code.substring(8) + code.substring(0, 8);
         } else {
@@ -69,9 +72,15 @@ function generalizedFinalParse(operation, op1, op2) {
             Reg = op2.code;
             MOD = "00";
             RsM = "110";
+            if (op1.length > 20) {
+                return "Memory adress out of bound.";
+            }
             code = hexToBinary(op1.code);
             imORadd = code.substring(8) + code.substring(0, 8);
         } else if (op1.regORhex === "R" && op2.regORhex === "H") {
+            if (op2.length > 16) {
+                return "Cannot move immediate value greater than FFFF to memory.";
+            }
             if(Opcode.length < 2) return "Instruction format not supported";
             opcode = Opcode[2];
             RsM = op1.code;
@@ -190,7 +199,7 @@ let instrSet = {
         opcode: ["000000","100000", "100000"],                                       
         opNo: 2,
         ALUfunction: (dest, source) => {
-            console.log(dest, source, hexToJSInt(dest), hexToJSInt(source), hexToJSInt(dest) + hexToJSInt(source))
+            // console.log(dest, source, hexToJSInt(dest), hexToJSInt(source), hexToJSInt(dest) + hexToJSInt(source))
             let res = operandTo8086Hex((hexToJSInt(dest) + hexToJSInt(source)).toString());
             if(res.length > 4) return res.slice(1);
             return res.length <= 4 ? res : "FFFF";
@@ -211,7 +220,7 @@ let instrSet = {
         opcode:["001000", "100000","100000"],
         opNo:2,
         ALUfunction: (dest, source) => {
-            console.log(dest, source);
+            // console.log(dest, source);
             return (parseInt(dest, 16) & parseInt(source, 16)).toString(16)
         },
         // ALUfunction: console.log

@@ -96,7 +96,7 @@ async function executeInstruction(instruction) {
     let {opcode, D, W, MOD, Reg, RsM, imORadd, op1, op2, instrTYPE} = instruction;
     tempCNV = imORadd.substring(8) + imORadd.substring(0,8);
     let imORaddCNV = parseInt(tempCNV, 2).toString(16).padStart(tempCNV.length/4, tempCNV[0] === "0" ? "0" : "F"); //little endian se normal convert
-    console.log(imORaddCNV);
+    // console.log(imORaddCNV);
     // let instrTYPE = instruction.operation;
     let destVal, srcVal;
 
