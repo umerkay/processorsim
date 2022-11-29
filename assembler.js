@@ -40,8 +40,17 @@ function parseOperand(op) {
     } else {
         result.regORhex = "H";
         //conv all other radix to hex
-        result.code = operandTo8086Hex(inner);
-        if(isNaN(result.code)) return "Invalid operand"
+        let length;
+        if (inner[inner.length-1].toUpperCase() === "B") {
+            length = parseInt(inner, 2).toString(2).length;
+        } else if (inner[inner.length - 1].toUpperCase() === "H") {
+            length = parseInt(inner, 16).toString(2).length;
+        } else {
+            length = parseInt(inner).toString(2).length;
+        }
+        result.code = operandTo8086Hex(inner, length <= 8 ? 2 : 4);
+        if(result.code + "" === "NaN") return "Invalid operand"
+        if(result.code + "" === "0NaN") return "Invalid operand"
 
         result.length = result.code.length * 4;
     }
@@ -85,8 +94,9 @@ async function executeInstruction(instruction) {
     //CYCLE: FETCH PC, CIR
     //decode CU
     let {opcode, D, W, MOD, Reg, RsM, imORadd, op1, op2, instrTYPE} = instruction;
-    let imORaddCNV = parseInt(imORadd.substring(8) + imORadd.substring(0,8), 2).toString(16).padStart(4, imORadd[0] === "0" ? "0" : "F"); //little endian se normal convert
-    
+    tempCNV = imORadd.substring(8) + imORadd.substring(0,8);
+    let imORaddCNV = parseInt(tempCNV, 2).toString(16).padStart(tempCNV.length/4, tempCNV[0] === "0" ? "0" : "F"); //little endian se normal convert
+    console.log(imORaddCNV);
     // let instrTYPE = instruction.operation;
     let destVal, srcVal;
 
@@ -114,12 +124,14 @@ async function executeInstruction(instruction) {
             destVal = getMemValue(getRegValue(RsM));
             srcVal = imORaddCNV;
         }
-    } else {
+    } else if (instrTYPE) {
         if (MOD == "11") {
             destVal = getRegValue(RsM, W == "1" ? 16 : 8);
         } else {
-            destVal = getMemValue(getRegValue(RsM, W=="1" ? 16: 8))
+            destVal = getMemValue(getRegValue(RsM, W=="1" ? 16: 8));
         }
+    } else {
+
     }
 
     
@@ -192,33 +204,33 @@ async function executeInstruction(instruction) {
     setRegValue(regs["PC"].code, (parseInt(getRegValue(regs["PC"].code), 16) + 1).toString(16), W == "1" ? 16 : 8);
 }
 
-function hexToBinary(hex) {
+function hexToBinary(hex, length=16) {
     let result;
     result = parseInt(hex, 16).toString(2);
-    while (result.length < 16) {
+    while (result.length < length) {
         result = "0" + result;
     }
     return result;
 }
 
-function operandTo8086Hex(op) {
+function operandTo8086Hex(op, length = 4) {
     if(op[op.length-1].toUpperCase() === "H") {
         if (parseInt(op, 16) < 0) {
-            return parseInt((twosComplement((parseInt(op, 16) * -1).toString(2))).padStart(16, "1"),2).toString(16);
+            return parseInt((twosComplement((parseInt(op, 16) * -1).toString(2))).padStart(length * 4, "1"),2).toString(16);
         } else {
-            return parseInt(op, 16).toString(16).padStart(4, "0");
+            return parseInt(op, 16).toString(16).padStart(length, "0");
         }
     } else if (op[op.length-1].toUpperCase() === "B") {
         if (parseInt(op, 2) < 0) {
-            return parseInt((twosComplement((parseInt(op, 2) * -1).toString(2))).padStart(16, "1"),2).toString(16);
+            return parseInt((twosComplement((parseInt(op, 2) * -1).toString(2))).padStart(length * 4, "1"),2).toString(16);
         } else {
-            return parseInt(op, 2).toString(16).padStart(4, "0");
+            return parseInt(op, 2).toString(16).padStart(length, "0");
         }
     } else {
         if (parseInt(op) < 0) {
-            return parseInt((twosComplement((parseInt(op) * -1).toString(2))).padStart(16, "1"),2).toString(16);
+            return parseInt((twosComplement((parseInt(op) * -1).toString(2))).padStart(length * 4, "1"),2).toString(16);
         } else if (parseInt(op) >= 0) {
-            return parseInt(op).toString(16).padStart(4, "0");
+            return parseInt(op).toString(16).padStart(length, "0");
         } else {
             return NaN;
         }
