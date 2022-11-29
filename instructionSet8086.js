@@ -48,7 +48,10 @@ function generalizedFinalParse(operation, op1, op2) {
                 RsM = op1.code;
                 MOD = "00";
             }
-            code = hexToBinary(op2.code);
+            if (op1.length < op2.length) {
+                return "Cannot " + operation + ": Operands of different sizes.";
+            }
+            code = hexToBinary(op2.code, op1.length);
             imORadd = code.substring(8) + code.substring(0,8);
         }
     }
@@ -303,7 +306,11 @@ let instrSet = {
     },*/
 
     "CBW":{
-        ///faiz
+        opcode: ['100110'],
+        opNo: 0,
+        ALUfunction: () => {
+
+        }
     },
 
     "NEG":{
