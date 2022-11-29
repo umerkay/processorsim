@@ -279,10 +279,28 @@ let instrSet = {
     },
 
     "XCHG":{
-        opcode: ["100001"],
-        opNo: 2,
-        //1000011w oorrrmmm
+        opcode : ["99999"],
     },
+
+    "ROL":{
+        opcode:["110100"],
+        opNo: 2,
+        //1101000w ooTTTmmm disp
+        //TTT=RRR=001
+        defReg: "000",
+        ALUfunction: (dest,steps) => {
+            let b16bit = getRegValue('dest',8).split("").map(x=>parseInt(x,16)); //converts first hex digit to binary
+            let LSB = bb16bit[0]; //gets first binary digit from hex
+            return (getRegValue('dest',8).slice(1) + LSB).toString(16);
+        } ,
+    },
+
+    /*"ROL":{
+        opcode:["110100"],
+        opNo: 2,
+        //1101000w ooTTTmmm disp
+        //TTT=RRR=000
+    },*/
 
     "CBW":{
         ///faiz
