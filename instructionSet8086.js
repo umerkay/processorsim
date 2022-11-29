@@ -286,24 +286,36 @@ let instrSet = {
     },
 
     "ROL":{
-        opcode:["110100"],
-        opNo: 2,
-        //1101000w ooTTTmmm disp
-        //TTT=RRR=001
-        defReg: "000",
-        ALUfunction: (dest,steps) => {
-            let b16bit = getRegValue('dest',8).split("").map(x=>parseInt(x,16)); //converts first hex digit to binary
-            let LSB = bb16bit[0]; //gets first binary digit from hex
-            return (getRegValue('dest',8).slice(1) + LSB).toString(16);
-        } ,
-    },
-
-    /*"ROL":{
-        opcode:["110100"],
+        opcode:["nan", "110100", "110100"],
         opNo: 2,
         //1101000w ooTTTmmm disp
         //TTT=RRR=000
-    },*/
+        defReg: "000",
+        ALUfunction: (dest,steps) => {
+            steps = parseInt(steps, 16);
+            let b16bit = dest.split("").map(x => parseInt(x, 16).toString(2).padStart(4, "0")).join("");
+            let newbits = b16bit.slice(0, steps);
+            let lostBits = b16bit.slice(steps);
+            return parseInt(lostBits + newbits, 2).toString(16);
+        },
+    },
+
+    "ROR":{
+        opcode:["nan","110100","110100"],
+        opNo: 2,
+        //1101000w ooTTTmmm disp
+        //TTT=RRR=001
+        defReg: "001",
+        ALUfunction: (dest,steps) => {
+            console.log(steps);
+            steps = parseInt(steps, 16);
+            let b16bit = dest.split("").map(x => parseInt(x, 16).toString(2).padStart(4, "0")).join("");
+            let newbits = b16bit.slice(0, (dest.length*4)-steps);
+            let lostBits = b16bit.slice((dest.length*4)-steps);
+            // console.log(b16bit, newbits, lostBits, dest.length, steps);
+            return parseInt(lostBits + newbits, 2).toString(16);
+        },
+    },
 
     "CBW":{
         opcode: ['100110'],
