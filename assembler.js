@@ -40,7 +40,7 @@ function parseOperand(op) {
     } else {
         result.regORhex = "H";
         //conv all other radix to hex
-        result.code = operandTo8086Hex(inner);
+        result.code = operandTo8086Hex(inner, inner.length);
         
         if(result.code === "NaN") return "Invalid operand"
 
@@ -71,38 +71,47 @@ function instructionToMachine(instr, i) {
     if(typeof op2 === "string") return op2;
 
     let finalParsed;
-    if(operands.length === 0) finalParsed = { machCode: instrSet[op].opcode };
+    if(operands.length === 0) finalParsed = { machCode: instrSet[op].opcode[0], instrTYPE: op };
     if(operands.length === 1) finalParsed = unaryFinalParse(op, op1);
     if(operands.length === 2) finalParsed = generalizedFinalParse(op, op1, op2);
-
-    return finalParsed; //string if error otherwise parsed object
+    if(typeof finalParsed === "string") return finalParsed;
+    return {...finalParsed, orgInstr: instr}; //string if error otherwise parsed object
 }
 
 const delay = (timeToDelay) => new Promise((resolve) => setTimeout(resolve, timeToDelay));
 
 async function executeInstruction(instruction) {
-    if(processorMode) await delay(1000);
+    // if(instruction.machCode === "11111111101") return "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
+    // if(instruction.machCode === "111111111011") return "The bits are upset they were associated with Manahil";
+    if(processorMode) await animateFetch(instruction);
     if(instruction.machCode === instrSet["NOP"].opcode) return;
     //CYCLE: FETCH PC, CIR
     //decode CU
-    let {opcode, D, W, MOD, Reg, RsM, imORadd, op1, op2, instrTYPE} = instruction;
-    let imORaddCNV = parseInt(imORadd.substring(8) + imORadd.substring(0,8), 2).toString(16).padStart(4, imORadd[0] === "0" ? "0" : "F"); //little endian se normal convert
-    
+    let {opcode, D, W, MOD, Reg, RsM, imORadd, op1, op2, instrTYPE, machCode} = instruction;
+    let imORaddCNV;
+    if(imORadd) 
+        imORaddCNV = parseInt(imORadd.substring(8) + imORadd.substring(0,8), 2).toString(16).padStart(4, imORadd[0] === "0" ? "0" : "F"); //little endian se normal convert
     // let instrTYPE = instruction.operation;
     let destVal, srcVal;
 
     //CYCLE: DECODE
+    if(processorMode) await animateDecode(instruction);
     //decode operands and fetch operands if required
+    let didAccessMemory = false;
     if(instrSet[instrTYPE].opNo === 2) {
         if(opcode === instrSet[instrTYPE].opcode[0]) {
             if(D === "1") {
                 //MOD != 11 is fetch operand case
-                if(MOD !== "11") srcVal = getMemValue(((RsM === "110" && imORadd !== "") ? imORaddCNV : getRegValue(RsM)));
+                if(MOD !== "11") {
+                    didAccessMemory = true;
+                    srcVal = getMemValue(((RsM === "110" && imORadd !== "") ? imORaddCNV : getRegValue(RsM)));
+                }
                 if(MOD === "11") srcVal = getRegValue(RsM, W == "1" ? 16 : 8);
                 destVal = getRegValue(Reg);
             } else {//D === 0
                 //fetch operand case
                 //CYCLE: FETCH OPERAND
+                didAccessMemory = true;
                 destVal = getMemValue((RsM === "110" && imORadd !== "") ? imORaddCNV : getRegValue(RsM));
                 srcVal = getRegValue(Reg);
             }
@@ -112,32 +121,43 @@ async function executeInstruction(instruction) {
             srcVal = imORaddCNV;
         } else if((D === "" && opcode === instrSet[instrTYPE].opcode[2]) || (D === "0")) {
             //CYCLE: FETCH OPERAND
+            didAccessMemory = true;
             destVal = getMemValue(getRegValue(RsM));
             srcVal = imORaddCNV;
         }
-    } else {
+    } else if(instrSet[instrTYPE].opNo === 1) {
         if (MOD == "11") {
             destVal = getRegValue(RsM, W == "1" ? 16 : 8);
         } else {
+            didAccessMemory = true;
             destVal = getMemValue(getRegValue(RsM, W=="1" ? 16: 8))
         }
+    } else {
+        if(machCode === instrSet["DAA"].opcode[0]) {
+            destVal = getRegValue(regs["AL"].code, 8);
+        }
+        if(machCode === instrSet["CBW"].opcode[0]) {
+            destVal = getRegValue(regs["AL"].code, 8);
+        }
     }
-
-    
+    if(processorMode) await animateFetchOperand(didAccessMemory, destVal, srcVal);
     
     //execute ALU
     //CYCLE: ALU
     let ALUResult = instrSet[instrTYPE].ALUfunction(destVal, srcVal);
 
-    if(opcode === instrSet["XCHG"].opcode[0]) {
+    if(processorMode) await animateExecute(ALUResult);
+
+    // if(opcode === instrSet["XCHG"].opcode[0]) {
         
-    }
+    // }
 
     if(globalRuntimeError) {
         displayError("Runtime error: " + globalRuntimeError);
     }
 
     //store reg to memory
+    let didWriteToMemory = false;
     if (instrSet[instrTYPE].opNo === 2) {
         if(opcode == instrSet[instrTYPE].opcode[0]) {
             if(D === "1") {
@@ -151,6 +171,7 @@ async function executeInstruction(instruction) {
                 //mov [ax], bx
                 //mov [1234], bx
                 //CYCLE: STORE
+                didWriteToMemory = true;
                 setMemValue((RsM === "110" && imORadd !== "") ? imORaddCNV : getRegValue(RsM), ALUResult);
             }
         } else if(instrTYPE === "MOV") {
@@ -158,6 +179,7 @@ async function executeInstruction(instruction) {
                 setRegValue(opcode === "100000" ? RsM : Reg, ALUResult, W == "1" ? 16 : 8); //mov ax, 1234h
             }
             else if(opcode === instrSet[instrTYPE].opcode[2]) {
+                didWriteToMemory = true;
                 setMemValue(getRegValue(RsM), ALUResult); //mov [ax], 1234h    
             }
         } else {
@@ -165,11 +187,12 @@ async function executeInstruction(instruction) {
                 setRegValue(opcode === "100000" ? RsM : Reg, ALUResult, W == "1" ? 16 : 8); //mov ax, 1234h
             }
             else if(D === "0") {
+                didWriteToMemory = true;
                 setMemValue(getRegValue(RsM), ALUResult); //mov [ax], 1234h    
             }
         }
     }
-    else {
+    else if(instrSet[instrTYPE].opNo === 1){
         if (MOD == "11") {
             if(opcode === "111101" && Reg === "100") {
                 setRegValue(regs["AX"].code, ALUResult, 16);
@@ -177,20 +200,29 @@ async function executeInstruction(instruction) {
                 setRegValue(RsM, ALUResult, W=="1" ? 16: 8);
             }
         } else {
+            didWriteToMemory = true;
             if(opcode === "111101" && Reg === "100") {
                 setMemValue(getRegValue(regs["AX"].code, 16), ALUResult);
             } else {
                 setMemValue(getRegValue(RsM, W=="1"? 16 : 8), ALUResult);
             }
         }
+    } else {
+        if(machCode === instrSet["DAA"].opcode[0]) {
+            setRegValue(regs["AL"].code, ALUResult, 8);
+        }
+        if(machCode === instrSet["CBW"].opcode[0]) {
+            setRegValue(regs["AX"].code, ALUResult, 16);
+        }
     }
     
+    if(processorMode) if(didWriteToMemory) animateStore();
 
     if(globalRuntimeError) {
         displayError("Runtime error: " + globalRuntimeError);
     }
     //increment PC
-    setRegValue(regs["PC"].code, (parseInt(getRegValue(regs["PC"].code), 16) + 1).toString(16), W == "1" ? 16 : 8);
+    // setRegValue(regs["PC"].code, (parseInt(getRegValue(regs["PC"].code), 16) + 1).toString(16), W == "1" ? 16 : 8);
 }
 
 function hexToBinary(hex) {

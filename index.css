@@ -99,6 +99,36 @@ body {
   letter-spacing: 6px;
   font-family: "Courier New", Courier, monospace;
 }
+#main.task2 #leftUI #cu, #main.task2 #leftUI #alu {
+  position: relative;
+}
+#main.task2 #leftUI #cu img, #main.task2 #leftUI #alu img {
+  display: none;
+}
+#main.task2 #leftUI #cu.animate img, #main.task2 #leftUI #alu.animate img {
+  display: block;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  -webkit-animation: rotation 0.3s infinite linear;
+          animation: rotation 0.3s infinite linear;
+}
+@-webkit-keyframes rotation {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(359deg);
+  }
+}
+@keyframes rotation {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(359deg);
+  }
+}
 #main.task2 #leftUI #cu {
   order: 4;
   grid-column: 3/2;
@@ -107,6 +137,8 @@ body {
   align-items: center;
   justify-content: center;
   grid-template-columns: 1fr 1fr;
+  position: relative;
+  width: 300px;
 }
 #main.task2 #leftUI #cu > div {
   width: 100%;

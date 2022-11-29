@@ -12,11 +12,11 @@ function generalizedFinalParse(operation, op1, op2) {
     }
     else if (op1.isMemory === false) {
         D = "1";
-        Reg = op1.code;
+        Reg = op1.code;   
+        if (op1.length != op2.length) {
+            return "Cannot " + operation + ": operands of different sizes.";
+        }      
         if (op2.isMemory === false && op2.regORhex === "R") {
-            if (op1.length != op2.length) {
-                return "Cannot " + operation + " registers of different sizes.";
-            }         
             RsM = op2.code;
             MOD = "11";                    
         } else if (op2.isMemory && op2.regORhex === "R") {           
@@ -157,7 +157,7 @@ let instrSet = {
         // doesAcceptImm: true
     },
     "NOP": {
-        opcode: "10010000",
+        opcode: ["10010000"],
         opNo: 0
     },
     "MOV": {//no need for conv
@@ -194,13 +194,21 @@ let instrSet = {
             return res;
         },
     },
+    // "SHALINA": {
+    //     opcode: ["11111111101"],
+    //     opNo: 0,
+    // },
+    // "MANAHIL": {
+    //     opcode: ["111111111011"],
+    //     opNo: 0,
+    // },
     "SUB": {
         opcode: ["000101","100000","100000"],
         opNo: 2,
         ALUfunction: (dest, source) => {
             let res = operandTo8086Hex((hexToJSInt(dest) - hexToJSInt(source)).toString());
-            if(res < 0) globalRuntimeError = "Negative value in result of SUB";
-            return res;
+            // if(res < 0) globalRuntimeError = "Negative value in result of SUB";
+            return res; 
         },
 
     },//signed
@@ -285,8 +293,28 @@ let instrSet = {
     },
 
     "CBW":{
-        ///faiz
+        opcode:["10011000"],
+        opNo:0,
+        //needs to be implemented for no operand operation, 
+        //also set value of AX to the val returned from ALU func
+        ALUfunction: (dest)=> {
+            console.log(dest);
+            let b16bit = dest.split("").map(x => parseInt(x, 16).toString(2).padStart(4, "0")).join("");
+            return (b16bit[0] === "0" ? "00" : "FF") + dest;
+        }
+
     },
+
+    "DAA":{
+        opcode: ["00100111"],
+    //     opNo: 0,
+    //     ALUfunction: (dest) => {
+    //         let res = parseInt(dest, 16);
+    //         if(res > 9) res += 6;
+    //         if(parseInt(res.toString(16)[0]) > 9) res += 6*16;
+    //         return res.toString(16);
+    //     }
+    }, 
 
     "NEG":{
         ///faiz

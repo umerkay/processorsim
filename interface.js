@@ -68,7 +68,7 @@ function reset() {
     }
 
     for(let i = 0; i < memLocs; i++) {
-        setMemValue(i.toString(16), "0000");
+        setMemValue(i.toString(16), "00");
     }
 }
 
@@ -96,12 +96,69 @@ function connect(a, b, objs = {}) {
     );
 }
 
-async function animateFetch() {
+let animationDelay = 500;
+
+async function animateFetch(x) {
+    processorConnections["cu_mem"].color = "blue"
+    processorConnections["cu_mem"].startPlug = "arrow1"
+    // processorConnections["cu_mem"].dash = {animation: true};
+
+    document.getElementById("rir").innerHTML = parseInt(x.machCode, 2).toString(16).padStart(x.machCode.length/4, "0");
+    setRegValue(regs["PC"].code, (parseInt(getRegValue(regs["PC"].code), 16) + 1).toString(16));
+    await delay(animationDelay);
+    processorConnections["cu_mem"].color = "rgba(219, 219, 219 ,1)";
+    processorConnections["cu_mem"].startPlug = "square";
+}
+
+async function animateDecode(x) {
+
+    document.getElementById("cu").classList.add("animate");
+    await delay(animationDelay);
+    document.getElementById("cu").classList.remove("animate");
+    document.getElementById("rir").innerHTML = x.orgInstr.toLowerCase();
+}
+
+async function animateFetchOperand(didAccessMemory, dest, src) {
+    processorConnections["regs_alu"].color = "blue";
+    processorConnections["regs_alu"].endPlug = "arrow1";
+
+    if(didAccessMemory) {
+        processorConnections["alu_mem"].color = "blue";
+        processorConnections["alu_mem"].startPlug = "arrow1";
+    }
+
+    await delay(animationDelay);
+
+    if(dest) document.getElementById("a0").innerHTML = dest;
+    if(src) document.getElementById("a1").innerHTML = dest;
+
+    processorConnections["regs_alu"].color = "rgba(219, 219, 219, 1)";
+    processorConnections["regs_alu"].endPlug = "square";
+
+    if(didAccessMemory) {
+        processorConnections["alu_mem"].color = "rgba(219, 219, 219, 1)";
+        processorConnections["alu_mem"].startPlug = "square";
+    }
+}
+
+async function animateExecute(result) {
+    document.getElementById("alu").classList.add("animate");
+
+    await delay(animationDelay);
+
+    if(result) document.getElementById("a0").innerHTML = result;
+    document.getElementById("alu").classList.remove("animate");
 
 }
 
-async function animateDecode() {
+async function animateStore() {
+    processorConnections["alu_mem"].color = "blue";
+    processorConnections["alu_mem"].endPlug = "arrow1";
 
+    await delay(animationDelay);
+
+    processorConnections["alu_mem"].color = "rgba(219, 219, 219, 1)";
+    processorConnections["alu_mem"].endPlug = "square";
 }
 
 function toggleProcessorMode() {
@@ -113,13 +170,16 @@ function toggleProcessorMode() {
         // document.getElementById("mem").appendChild(document.getElementById("asmoutput"));
         setTimeout(() => {
             connect("regs", "alu", {startSocket: 'right', endSocket: 'right'});
-            connect("alu", "cu", {startSocket: 'bottom', endSocket: 'top'});
-            connect("alu", "mem"), {startSocket: 'right', endSocket: 'left'};
-            connect("cu", "bu");
+            connect("alu", "cu", {startSocket: 'left', endSocket: 'left'});
             connect("cu", "regs", {startSocket: 'left', endSocket: 'left'});
-            connect("bu", "mem", {startSocket: 'right', endSocket: 'bottom'});
+            connect("alu", "mem", {startSocket: 'right', endSocket: 'left'});
+            connect("cu", "mem", {startSocket: 'right', endSocket: 'bottom'});
+            // connect("cu", "bu");
+            // connect("bu", "mem", {startSocket: 'right', endSocket: 'bottom'});
         }, 200);
-        document.getElementById("asmoutput2").innerHTML = document.getElementById("asmoutput").innerHTML;
+        //if not error
+        if(!globalCompilerError && !globalRuntimeError)
+            document.getElementById("asmoutput2").innerHTML = document.getElementById("asmoutput").innerHTML;
 
 
         

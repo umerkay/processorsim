@@ -12,7 +12,7 @@ body {
     justify-content: center;
     padding: 0px;
     margin: 0px;
-
+    // background-color: rgb(252, 252, 252);
 }
 
 #main {
@@ -96,6 +96,30 @@ body {
                 }
             }
 
+            #cu, #alu {
+                position: relative;
+                img {
+                    display: none;
+                }
+                &.animate {
+                    img {
+                        display: block;
+                        position: absolute;
+                        top: 10px;
+                        right: 10px;
+                        animation: rotation 0.3s infinite linear;
+                    }
+                    @keyframes rotation {
+                    from {
+                        transform: rotate(0deg);
+                    }
+                    to {
+                        transform: rotate(359deg);
+                    }
+                    }
+                }
+            }
+
             #cu {
                 order: 4;
                 grid-column: 3 / 2;
@@ -104,6 +128,9 @@ body {
                 align-items: center;
                 justify-content: center;
                 grid-template-columns: 1fr 1fr;
+                position: relative;
+                width: 300px;
+                
                 >div {
                     width: 100%;
                     display: grid;
