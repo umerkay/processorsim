@@ -77,6 +77,16 @@ Vaiations: Inc/Dec reg, Inc/Dec mem  (Memory in register like [ax] but not like 
 The DEC instruction is used for decrementing an operand by one. It works on a single operand that can be either in a register or in memory.
 Vaiations: Inc/Dec reg, Inc/Dec mem  (Memory in register like [ax] but not like [s00005h].)
 
+#### NOT:
+
+NOT operation performs the 1s complement of the operand 
+Variations: Not reg, Not mem
+
+#### AND:
+
+The AND instruction performs a Boolean (bitwise) AND operation between each pair of matching bits in two operands and places the result in the destination operand.
+Variations: And reg,reg, And reg,mem, And reg,imm
+
 ## Technologies
 
 Project is created using:
