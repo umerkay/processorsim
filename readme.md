@@ -72,6 +72,11 @@ Variations: shl/shr reg, immediate value
 The INC instruction is used for incrementing an operand by one. It works on a single operand that can be either in a register or in memory.
 Vaiations: Inc/Dec reg, Inc/Dec mem  (Memory in register like [ax] but not like [s00005h].)
 
+#### DEC
+
+The DEC instruction is used for decrementing an operand by one. It works on a single operand that can be either in a register or in memory.
+Vaiations: Inc/Dec reg, Inc/Dec mem  (Memory in register like [ax] but not like [s00005h].)
+
 ## Technologies
 
 Project is created using:
