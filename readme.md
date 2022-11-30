@@ -67,6 +67,11 @@ Variations: shl/shr reg, immediate value
 The SHL instruction is an abbreviation for ‘Shift Left’. This instruction simply shifts the mentioned bits in the register to the left side one by one by inserting the same number (bits that are being shifted) of zeroes from the right end. 
 Variations: shl/shr reg, immediate value
 
+#### INC
+
+The INC instruction is used for incrementing an operand by one. It works on a single operand that can be either in a register or in memory.
+Vaiations: Inc/Dec reg, Inc/Dec mem  (Memory in register like [ax] but not like [s00005h].)
+
 ## Technologies
 
 Project is created using:
