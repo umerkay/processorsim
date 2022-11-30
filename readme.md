@@ -87,6 +87,11 @@ Variations: Not reg, Not mem
 The AND instruction performs a Boolean (bitwise) AND operation between each pair of matching bits in two operands and places the result in the destination operand.
 Variations: And reg,reg, And reg,mem, And reg,imm
 
+#### XOR
+
+Performs a bit-wise xor of the two operands, and stores the result in destination.
+Variations: Xor reg,reg, Xor mem,reg, Xor reg,mem, Xor reg,imm
+
 ## Technologies
 
 Project is created using:
