@@ -10,10 +10,18 @@ function setRegValue(reg, value, size = 16) {
     else document.getElementById("r"+reg).innerHTML = value.padStart(4, '0').toUpperCase();
 }
 
-function getMemValue(address) {
+function getMemValue(address, byte = 1) {
+    console.log(byte);
     if(globalRuntimeError) return "";
     try {
-        return document.getElementById("m" + address.padStart(5, '0').toUpperCase()).innerHTML;
+        if (byte === 1) {
+            return document.getElementById("m" + address.padStart(5, '0').toUpperCase()).innerHTML;
+        } else {
+            ret = document.getElementById("m" + address.padStart(5, '0').toUpperCase()).innerHTML + document.getElementById("m" + (parseInt(address, 16) + 1).toString(16).padStart(5, '0').toUpperCase()).innerHTML;
+            console.log(ret);
+            return ret;
+        }
+        
     } catch(e) {
         globalRuntimeError = "Error writing to memory"
     }

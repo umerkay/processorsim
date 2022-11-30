@@ -119,7 +119,7 @@ async function executeInstruction(instruction) {
                 //MOD != 11 is fetch operand case
                 if(MOD !== "11") {
                     didAccessMemory = true;
-                    srcVal = getMemValue(((RsM === "110" && imORadd !== "") ? imORaddCNV : getRegValue(RsM)));
+                    srcVal = getMemValue(((RsM === "110" && imORadd !== "") ? imORaddCNV : getRegValue(RsM)), W === "1" ? 2: 1);
                 }
                 if(MOD === "11") srcVal = getRegValue(RsM, W == "1" ? 16 : 8);
                 destVal = getRegValue(Reg);
