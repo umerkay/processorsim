@@ -42,12 +42,26 @@ to speed up instruction execution (Pipelining). It usually requires +5V power su
 under a 40 pin dual inlined package.
 
 ## File names and Description
-
 The following is a list of filenames along with their description.
+
+### Instructions
+
+#### ROL
+
+ROL instruction stands for Rotate Left.The contents of the operand (register) are rotated left bit-wise by some number of positions depending on the count value.During this rotation, the most significant bit (MSB) is moved into the least significant bit (LSB) position.
+Variations: reg, immediate 
+
+
+#### ROR
+
+ROR instruction stands for Rotate Right. The contents of the operand are rotated right bit-wise by some number of positions depending on the count value.Since this instruction rotates the bits right, the least significant bit (LSB) is moved into the most significant bit (MSB) position.
+Variations: reg, immediate 
+
+
 
 ## Technologies
 
-Project is created with:
+Project is created using:
 * JavaScript 
 * HTML
 * CSS
