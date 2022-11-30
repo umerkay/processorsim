@@ -57,7 +57,15 @@ Variations: reg, immediate
 ROR instruction stands for Rotate Right. The contents of the operand are rotated right bit-wise by some number of positions depending on the count value.Since this instruction rotates the bits right, the least significant bit (LSB) is moved into the most significant bit (MSB) position.
 Variations: reg, immediate 
 
+#### SHR
 
+The SHR instruction is an abbreviation for ‘Shift Right’. The SHR instruction is used to shift the bits of the operand destination to the right, by the number of bits specified in the count operand and is filled with zeroes.
+Variations: shl/shr reg, immediate value
+
+#### SHL
+
+The SHL instruction is an abbreviation for ‘Shift Left’. This instruction simply shifts the mentioned bits in the register to the left side one by one by inserting the same number (bits that are being shifted) of zeroes from the right end. 
+Variations: shl/shr reg, immediate value
 
 ## Technologies
 
