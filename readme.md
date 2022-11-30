@@ -92,6 +92,10 @@ Variations: And reg,reg, And reg,mem, And reg,imm
 Performs a bit-wise xor of the two operands, and stores the result in destination.
 Variations: Xor reg,reg, Xor mem,reg, Xor reg,mem, Xor reg,imm
 
+#### CBW
+
+It converts byte in Al to word in Ax. It takes first digit hex of Al and converts to binary, takes 1st digit of binary and extends this number to first 2 hex of Ax. Copy rest of the data in Al into last 2 hex of Ax as it is.
+
 ## Technologies
 
 Project is created using:
@@ -104,7 +108,13 @@ Project is created using:
 
 ## Lessons Learnt
 
-What did you learn while building this project? What challenges did you face and how did you overcome them?
+* 8086 memory and register addressing
+* 8086 machine code generation for each instruction
+* Assemby language instructions implementation back end logic
+* linking UI and code 
+* Complex problem solving due to issues that arose during creation of parsing and compiling
+* Github coordination in group, inclusing installation, setup
+
 
 ## Setup
 
