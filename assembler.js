@@ -41,14 +41,18 @@ function parseOperand(op) {
         result.regORhex = "H";
         //conv all other radix to hex
         let length;
-        if (inner[inner.length-1].toUpperCase() === "B") {
+        if (inner[0] == '-') {
+            length = 9;
+        } else if (inner[inner.length-1].toUpperCase() === "B") {
             length = parseInt(inner, 2).toString(2).length;
         } else if (inner[inner.length - 1].toUpperCase() === "H") {
             length = parseInt(inner, 16).toString(2).length;
         } else {
             length = parseInt(inner).toString(2).length;
         }
+        
         result.code = operandTo8086Hex(inner, length <= 8 ? 2 : 4);
+        console.log(result.code);
         if(result.code + "" === "NaN") return "Invalid operand"
         if(result.code + "" === "0NaN") return "Invalid operand"
 
@@ -116,7 +120,7 @@ async function executeInstruction(instruction) {
                 //MOD != 11 is fetch operand case
                 if(MOD !== "11") {
                     didAccessMemory = true;
-                    srcVal = getMemValue(((RsM === "110" && imORadd !== "") ? imORaddCNV : getRegValue(RsM)));
+                    srcVal = getMemValue(((RsM === "110" && imORadd !== "") ? imORaddCNV : getRegValue(RsM)), W === "1" ? 2: 1);
                 }
                 if(MOD === "11") srcVal = getRegValue(RsM, W == "1" ? 16 : 8);
                 destVal = getRegValue(Reg);

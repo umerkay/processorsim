@@ -42,12 +42,63 @@ to speed up instruction execution (Pipelining). It usually requires +5V power su
 under a 40 pin dual inlined package.
 
 ## File names and Description
-
 The following is a list of filenames along with their description.
+
+### Instructions
+
+#### ROL
+
+ROL instruction stands for Rotate Left.The contents of the operand (register) are rotated left bit-wise by some number of positions depending on the count value.During this rotation, the most significant bit (MSB) is moved into the least significant bit (LSB) position.
+Variations: reg, immediate 
+
+
+#### ROR
+
+ROR instruction stands for Rotate Right. The contents of the operand are rotated right bit-wise by some number of positions depending on the count value.Since this instruction rotates the bits right, the least significant bit (LSB) is moved into the most significant bit (MSB) position.
+Variations: reg, immediate 
+
+#### SHR
+
+The SHR instruction is an abbreviation for ‘Shift Right’. The SHR instruction is used to shift the bits of the operand destination to the right, by the number of bits specified in the count operand and is filled with zeroes.
+Variations: shl/shr reg, immediate value
+
+#### SHL
+
+The SHL instruction is an abbreviation for ‘Shift Left’. This instruction simply shifts the mentioned bits in the register to the left side one by one by inserting the same number (bits that are being shifted) of zeroes from the right end. 
+Variations: shl/shr reg, immediate value
+
+#### INC
+
+The INC instruction is used for incrementing an operand by one. It works on a single operand that can be either in a register or in memory.
+Vaiations: Inc/Dec reg, Inc/Dec mem  (Memory in register like [ax] but not like [s00005h].)
+
+#### DEC
+
+The DEC instruction is used for decrementing an operand by one. It works on a single operand that can be either in a register or in memory.
+Vaiations: Inc/Dec reg, Inc/Dec mem  (Memory in register like [ax] but not like [s00005h].)
+
+#### NOT:
+
+NOT operation performs the 1s complement of the operand 
+Variations: Not reg, Not mem
+
+#### AND:
+
+The AND instruction performs a Boolean (bitwise) AND operation between each pair of matching bits in two operands and places the result in the destination operand.
+Variations: And reg,reg, And reg,mem, And reg,imm
+
+#### XOR
+
+Performs a bit-wise xor of the two operands, and stores the result in destination.
+Variations: Xor reg,reg, Xor mem,reg, Xor reg,mem, Xor reg,imm
+
+#### CBW
+
+It converts byte in Al to word in Ax. It takes first digit hex of Al and converts to binary, takes 1st digit of binary and extends this number to first 2 hex of Ax. Copy rest of the data in Al into last 2 hex of Ax as it is.
 
 ## Technologies
 
-Project is created with:
+Project is created using:
 * JavaScript 
 * HTML
 * CSS
@@ -57,7 +108,13 @@ Project is created with:
 
 ## Lessons Learnt
 
-What did you learn while building this project? What challenges did you face and how did you overcome them?
+* 8086 memory and register addressing
+* 8086 machine code generation for each instruction
+* Assemby language instructions implementation back end logic
+* linking UI and code 
+* Complex problem solving due to issues that arose during creation of parsing and compiling
+* Github coordination in group, inclusing installation, setup
+
 
 ## Setup
 
