@@ -93,6 +93,7 @@ async function executeInstruction(instruction) {
     // if(instruction.machCode === "111111111011") return "The bits are upset they were associated with Manahil";
     if(processorMode) await animateFetch(instruction);
     if(instruction.machCode === instrSet["NOP"].opcode) return;
+
     //CYCLE: FETCH PC, CIR
     //decode CU
     let {opcode, D, W, MOD, Reg, RsM, imORadd, op1, op2, instrTYPE, machCode} = instruction;
@@ -233,7 +234,7 @@ async function executeInstruction(instruction) {
         displayError("Runtime error: " + globalRuntimeError);
     }
     //increment PC
-    // setRegValue(regs["PC"].code, (parseInt(getRegValue(regs["PC"].code), 16) + 1).toString(16), W == "1" ? 16 : 8);
+    setRegValue(regs["PC"].code, (parseInt(getRegValue(regs["PC"].code), 16) + 1).toString(16), W == "1" ? 16 : 8);
 }
 
 function hexToBinary(hex, length=16) {

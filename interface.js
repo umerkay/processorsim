@@ -20,7 +20,6 @@ function getMemValue(address) {
 }
 
 function setMemValue(address, value) {
-    console.log(value);
     if(globalRuntimeError) return "";
     try {
         if (parseInt(value, 16).toString(16).length > 2) {
@@ -58,6 +57,7 @@ async function executeAll() {
 function executeNext() {
     if(globalRuntimeError || globalCompilerError) return;
     resetError("");
+    // console.log("hiihihi")
     if(parseInt(getRegValue(regs["PC"].code), 16) < instructions.length) {
         executeInstruction(instructions[parseInt(getRegValue(regs['PC'].code),16)]);
     } else {
@@ -110,7 +110,7 @@ async function animateFetch(x) {
     // processorConnections["cu_mem"].dash = {animation: true};
 
     document.getElementById("rir").innerHTML = parseInt(x.machCode, 2).toString(16).padStart(x.machCode.length/4, "0");
-    setRegValue(regs["PC"].code, (parseInt(getRegValue(regs["PC"].code), 16) + 1).toString(16));
+    // setRegValue(regs["PC"].code, (parseInt(getRegValue(regs["PC"].code), 16) + 1).toString(16));
     await delay(animationDelay);
     processorConnections["cu_mem"].color = "rgba(219, 219, 219 ,1)";
     processorConnections["cu_mem"].startPlug = "square";

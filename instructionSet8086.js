@@ -13,7 +13,7 @@ function generalizedFinalParse(operation, op1, op2) {
     else if (op1.isMemory === false) {
         D = "1";
         Reg = op1.code;   
-        if (op1.length != op2.length) {
+        if (op1.length < op2.length) {
             return "Cannot " + operation + ": operands of different sizes.";
         }      
         if (op2.isMemory === false && op2.regORhex === "R") {
