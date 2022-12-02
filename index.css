@@ -4,6 +4,16 @@
   margin: 0px;
 }
 
+.animating {
+  transition-duration: 300ms;
+  background-color: #006eff !important;
+  color: white !important;
+}
+
+#rir {
+  font-size: 0.75rem;
+}
+
 body {
   width: 100%;
   display: flex;
@@ -102,16 +112,27 @@ body {
 #main.task2 #leftUI #cu, #main.task2 #leftUI #alu {
   position: relative;
 }
+#main.task2 #leftUI #cu .cycletext, #main.task2 #leftUI #alu .cycletext {
+  display: none;
+}
 #main.task2 #leftUI #cu img, #main.task2 #leftUI #alu img {
   display: none;
 }
+#main.task2 #leftUI #cu.animate .cycletext, #main.task2 #leftUI #alu.animate .cycletext {
+  display: block;
+  position: absolute;
+  top: -30px;
+  color: blue;
+  font-size: 1rem;
+}
 #main.task2 #leftUI #cu.animate img, #main.task2 #leftUI #alu.animate img {
+  width: 50px;
   display: block;
   position: absolute;
   top: 10px;
   right: 10px;
-  -webkit-animation: rotation 0.3s infinite linear;
-          animation: rotation 0.3s infinite linear;
+  -webkit-animation: rotation 0.5s infinite linear;
+          animation: rotation 0.5s infinite linear;
 }
 @-webkit-keyframes rotation {
   from {
@@ -320,7 +341,9 @@ body {
 }
 #main #regs .register .value {
   background-color: rgb(228, 228, 228);
+  color: black;
   border-radius: 100rem;
+  transition-duration: 300ms;
   padding: 0.2rem 1rem;
   letter-spacing: 6px;
   font-family: "Courier New", Courier, monospace;
@@ -341,6 +364,7 @@ body {
 }
 #main #mem #memlocs {
   display: grid;
+  grid-auto-flow: column;
   font-size: 0.8rem;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
@@ -395,7 +419,6 @@ body {
 .tooltip {
   position: relative;
   display: inline-block;
-  border-bottom: 1px dotted black;
   outline: none;
 }
 

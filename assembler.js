@@ -4,7 +4,7 @@ let globalCompilerError;
 let globalRuntimeError;
 
 function parseAssembly(text) {
-    instructions = text.split("\n").filter(x => x != 0);
+    instructions = text.split("\n").filter(x => (x != 0 && x[0] !== ";"));
     globalCompilerError = false;
     resetError();
     setRegValue(regs["PC"].code, "0000");
@@ -33,6 +33,7 @@ function parseOperand(op) {
     if(result.isMemory && op[op.length-1] !== "]") return "Expected ]";
 
     inner = result.isMemory ? op.match(/\[([^)]+)\]/)[1] : op;
+    console.log(inner)
     if (regs[inner] != undefined) {
         result.regORhex = "R";
         result.code = regs[inner].code;
@@ -52,7 +53,7 @@ function parseOperand(op) {
         }
         
         result.code = operandTo8086Hex(inner, length <= 8 ? 2 : 4);
-        console.log(result.code);
+        // console.log(result.code);
         if(result.code + "" === "NaN") return "Invalid operand"
         if(result.code + "" === "0NaN") return "Invalid operand"
 
@@ -93,12 +94,18 @@ function instructionToMachine(instr, i) {
 const delay = (timeToDelay) => new Promise((resolve) => setTimeout(resolve, timeToDelay));
 
 async function executeInstruction(instruction) {
-    // if(instruction.machCode === "11111111101") return "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA";
-    // if(instruction.machCode === "111111111011") return "The bits are upset they were associated with Manahil";
-    if(processorMode) await animateFetch(instruction);
-    if(instruction.machCode === instrSet["NOP"].opcode) return;
+    if(instruction.machCode === instrSet["NOP"].opcode[0]) {
+        if(processorMode) {
+            await animateFetch(instruction);
+            await animateDecode(instruction);
+            await delay(animationDelay);
+        }
+        setRegValue(regs["PC"].code, (parseInt(getRegValue(regs["PC"].code), 16) + 1).toString(16));
+        return;
+    };
 
     //CYCLE: FETCH PC, CIR
+    if(processorMode) await animateFetch(instruction);
     //decode CU
     let {opcode, D, W, MOD, Reg, RsM, imORadd, op1, op2, instrTYPE, machCode} = instruction;
     let tempCNV, imORaddCNV;
@@ -128,7 +135,7 @@ async function executeInstruction(instruction) {
                 //fetch operand case
                 //CYCLE: FETCH OPERAND
                 didAccessMemory = true;
-                destVal = getMemValue((RsM === "110" && imORadd !== "") ? imORaddCNV : getRegValue(RsM));
+                destVal = getMemValue((RsM === "110" && imORadd !== "") ? imORaddCNV : getRegValue(RsM), W === "1" ? 2: 1);
                 srcVal = getRegValue(Reg);
             }
         } else if((D === "" && opcode === instrSet[instrTYPE].opcode[1]) || (D === "1")) {
@@ -138,7 +145,7 @@ async function executeInstruction(instruction) {
         } else if((D === "" && opcode === instrSet[instrTYPE].opcode[2]) || (D === "0")) {
             //CYCLE: FETCH OPERAND
             didAccessMemory = true;
-            destVal = getMemValue(getRegValue(RsM));
+            destVal = getMemValue(getRegValue(RsM), W === "1" ? 2: 1);
             srcVal = imORaddCNV;
         }
     } else if(instrSet[instrTYPE].opNo === 1) {
@@ -146,7 +153,7 @@ async function executeInstruction(instruction) {
             destVal = getRegValue(RsM, W == "1" ? 16 : 8);
         } else {
             didAccessMemory = true;
-            destVal = getMemValue(getRegValue(RsM, W=="1" ? 16: 8))
+            destVal = getMemValue(getRegValue(RsM, W=="1" ? 16: 8), W === "1" ? 2: 1)
         }
     } else {
         if(machCode === instrSet["DAA"].opcode[0]) {
@@ -156,6 +163,7 @@ async function executeInstruction(instruction) {
             destVal = getRegValue(regs["AL"].code, 8);
         }
     }
+    if(instrTYPE === "MOV") didAccessMemory = false;
     if(processorMode) await animateFetchOperand(didAccessMemory, destVal, srcVal);
     
     //execute ALU
@@ -173,12 +181,13 @@ async function executeInstruction(instruction) {
     }
 
     //store reg to memory
-    let didWriteToMemory = false;
+    let storeType = "NONE";
     if (instrSet[instrTYPE].opNo === 2) {
         if(opcode == instrSet[instrTYPE].opcode[0]) {
             if(D === "1") {
                 // if(MOD === "11") { //mov ax, bx
                     setRegValue(Reg, ALUResult, W == "1" ? 16 : 8)
+                    storeType = "REG";
                 // } else { //MOD == 00
                     //mox ax, [bx OR 1234H]
                     // setRegValue(Reg, ALUResult, W == "1" ? 16 : 8);
@@ -187,23 +196,27 @@ async function executeInstruction(instruction) {
                 //mov [ax], bx
                 //mov [1234], bx
                 //CYCLE: STORE
-                didWriteToMemory = true;
+                storeType = "MEM";
                 setMemValue((RsM === "110" && imORadd !== "") ? imORaddCNV : getRegValue(RsM), ALUResult);
             }
         } else if(instrTYPE === "MOV") {
             if (opcode === instrSet[instrTYPE].opcode[1]) {
+                storeType = "REG";
                 setRegValue(opcode === "100000" ? RsM : Reg, ALUResult, W == "1" ? 16 : 8); //mov ax, 1234h
             }
             else if(opcode === instrSet[instrTYPE].opcode[2]) {
                 didWriteToMemory = true;
+                storeType = "MEM";
                 setMemValue(getRegValue(RsM), ALUResult); //mov [ax], 1234h    
             }
         } else {
             if (D === "1") {
+                storeType = "REG";
                 setRegValue(opcode === "100000" ? RsM : Reg, ALUResult, W == "1" ? 16 : 8); //mov ax, 1234h
             }
             else if(D === "0") {
                 didWriteToMemory = true;
+                storeType = "MEM";
                 setMemValue(getRegValue(RsM), ALUResult); //mov [ax], 1234h    
             }
         }
@@ -211,33 +224,40 @@ async function executeInstruction(instruction) {
     else if(instrSet[instrTYPE].opNo === 1){
         if (MOD == "11") {
             if(opcode === "111101" && Reg === "100") {
+                storeType = "REG";
                 setRegValue(regs["AX"].code, ALUResult, 16);
             } else {
+                storeType = "REG";
                 setRegValue(RsM, ALUResult, W=="1" ? 16: 8);
             }
         } else {
             didWriteToMemory = true;
             if(opcode === "111101" && Reg === "100") {
+                storeType = "MEM";
                 setMemValue(getRegValue(regs["AX"].code, 16), ALUResult);
             } else {
+                storeType = "MEM";
                 setMemValue(getRegValue(RsM, W=="1"? 16 : 8), ALUResult);
             }
         }
     } else {
         if(machCode === instrSet["DAA"].opcode[0]) {
+            storeType = "REG";
             setRegValue(regs["AL"].code, ALUResult, 8);
         }
         if(machCode === instrSet["CBW"].opcode[0]) {
+            storeType = "REG";
             setRegValue(regs["AX"].code, ALUResult, 16);
         }
     }
     
-    if(processorMode) if(didWriteToMemory) animateStore();
+    if(processorMode && storeType !== "NONE") animateStore(storeType);
 
     if(globalRuntimeError) {
         displayError("Runtime error: " + globalRuntimeError);
     }
     //increment PC
+    if(processorMode) await delay(animationDelay);
     setRegValue(regs["PC"].code, (parseInt(getRegValue(regs["PC"].code), 16) + 1).toString(16), W == "1" ? 16 : 8);
 }
 
@@ -259,7 +279,7 @@ function operandTo8086Hex(op, length = 4) {
         }
     } else if (op[op.length-1].toUpperCase() === "B") {
         if (parseInt(op, 2) < 0) {
-            return parseInt((twosComplement((parseInt(op, 2) * -1).toString(2))).padStart(length * 4, "1"),2).toString(16);
+            return parseInt((twosC1omplement((parseInt(op, 2) * -1).toString(2))).padStart(length * 4, "1"),2).toString(16);
         } else {
             return parseInt(op, 2).toString(16).padStart(length, "0");
         }

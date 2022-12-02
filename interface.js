@@ -6,19 +6,22 @@ function getRegValue(reg, size = 16) {
 
 function setRegValue(reg, value, size = 16) {
     if(globalRuntimeError) return "";
-    if(size === 8) document.getElementById("r"+reg).innerHTML = document.getElementById("r"+reg).innerHTML.slice(0, 2) + value.padStart(2, '0').toUpperCase();
-    else document.getElementById("r"+reg).innerHTML = value.padStart(4, '0').toUpperCase();
+    let regel = document.getElementById("r"+reg);
+    regel.classList.add("animating");
+
+    if(size === 8) regel.innerHTML = regel.innerHTML.slice(0, 2) + value.padStart(2, '0').toUpperCase();
+    else regel.innerHTML = value.padStart(4, '0').toUpperCase();
+
+    setTimeout(() => regel.classList.remove("animating"), 600);
 }
 
-function getMemValue(address, byte = 1) {
-    console.log(byte);
+function getMemValue(address, byte = 2) {
     if(globalRuntimeError) return "";
     try {
         if (byte === 1) {
             return document.getElementById("m" + address.padStart(5, '0').toUpperCase()).innerHTML;
         } else {
             ret = document.getElementById("m" + address.padStart(5, '0').toUpperCase()).innerHTML + document.getElementById("m" + (parseInt(address, 16) + 1).toString(16).padStart(5, '0').toUpperCase()).innerHTML;
-            console.log(ret);
             return ret;
         }
         
@@ -31,10 +34,28 @@ function setMemValue(address, value) {
     if(globalRuntimeError) return "";
     try {
         if (parseInt(value, 16).toString(16).length > 2) {
-            document.getElementById("m" + address.padStart(5, '0').toUpperCase()).innerHTML = value.substring(0,2);
-            document.getElementById("m" + (parseInt(address,16)+1).toString(16).padStart(5, '0').toUpperCase()).innerHTML = value.substring(2);
+            let memel1 = document.getElementById("m" + address.padStart(5, '0').toUpperCase());
+            let memel2 = document.getElementById("m" + (parseInt(address,16)+1).toString(16).padStart(5, '0').toUpperCase());
+            memel1.classList.add("animating");
+            memel2.classList.add("animating");
+
+            memel1.innerHTML = value.substring(0,2);
+            memel2.innerHTML = value.substring(2);
+
+            setTimeout(() => {
+                memel1.classList.remove("animating");
+                memel2.classList.remove("animating");
+            }, 600);
+            
         } else {
-            document.getElementById("m"+address.padStart(5, '0').toUpperCase()).innerHTML = parseInt(value, 16).toString(16).padStart(2, '0').toUpperCase();
+            let memel1 = document.getElementById("m"+address.padStart(5, '0').toUpperCase());
+            memel1.classList.add("animating");
+
+            memel1.innerHTML = parseInt(value, 16).toString(16).padStart(2, '0').toUpperCase();
+
+            setTimeout(() => {
+                memel1.classList.remove("animating");
+            }, 600);
         }
     } catch(e) {
         globalRuntimeError = "Error writing to memory";
@@ -42,6 +63,7 @@ function setMemValue(address, value) {
 }
 
 async function executeAll() {
+    if(instructions.length === 0) alert("Assemble program first")
     document.getElementById("execbtn").disabled = true;
     document.getElementById("asmbbtn").disabled = true;
     document.getElementById("execOnebtn").disabled = true;
@@ -69,7 +91,8 @@ function executeNext() {
     if(parseInt(getRegValue(regs["PC"].code), 16) < instructions.length) {
         executeInstruction(instructions[parseInt(getRegValue(regs['PC'].code),16)]);
     } else {
-        console.log("All instructions executed");
+        alert("All instructions executed.")
+        // console.log("All instructions executed");
     }
 }
 
@@ -110,69 +133,106 @@ function connect(a, b, objs = {}) {
     );
 }
 
-let animationDelay = 500;
+let animationDelay = 1000;
 
 async function animateFetch(x) {
-    processorConnections["cu_mem"].color = "blue"
-    processorConnections["cu_mem"].startPlug = "arrow1"
+    processorConnections["cu_mem"].color = "blue";
+    processorConnections["cu_mem"].startPlug = "arrow1";
+    processorConnections["cu_mem"].startLabel = "FETCH CYCLE";
     // processorConnections["cu_mem"].dash = {animation: true};
 
-    document.getElementById("rir").innerHTML = parseInt(x.machCode, 2).toString(16).padStart(x.machCode.length/4, "0");
+    setRegValue("ir", parseInt(x.machCode, 2).toString(16).padStart(x.machCode.length/4, "0"));
+    
     // setRegValue(regs["PC"].code, (parseInt(getRegValue(regs["PC"].code), 16) + 1).toString(16));
-    await delay(animationDelay);
+    await delay(animationDelay/2);
     processorConnections["cu_mem"].color = "rgba(219, 219, 219 ,1)";
     processorConnections["cu_mem"].startPlug = "square";
+    processorConnections["cu_mem"].startLabel = "";
+    await delay(animationDelay/2);
 }
 
 async function animateDecode(x) {
 
     document.getElementById("cu").classList.add("animate");
-    await delay(animationDelay);
+    await delay(animationDelay/2);
     document.getElementById("cu").classList.remove("animate");
-    document.getElementById("rir").innerHTML = x.orgInstr.toLowerCase();
+    setRegValue("ir", x.orgInstr.toLowerCase());
+    await delay(animationDelay/2);
+
 }
 
 async function animateFetchOperand(didAccessMemory, dest, src) {
     processorConnections["regs_alu"].color = "blue";
     processorConnections["regs_alu"].endPlug = "arrow1";
+    processorConnections["cu_regs"].color = "blue";
+    processorConnections["cu_regs"].endPlug = "arrow1";
+    processorConnections["alu_cu"].startPlug = "arrow1";
+    processorConnections["alu_cu"].color = "blue";
 
     if(didAccessMemory) {
         processorConnections["alu_mem"].color = "blue";
         processorConnections["alu_mem"].startPlug = "arrow1";
+        processorConnections["alu_mem"].endLabel = "FETCH OPERAND";
     }
 
-    await delay(animationDelay);
+    await delay(animationDelay/2);
 
-    if(dest) document.getElementById("a0").innerHTML = dest;
-    if(src) document.getElementById("a1").innerHTML = dest;
+    if(src) {
+        setRegValue("a1", src);
+    }
+    if(dest) {
+        setRegValue("a0", dest);
+    }
+
+    await delay(animationDelay/2);
 
     processorConnections["regs_alu"].color = "rgba(219, 219, 219, 1)";
     processorConnections["regs_alu"].endPlug = "square";
+    processorConnections["cu_regs"].color = "rgba(219, 219, 219, 1)";
+    processorConnections["alu_cu"].color = "rgba(219, 219, 219, 1)";
+    processorConnections["alu_cu"].startPlug = "square";
+    processorConnections["cu_regs"].endPlug = "square";
 
     if(didAccessMemory) {
         processorConnections["alu_mem"].color = "rgba(219, 219, 219, 1)";
         processorConnections["alu_mem"].startPlug = "square";
+        processorConnections["alu_mem"].endLabel = "";
     }
 }
 
 async function animateExecute(result) {
     document.getElementById("alu").classList.add("animate");
 
-    await delay(animationDelay);
+    await delay(animationDelay/2);
 
-    if(result) document.getElementById("a0").innerHTML = result;
+    if(result) setRegValue("a1", result);
+    // setRegValue("a1", "0000");
     document.getElementById("alu").classList.remove("animate");
 
+    await delay(animationDelay/2);
 }
 
-async function animateStore() {
-    processorConnections["alu_mem"].color = "blue";
-    processorConnections["alu_mem"].endPlug = "arrow1";
+async function animateStore(storetype) {
+    if(storetype == "REG") {
+        processorConnections["regs_alu"].color = "blue";
+        processorConnections["regs_alu"].startPlug = "arrow1";
+    
+        await delay(animationDelay/2);
+    
+        processorConnections["regs_alu"].color = "rgba(219, 219, 219, 1)";
+        processorConnections["regs_alu"].startPlug = "square";
+    } else {
+        processorConnections["alu_mem"].color = "blue";
+        processorConnections["alu_mem"].endPlug = "arrow1";
+        processorConnections["alu_mem"].endLabel = "STORE CYCLE";
 
-    await delay(animationDelay);
+        await delay(animationDelay/2);
 
-    processorConnections["alu_mem"].color = "rgba(219, 219, 219, 1)";
-    processorConnections["alu_mem"].endPlug = "square";
+        processorConnections["alu_mem"].color = "rgba(219, 219, 219, 1)";
+        processorConnections["alu_mem"].endPlug = "square";
+        processorConnections["alu_mem"].endLabel = "";
+        await delay(animationDelay/2);
+    }
 }
 
 function toggleProcessorMode() {

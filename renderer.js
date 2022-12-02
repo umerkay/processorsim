@@ -55,6 +55,27 @@ window.addEventListener("load", () => {
         parseAssembly(document.getElementById("asminptext").value);
     });
 
+    document.getElementById("asminptext").value = `;SAMPLE PROGRAM
+
+;Calculate 5432h + 3040h
+mov [ax], 5432h
+mov bx, 3040h
+add [ax], bx
+
+;Calculate 789h - 234h
+inc ax
+inc ax
+mov [ax], 789h
+mov cx, 234h
+sub [ax], cx
+
+;Calculate 1011 AND 1110
+inc ax
+inc ax
+mov [ax], 1011b
+mov dl, 1110b
+and [ax], dl`
+
     // document.body.appendChild(regsEl);
     // document.body.appendChild(memsEl);
 });

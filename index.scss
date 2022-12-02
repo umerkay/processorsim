@@ -2,7 +2,16 @@
     box-sizing: border-box;
     font-family: 'Raleway';
     margin: 0px;
-    // transition-duration: 300ms;
+}
+
+.animating {
+    transition-duration: 300ms;
+    background-color: #006eff !important;
+    color: white !important;
+}
+
+#rir {
+    font-size: 0.75rem;
 }
 
 body {
@@ -97,17 +106,31 @@ body {
             }
 
             #cu, #alu {
+                .cycletext {
+                    display: none;
+                    // transition-duration: 300ms;
+                    // opacity: 0;
+                }
                 position: relative;
                 img {
                     display: none;
                 }
                 &.animate {
+                    .cycletext {
+                        display: block;
+                    // opacity: 1;
+                        position: absolute;
+                        top: -30px;
+                        color: blue;
+                        font-size: 1rem;
+                    }
                     img {
+                        width: 50px;
                         display: block;
                         position: absolute;
                         top: 10px;
                         right: 10px;
-                        animation: rotation 0.3s infinite linear;
+                        animation: rotation 0.5s infinite linear;
                     }
                     @keyframes rotation {
                     from {
@@ -353,7 +376,9 @@ body {
             }
             .value {
                 background-color: rgb(228, 228, 228);
+                color: black;
                 border-radius: 100rem;
+            transition-duration: 300ms;
                 padding: 0.2rem 1rem;
                 letter-spacing: 6px;
                 font-family: 'Courier New', Courier, monospace;
@@ -376,7 +401,9 @@ body {
         }
         #memlocs {
             display: grid;
+            grid-auto-flow: column;
             font-size: 0.8rem;
+            // flex-direction: column;
             grid-template-columns: 1fr 1fr;
             grid-template-rows: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr; 
             column-gap: 10px;
@@ -439,7 +466,7 @@ body {
 .tooltip {
     position: relative;
     display: inline-block;
-    border-bottom: 1px dotted black;
+    // border-bottom: 1px dotted black;
     outline: none;
   }
   

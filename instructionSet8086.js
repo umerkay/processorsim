@@ -7,16 +7,17 @@ function generalizedFinalParse(operation, op1, op2) {
     let opcode = Opcode[0];
     let D = "", Reg = "", RsM = "", MOD = "", W = "";
     let imORadd = "";
+    console.log(op1, op2)
     if (op1.isMemory === false && op1.regORhex === "H") {
         return "Cannot " + operation + " to immediate value.";
     }
     else if (op1.isMemory === false) {
         D = "1";
-        Reg = op1.code;   
-        // if (op1.length < op2.length) {
-        //     return "Cannot " + operation + ": operands of different sizes.";
-        // }      
+        Reg = op1.code;         
         if (op2.isMemory === false && op2.regORhex === "R") {
+            if (op1.length != op2.length) {
+                return "Cannot " + operation + ": operands of different sizes.";
+            }
             RsM = op2.code;
             MOD = "11";                    
         } else if (op2.isMemory && op2.regORhex === "R") {           
@@ -101,7 +102,11 @@ function generalizedFinalParse(operation, op1, op2) {
             imORadd = code.substring(8) + code.substring(0,8);
         }
     }
-    W = (op1.length || op2.length) === 16 ? "1": "0";
+    if(op1.isMemory === false) {
+        W = op1.length === 16 ? "1": "0"
+    } else {
+        W = op2.length === 16 ? "1": "0"
+    }
 
     if(instrSet[operation].finalParse instanceof Function) {
         instrSet[operation].finalParse(...arguments);
@@ -199,6 +204,7 @@ let instrSet = {
         opcode: ["000000","100000", "100000"],                                       
         opNo: 2,
         ALUfunction: (dest, source) => {
+            console.log(dest, source);
             // console.log(dest, source, hexToJSInt(dest), hexToJSInt(source), hexToJSInt(dest) + hexToJSInt(source))
             let res = operandTo8086Hex((hexToJSInt(dest) + hexToJSInt(source)).toString());
             if(res.length > 4) return res.slice(1);
@@ -228,7 +234,7 @@ let instrSet = {
         opcode:["001000", "100000","100000"],
         opNo:2,
         ALUfunction: (dest, source) => {
-            // console.log(dest, source);
+            console.log(dest, source);
             return (parseInt(dest, 16) & parseInt(source, 16)).toString(16)
         },
         // ALUfunction: console.log
@@ -378,6 +384,23 @@ let regs = {
         length: 8,
         doRender: false
     },
+    "alu0" :{
+        code: "a0",
+        doRender: false
+    },
+    "alu1" :{
+        code: "a1",
+        doRender: false
+    },
+    "BX": {
+        code: "110",
+        length: 16,
+    },
+    "BL": {
+        code: "110",
+        length: 8,
+        doRender: false
+    },
     "CX": {
         code: "001",
         length: 16,
@@ -395,15 +418,6 @@ let regs = {
         code: "010",
         length: 8,
         doRender: false
-    },
-    "BL": {
-        code: "110",
-        length: 8,
-        doRender: false
-    },
-    "BX": {
-        code: "110",
-        length: 16,
     },
     "PC": {
         code: "pc",

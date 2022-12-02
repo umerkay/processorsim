@@ -35,23 +35,30 @@
                 </div>
                 <div id="asminpcontainer">
                     <textarea id="asminptext" spellcheck="false"></textarea>
-                    <textarea disabled readonly id="asmoutput"></textarea>
+                    <textarea disabled readonly id="asmoutput">Press "Shift" + "T" to toggle Task 2 Mode
+                    </textarea>
                 </div>
             </div>
             <div id="alu" class="card task2only">
+                <div class="cycletext">EXECUTE CYCLE</div>
                 <img src="src/loader.svg" alt="">
                 <div class="heading">ALU</div>
                 <div>
-                    <div class="value" id="a0"></div>
-                    <div class="value" id="a1"></div>
+                    <div class="value" id="ra0"></div>
+                    <div class="value" id="ra1"></div>
                 </div>
             </div>
             <div id="cu" class="card task2only">
+                <div class="cycletext">DECODE CYCLE</div>
                 <img src="src/loader.svg" alt="">
                 <div class="heading">Control Unit</div>
                 <div>
-                    <div class="value" id="rpc"></div>
-                    <div class="value" id="rir"></div>
+                    <div class="value tooltip" id="rpc">
+                        <!-- <span class="tooltiptext">Program Counter</span> -->
+                    </div>
+                    <div class="value tooltip" id="rir">
+                        <!-- <span class="tooltiptext">Instruction Register</span> -->
+                    </div>
                 </div>
             </div>
             <!-- <div id="bu" class="card task2only">
