@@ -56,42 +56,65 @@ Reg, Imm  | ROL AX, 4
 #### ROR
 
 ROR instruction stands for Rotate Right. The contents of the operand are rotated right bit-wise by some number of positions depending on the count value. Since this instruction rotates the bits right, the least significant bit (LSB) is moved into the most significant bit (MSB) position.
-Variations: reg, immediate 
+Variation(s)  | Example
+------------- | -------------
+Reg, Imm  | ROR AX, 4
 
 #### SHR
 
 The SHR instruction is an abbreviation for ‘Shift Right’. The SHR instruction is used to shift the bits of the operand destination to the right, by the number of bits specified in the count operand and is filled with zeroes.
-Variations: shl/shr reg, immediate value
+Variation(s)  | Example
+------------- | -------------
+Reg, Imm  | SHR AX, 4
 
 #### SHL
 
 The SHL instruction is an abbreviation for ‘Shift Left’. This instruction simply shifts the mentioned bits in the register to the left side one by one by inserting the same number (bits that are being shifted) of zeroes from the right end. 
-Variations: shl/shr reg, immediate value
+Variation(s)  | Example
+------------- | -------------
+Reg, Imm  | SHL AX, 4
 
 #### INC
 
 The INC instruction is used for incrementing an operand by one. It works on a single operand that can be either in a register or in memory.
-Vaiations: Inc/Dec reg, Inc/Dec mem  (Memory in register like [ax] but not like [s00005h].)
+Variation(s)  | Example
+------------- | -------------
+Reg  | Inc AX
+Mem  | Inc \[AX]
 
 #### DEC
 
 The DEC instruction is used for decrementing an operand by one. It works on a single operand that can be either in a register or in memory.
-Vaiations: Inc/Dec reg, Inc/Dec mem  (Memory in register like [ax] but not like [s00005h].)
+Variation(s)  | Example
+------------- | -------------
+Reg  | Dec AX
+Mem  | Dec \[AX]
 
 #### NOT:
 
 NOT operation performs the 1s complement of the operand 
-Variations: Not reg, Not mem
+Variation(s)  | Example
+------------- | -------------
+Reg  | Not AX
+Mem  | Not \[AX]
 
 #### AND:
 
 The AND instruction performs a Boolean (bitwise) AND operation between each pair of matching bits in two operands and places the result in the destination operand.
-Variations: And reg,reg, And reg,mem, And reg,imm
+Variation(s)  | Example
+------------- | -------------
+Reg, Reg  | AND AX, BX
+Reg, Imm  | AND AX, FF23h
+Reg, Mem  | AND AX, \[BX]
+Mem, Imm  | AND \[AX], FF23h
+Mem, Reg  | AND \[AX], AX
 
 #### XOR
 
 Performs a bit-wise xor of the two operands, and stores the result in destination.
-Variations: Xor reg,reg, Xor mem,reg, Xor reg,mem, Xor reg,imm
+Variation(s)  | Example
+------------- | -------------
+See [AND]
 
 #### CBW
 
