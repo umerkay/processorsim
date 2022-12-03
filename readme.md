@@ -96,7 +96,7 @@ Decimal | A number with no base specified | 385
 ### Adressing
 
 In our simulator, a memory location can be accessed either by storing its address in a register and accessing it (as [REG]); or, as is only allowed in two operands instructions, by putting the memory address in square brackets directly (as [1234h]).
-Segmentation has not been implemented in this simulator, therefore when accessing memory address using registers, the address is internally appended with a “0” to the left.
+Segmentation has not been implemented in this simulator, therefore when accessing memory address using registers, the address is internally appended with a “0” to the left.  
 Thus, if AX is 1234h, then [ax] accesses the memory location 01234h. Moreover, in our implementation, displacement values are not allowed when addressing memory.
 
 ## File names and Description
