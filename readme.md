@@ -87,7 +87,7 @@ The simulator displays 16 memory locations, each of one byte. By default, these 
 ### Immediate Values
 
 In our simulator, the following possibilities of immediate values can be given in instructions:
-Base | Represenation | Example
+Base | Representation | Example
 -----|--------------|----------
 Binary | A binary number is followed by a "b" | 1001b
 Hexadecimal | A Hex number is followed by an "h" | FA37h
