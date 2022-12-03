@@ -22,6 +22,16 @@ body {
   padding: 0px;
   margin: 0px;
 }
+body.dark {
+  filter: invert(1);
+  background-color: rgb(20, 20, 20);
+}
+body.dark button {
+  filter: invert(1);
+}
+body.dark .value {
+  filter: invert(1);
+}
 
 #main {
   transition-duration: 400ms;

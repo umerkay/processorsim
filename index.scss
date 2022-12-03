@@ -21,7 +21,16 @@ body {
     justify-content: center;
     padding: 0px;
     margin: 0px;
-    // background-color: rgb(252, 252, 252);
+    &.dark {
+        filter: invert(1);
+        background-color: rgb(20, 20, 20);
+        button {
+            filter: invert(1);
+        }
+        .value {
+            filter: invert(1);
+        }
+    }
 }
 
 #main {

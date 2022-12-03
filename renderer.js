@@ -79,3 +79,7 @@ and [ax], dl`
     // document.body.appendChild(regsEl);
     // document.body.appendChild(memsEl);
 });
+
+function activateDarkMode() {
+    document.body.classList.toggle("dark");
+}
