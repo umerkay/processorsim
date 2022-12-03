@@ -118,14 +118,19 @@ See [AND](#AND)
 
 #### CBW
 
-It converts byte in Al to word in Ax. It takes first digit hex of Al and converts to binary, takes 1st digit of binary and extends this number to first 2 hex of Ax. Copy rest of the data in Al into last 2 hex of Ax as it is.
+The CBW (convert byte to word) instruction copies the sign (bit 7) in the source operand into every bit in the AH register.
+Example Usage:
+```
+MOV AL, -9h
+CBW
+```
 
 ## Technologies
 
 Project is created using:
 * JavaScript 
 * HTML
-* CSS
+* SCSS
 
 ## Output Screenshots
 
