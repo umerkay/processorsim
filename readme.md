@@ -19,12 +19,12 @@ Choose a simple circuit of 8086/88 (preferably circuit but you can also use bloc
 ## Table of contents
 * [Prerequisites](#Prerequisites)
 * [8086 Overview](#8086-Overview)
+* [Setup and Usage](#Setup-and-Usage)
 * [Implementation](Implementation)
 * [File names and Description](#File-names-and-Description)
 * [Technologies](#Technologies)
 * [Output Screenshots](#Output-Screenshots)
 * [Lessons Learnt](#Lessons-Learnt)
-* [Setup](#Setup)
 * [FAQ](#FAQ)
 * [Acknowledgements](#Acknowledgements)
 * [Feedback](#Feedback)
@@ -43,6 +43,20 @@ Maximum mode. Its improvements over 8085 microprocessor includes pipelining, ins
 and segmentation. It can pre-fetch upto 6 instruction byte from memory and queue them in order
 to speed up instruction execution (Pipelining). It usually requires +5V power supply. It is packaged
 under a 40 pin dual inlined package.
+
+## Setup and Usage
+This is a web project, so no setup or download is required. Simply visit the link at the top of this document. However, if you wish to run this application locally, simply clone the repository and open index.html in any browser.
+
+The application is very intuitive to use. The main screen offers four sections.
+The memory and register sections which display the contents of memory and registers respectively. Assembly code is entered into the textarea input and any and all outputs are shown in the output box.
+![image](https://user-images.githubusercontent.com/20483712/205465014-3f889730-d48d-43bb-9966-7c67c856d511.png)
+You can press "Shift" + "T" to toggle processor mode, which shows all animations and a simple block diagram for 8086.
+![image](https://user-images.githubusercontent.com/20483712/205465105-2dc86fe8-ee1a-43b0-90b3-6dadadc7205c.png)
+
+Button  |  Name  |  Purpose
+------------- | -------------
+![image](https://user-images.githubusercontent.com/20483712/205465136-b808c9ef-8bb2-446a-bca1-016685a15dc8.png)  |  Assemble  |  Assembles the code into machine code and displays the contents in the output box.
+
 
 ## Implementation
 
@@ -165,9 +179,6 @@ After assembling and executing: Assembled binary is shown in the output box, whi
 * linking UI and code 
 * Complex problem solving due to issues that arose during creation of parsing and compiling
 * Github coordination in group, inclusing installation, setup
-
-
-## Setup
 
 ## FAQ
 
