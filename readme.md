@@ -145,6 +145,17 @@ Project is created using:
 
 ## Output Screenshots
 
+### Task 1
+#### Example 1
+```
+mov [ax], 5432h
+mov bx, 3040h
+add [ax], bx
+```
+Before assembling and executing
+![image](https://user-images.githubusercontent.com/20483712/205464862-c817a5e9-a450-4f99-9434-e3fbf6601b59.png)
+After assembling and executing: Assembled binary is shown in the output box, while the relevant register values and memory locations have been updated.
+![image](https://user-images.githubusercontent.com/20483712/205464886-98e8b415-e81f-457e-9b1c-14fd28115b09.png)
 
 ## Lessons Learnt
 
