@@ -6,7 +6,7 @@ Assembly language programming and its thorough understanding is a great asset fo
 
 ### Project Goal
 
-### Task1
+### Task 1
 
 You need to write a program with easy to graphical use interface in the programming language of your choice that will simulate the behavior of 8088/8086 processor. The program should include the conversion from assembly language to machine code as per the book (implement at least 15 different instructions with different operands).
 The program should show display the contents of the registers and memory (for simplicity you can use 8 registers and 16 memory locations).
