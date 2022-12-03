@@ -318,6 +318,7 @@ body {
   padding: 1rem;
   border-radius: 0.5rem;
   font-size: 1.25rem;
+  font-family: "Courier New", Courier, monospace;
 }
 #main #regs {
   padding: 2rem;

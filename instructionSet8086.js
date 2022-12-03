@@ -212,14 +212,6 @@ let instrSet = {
             return res;
         },
     },
-    // "SHALINA": {
-    //     opcode: ["11111111101"],
-    //     opNo: 0,
-    // },
-    // "MANAHIL": {
-    //     opcode: ["111111111011"],
-    //     opNo: 0,
-    // },
     "SUB": {
         opcode: ["000101","100000","100000"],
         opNo: 2,
@@ -261,7 +253,6 @@ let instrSet = {
             return parseInt(parseInt(dest, 16).toString(2).padStart(16, "0").split("").map(x => x == "0" ? "1" : "0").join(""), 2).toString(16);
         }
     },
-
     "INC":{
         opcode:["111111"],
         opNo:1,
@@ -269,14 +260,13 @@ let instrSet = {
             return (parseInt(dest, 16) + 1).toString(16);
         }
     }, //signed
-
     "DEC":{
         opcode: ["111111"],
         opNo:1,
         ALUfunction: (dest) => {
             return (parseInt(dest, 16) - 1).toString(16);
         }
-},//signed
+    },//signed
     "SHL":{
         opcode: ["nan", "110100", "110100"],
         opNo: 2,
@@ -289,7 +279,6 @@ let instrSet = {
             return res.toString(16);
         }
     },
-
     "SHR":{
         opcode: ["nan", "110100", "110100"],
         opNo: 2,
@@ -303,11 +292,9 @@ let instrSet = {
         }
     
     },
-
     "XCHG":{
         opcode : ["99999"],
     },
-
     "ROL":{
         opcode:["nan", "110100", "110100"],
         opNo: 2,
@@ -322,7 +309,6 @@ let instrSet = {
             return parseInt(lostBits + newbits, 2).toString(16);
         },
     },
-
     "ROR":{
         opcode:["nan","110100","110100"],
         opNo: 2,
@@ -339,7 +325,6 @@ let instrSet = {
             return parseInt(lostBits + newbits, 2).toString(16);
         },
     },
-
     "CBW":{
         opcode:["10011000"],
         opNo:0,
@@ -352,7 +337,6 @@ let instrSet = {
         }
 
     },
-
     "DAA":{
         opcode: ["00100111"],
     //     opNo: 0,
@@ -363,7 +347,6 @@ let instrSet = {
     //         return res.toString(16);
     //     }
     }, 
-
     "NEG":{
         opcode: ["111101"],
         opNo: 1,

@@ -20,7 +20,8 @@ function parseAssembly(text) {
         }
     }
     if(!globalCompilerError) {
-        document.getElementById("asmoutput").innerHTML = instructions.map(x => parseInt(x.machCode, 2).toString(16).padStart(x.machCode.length/4, "0")).join("\n").toUpperCase();
+        document.getElementById("asmoutput").innerHTML = instructions.map(x => x.machCode).join("\n").toUpperCase();
+        // document.getElementById("asmoutput").innerHTML = instructions.map(x => parseInt(x.machCode, 2).toString(16).padStart(x.machCode.length/4, "0")).join("\n").toUpperCase();
         if(processorMode)
             document.getElementById("asmoutput2").innerHTML = document.getElementById("asmoutput").innerHTML;
     }
@@ -156,9 +157,9 @@ async function executeInstruction(instruction) {
             destVal = getMemValue(getRegValue(RsM, W=="1" ? 16: 8), W === "1" ? 2: 1)
         }
     } else {
-        if(machCode === instrSet["DAA"].opcode[0]) {
-            destVal = getRegValue(regs["AL"].code, 8);
-        }
+        // if(machCode === instrSet["DAA"].opcode[0]) {
+        //     destVal = getRegValue(regs["AL"].code, 8);
+        // }
         if(machCode === instrSet["CBW"].opcode[0]) {
             destVal = getRegValue(regs["AL"].code, 8);
         }
@@ -241,10 +242,10 @@ async function executeInstruction(instruction) {
             }
         }
     } else {
-        if(machCode === instrSet["DAA"].opcode[0]) {
-            storeType = "REG";
-            setRegValue(regs["AL"].code, ALUResult, 8);
-        }
+        // if(machCode === instrSet["DAA"].opcode[0]) {
+        //     storeType = "REG";
+        //     setRegValue(regs["AL"].code, ALUResult, 8);
+        // }
         if(machCode === instrSet["CBW"].opcode[0]) {
             storeType = "REG";
             setRegValue(regs["AX"].code, ALUResult, 16);
