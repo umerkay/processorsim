@@ -19,6 +19,7 @@ Choose a simple circuit of 8086/88 (preferably circuit but you can also use bloc
 ## Table of contents
 * [Prerequisites](#Prerequisites)
 * [8086 Overview](#8086-Overview)
+* [Implementation](Implementation)
 * [File names and Description](#File-names-and-Description)
 * [Technologies](#Technologies)
 * [Output Screenshots](#Output-Screenshots)
@@ -47,6 +48,12 @@ under a 40 pin dual inlined package.
 
 ## File names and Description
 The following is a list of filenames along with their description.
+File Name  | Purpose
+------------- | -------------
+instructionSet8086.js  | This file contains all of the configuration details of our specific implementation of 8086 Assembly. It describes registers, instructions, memory addresses and contains the code for conversion of individual instructions into binary format.
+renderer.js  | This file uses the register and memory information to construct HTML elements on the screen. Registers and memory locations are dynamically rendered through JavaScript code.
+interface.js  | This file contains many helper functions that sugarcoat the HTML syntax into useful functions. It acts as an interface between our HTML independant assembler code logic, and the very HTML dependant rendering and UI logic. Animations are defined here.
+assembler.js  | This file is where all of the assembly code is converted into machine code. It parses the operands, generates assembler errors and eventually forms the binary machine code. This code is then used to execute the actual instructions. Also handles displaying animations.
 
 ### Instructions
 
