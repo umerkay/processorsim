@@ -53,9 +53,13 @@ The memory and register sections which display the contents of memory and regist
 You can press "Shift" + "T" to toggle processor mode, which shows all animations and a simple block diagram for 8086.
 ![image](https://user-images.githubusercontent.com/20483712/205465105-2dc86fe8-ee1a-43b0-90b3-6dadadc7205c.png)
 
-Button  |  Name  |  Purpose
+![image](https://user-images.githubusercontent.com/20483712/205465219-faa8b14b-15d2-4efc-b56e-da15d00735b6.png)
+Button  | Purpose
 ------------- | -------------
-![image](https://user-images.githubusercontent.com/20483712/205465136-b808c9ef-8bb2-446a-bca1-016685a15dc8.png)  |  Assemble  |  Assembles the code into machine code and displays the contents in the output box.
+Assemble  |  Assembles the code into machine code and displays the contents in the output box.
+Execute All  |  Resets PC and sequentially executes all instructions.
+Execute Next  |  Executes a single instruction and increments PC.
+Reset  |  Resets all registers and memory locations to default values.
 
 
 ## Implementation
