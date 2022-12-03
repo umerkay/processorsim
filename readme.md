@@ -114,7 +114,7 @@ Mem, Reg  | AND \[AX], AX
 Performs a bit-wise xor of the two operands, and stores the result in destination.
 Variation(s)  | Example
 ------------- | -------------
-See [AND]
+See [AND](#AND)
 
 #### CBW
 
