@@ -2,6 +2,8 @@
 
 Assembly language programming and its thorough understanding is a great asset for a Computer Science undergraduate. Experience in programming using lower-level or assembly languages gives an insight into computer architecture and computer organization that is highly valuable. 
 
+# [Project Live Here](https://umerkay.github.io/processorsim/)
+
 ### Project Goal
 
 ### Task1
@@ -40,6 +42,8 @@ Maximum mode. Its improvements over 8085 microprocessor includes pipelining, ins
 and segmentation. It can pre-fetch upto 6 instruction byte from memory and queue them in order
 to speed up instruction execution (Pipelining). It usually requires +5V power supply. It is packaged
 under a 40 pin dual inlined package.
+
+## Implementation
 
 ## File names and Description
 The following is a list of filenames along with their description.
