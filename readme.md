@@ -1,10 +1,16 @@
-# About the Project
+# ❓ About the Project
 
-Assembly language programming and its thorough understanding is a great asset for a Computer Science undergraduate. Experience in programming using lower-level or assembly languages gives an insight into computer architecture and computer organization that is highly valuable.
+This project has been made as part of the coursework required for CS 235 Computer Organisation and Assembly Language. It is a graded group assignment. The group members include:
 
-# [Project Live Here](https://umerkay.github.io/processorsim/)
+- Muhammad Umer Khan
+- Manahil Ahmad
+- Faizyab Ali Shah
+- Hina Naeem
+- Shalina Riaz
 
-### Project Goal
+# [Project Live Here 🚀](https://umerkay.github.io/processorsim/)
+
+### Project Goals 🥅
 
 ### Task 1
 
@@ -16,10 +22,9 @@ The program should also give error in case of not allowed instructions like size
 
 Choose a simple circuit of 8086/88 (preferably circuit but you can also use block diagram) The simulator should also highlight the cycles or modules (like ALU, Memory etc.) used in the current instruction.
 
-## Table of contents
+## Table of contents 📃
 
-- [Prerequisites](#Prerequisites)
-- [8086 Overview](#8086-Overview)
+- [About the 8086 Processor](#About-the-8086-Processor)
 - [Setup and Usage](#Setup-and-Usage)
 - [Implementation](#Implementation)
 - [File names and Description](#File-names-and-Description)
@@ -30,11 +35,7 @@ Choose a simple circuit of 8086/88 (preferably circuit but you can also use bloc
 - [Acknowledgements](#Acknowledgements)
 - [Feedback](#Feedback)
 
-## Prerequisites
-
-These programs are intended for those who are familiar with assembler, or have a bit of idea about it. Of course if you have knowledge of some other programming language (Basic, C/C++ ...) that may help you a lot.
-
-## 8086 Overview
+## About the 8086 Processor
 
 8086 is a 16-bit microprocessor. It has 20 bit address bus that can access upto 220 memory locations
 (1 MB). It can support upto 64K input/output ports. It provides 14, 16-bit internal registers. It has
