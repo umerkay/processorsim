@@ -75,8 +75,8 @@ In our simulator, we have implemented the following eight registers:
 - DX
 - DS
 - DI
-- [to be added]
-- [to be added]
+- BP
+- SP
 
 All the above registers are 16-bits; however, the lower 8-bits of the first four registers, i.e., AL, BL, CL, DL are addressable and accessible. The upper 8-bits of the same registers are not addressable.
 
