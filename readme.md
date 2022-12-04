@@ -21,7 +21,7 @@ Choose a simple circuit of 8086/88 (preferably circuit but you can also use bloc
 - [Prerequisites](#Prerequisites)
 - [8086 Overview](#8086-Overview)
 - [Setup and Usage](#Setup-and-Usage)
-- [Implementation](Implementation)
+- [Implementation](#Implementation)
 - [File names and Description](#File-names-and-Description)
 - [Technologies](#Technologies)
 - [Output Screenshots](#Output-Screenshots)
@@ -276,6 +276,48 @@ Before assembling and executing
 After assembling and executing: Assembled binary is shown in the output box, while the relevant register values and memory locations have been updated.
 ![image](https://user-images.githubusercontent.com/20483712/205464886-98e8b415-e81f-457e-9b1c-14fd28115b09.png)
 
+#### Example 2
+
+```
+inc ax
+inc ax
+mov [ax], 789h
+mov cx, 234h
+sub [ax], cx
+```
+
+Before assembling and executing
+![image](https://user-images.githubusercontent.com/94801715/205486996-b24e40eb-1172-4111-bea4-4294567cc921.png)
+After assembling and executing: Assembled binary is shown in the output box, while the relevant register values and memory locations have been updated.
+![image](https://user-images.githubusercontent.com/94801715/205487013-815f52ee-7d74-4ee6-a5e2-cb56e6bb196a.png)
+
+#### Example 3
+
+```
+inc ax
+inc ax
+mov [ax], 1011b
+mov dl, 1110b
+and [ax], dl
+```
+
+Before assembling and executing
+![image](https://user-images.githubusercontent.com/94801715/205487033-644b828a-c073-4b97-bbf2-74f4ad6373e9.png)
+After assembling and executing: Assembled binary is shown in the output box, while the relevant register values and memory locations have been updated.
+![image](https://user-images.githubusercontent.com/94801715/205487081-93510d1b-7128-49d1-9a8b-6e7209aa37ef.png)
+
+### Task 2
+
+The following screenshots show the animation required for task 2.
+
+![WhatsApp Image 2022-12-04 at 16 13 51](https://user-images.githubusercontent.com/94801715/205487399-3bf4abfe-fc87-4127-ad59-cd6421aa0865.jpg)
+
+![WhatsApp Image 2022-12-04 at 16 13 52](https://user-images.githubusercontent.com/94801715/205487413-01fc5e81-e5f3-4430-8973-1dad7a1262ca.jpg)
+
+![WhatsApp Image 2022-12-04 at 16 13 58](https://user-images.githubusercontent.com/94801715/205487431-64e0bd06-6b93-4f2b-bb0f-82fa367f95de.jpg)
+
+![WhatsApp Image 2022-12-04 at 16 14 06](https://user-images.githubusercontent.com/94801715/205487438-44d282e1-6b97-46b2-b69d-7cf760b2c520.jpg)
+
 ## Lessons Learnt
 
 - 8086 memory and register addressing
@@ -284,16 +326,6 @@ After assembling and executing: Assembled binary is shown in the output box, whi
 - linking UI and code
 - Complex problem solving due to issues that arose during creation of parsing and compiling
 - Github coordination in group, inclusing installation, setup
-
-## FAQ
-
-#### Question 1
-
-Answer 1
-
-#### Question 2
-
-Answer 2
 
 ## Acknowledgements
 
