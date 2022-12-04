@@ -24,6 +24,14 @@ body {
     &.dark {
         filter: invert(1);
         background-color: rgb(20, 20, 20);
+        .err {
+            filter: invert(1);
+            background-color: rgb(49, 0, 0) !important;
+            color: rgb(255, 102, 102) !important;
+        }
+        #asminptext {
+            font-weight: bold;
+        }
         button {
             filter: invert(1);
         }

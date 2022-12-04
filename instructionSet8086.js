@@ -367,20 +367,12 @@ let regs = {
         length: 8,
         doRender: false
     },
-    "alu0" :{
-        code: "a0",
-        doRender: false
-    },
-    "alu1" :{
-        code: "a1",
-        doRender: false
-    },
     "BX": {
-        code: "110",
+        code: "011",
         length: 16,
     },
     "BL": {
-        code: "110",
+        code: "011",
         length: 8,
         doRender: false
     },
@@ -412,12 +404,28 @@ let regs = {
         length: 16,
         doRender: false
     },
-    "DS": {
+    "DI": {
         code: "111",
         length: 16,
     },
-    "DI": {
+    "SP": {
+        code: "100",
+        length: 16,
+    },
+    "BP": {
+        code: "101",
+        length: 16,
+    },
+    "DS": {
         code: "011",
         length: 16,
+    },
+    "alu0" :{
+        code: "a0",
+        doRender: false
+    },
+    "alu1" :{
+        code: "a1",
+        doRender: false
     },
 }
