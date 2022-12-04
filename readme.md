@@ -64,6 +64,10 @@ Execute All | Resets PC and sequentially executes all instructions.
 Execute Next | Executes a single instruction and increments PC.
 Reset | Resets all registers and memory locations to default values.
 
+Here's the link to youtube video in which we presented the functionality of our program.
+https://youtu.be/-TMFRTRN_Kk 
+
+
 ## Implementation
 
 ### Registers
@@ -326,7 +330,7 @@ The following screenshots show the animation required for task 2.
 - Assemby language instructions implementation back end logic
 - linking UI and code
 - Complex problem solving due to issues that arose during creation of parsing and compiling
-- Github coordination in group, inclusing installation, setup
+- Github coordination in group, including installation, setup
 
 ## Acknowledgements
 
