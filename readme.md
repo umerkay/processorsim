@@ -21,7 +21,7 @@ Choose a simple circuit of 8086/88 (preferably circuit but you can also use bloc
 - [Prerequisites](#Prerequisites)
 - [8086 Overview](#8086-Overview)
 - [Setup and Usage](#Setup-and-Usage)
-- [Implementation](Implementation)
+- [Implementation](#Implementation)
 - [File names and Description](#File-names-and-Description)
 - [Technologies](#Technologies)
 - [Output Screenshots](#Output-Screenshots)
