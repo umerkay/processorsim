@@ -306,6 +306,18 @@ Before assembling and executing
 After assembling and executing: Assembled binary is shown in the output box, while the relevant register values and memory locations have been updated.
 ![image](https://user-images.githubusercontent.com/94801715/205487081-93510d1b-7128-49d1-9a8b-6e7209aa37ef.png)
 
+### Task 2
+
+The following screenshots show the animation required for task 2.
+
+![WhatsApp Image 2022-12-04 at 16 13 51](https://user-images.githubusercontent.com/94801715/205487399-3bf4abfe-fc87-4127-ad59-cd6421aa0865.jpg)
+
+![WhatsApp Image 2022-12-04 at 16 13 52](https://user-images.githubusercontent.com/94801715/205487413-01fc5e81-e5f3-4430-8973-1dad7a1262ca.jpg)
+
+![WhatsApp Image 2022-12-04 at 16 13 58](https://user-images.githubusercontent.com/94801715/205487431-64e0bd06-6b93-4f2b-bb0f-82fa367f95de.jpg)
+
+![WhatsApp Image 2022-12-04 at 16 14 06](https://user-images.githubusercontent.com/94801715/205487438-44d282e1-6b97-46b2-b69d-7cf760b2c520.jpg)
+
 ## Lessons Learnt
 
 - 8086 memory and register addressing
