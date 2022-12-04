@@ -276,6 +276,36 @@ Before assembling and executing
 After assembling and executing: Assembled binary is shown in the output box, while the relevant register values and memory locations have been updated.
 ![image](https://user-images.githubusercontent.com/20483712/205464886-98e8b415-e81f-457e-9b1c-14fd28115b09.png)
 
+#### Example 2
+
+```
+inc ax
+inc ax
+mov [ax], 789h
+mov cx, 234h
+sub [ax], cx
+```
+
+Before assembling and executing
+![image](https://user-images.githubusercontent.com/94801715/205486996-b24e40eb-1172-4111-bea4-4294567cc921.png)
+After assembling and executing: Assembled binary is shown in the output box, while the relevant register values and memory locations have been updated.
+![image](https://user-images.githubusercontent.com/94801715/205487013-815f52ee-7d74-4ee6-a5e2-cb56e6bb196a.png)
+
+#### Example 3
+
+```
+inc ax
+inc ax
+mov [ax], 1011b
+mov dl, 1110b
+and [ax], dl
+```
+
+Before assembling and executing
+![image](https://user-images.githubusercontent.com/94801715/205487033-644b828a-c073-4b97-bbf2-74f4ad6373e9.png)
+After assembling and executing: Assembled binary is shown in the output box, while the relevant register values and memory locations have been updated.
+![image](https://user-images.githubusercontent.com/94801715/205487081-93510d1b-7128-49d1-9a8b-6e7209aa37ef.png)
+
 ## Lessons Learnt
 
 - 8086 memory and register addressing
