@@ -123,6 +123,7 @@ async function executeInstruction(instruction) {
     //decode operands and fetch operands if required
     let didAccessMemory = false;
     if(instrSet[instrTYPE].opNo === 2) {
+        
         if(opcode === instrSet[instrTYPE].opcode[0]) {
             if(D === "1") {
                 //MOD != 11 is fetch operand case
@@ -137,14 +138,18 @@ async function executeInstruction(instruction) {
                 //CYCLE: FETCH OPERAND
                 didAccessMemory = true;
                 destVal = getMemValue((RsM === "110" && imORadd !== "") ? imORaddCNV : getRegValue(RsM), W === "1" ? 2: 1);
-                srcVal = getRegValue(Reg);
+                
+                srcVal = getRegValue(Reg, W=== "1" ? 16 : 8);
+                console.log(srcVal);
             }
         } else if((D === "" && opcode === instrSet[instrTYPE].opcode[1]) || (D === "1")) {
+            
             
             destVal = getRegValue(opcode === "100000" ? RsM : Reg, W == "1" ? 16 : 8);
             srcVal = imORaddCNV;
         } else if((D === "" && opcode === instrSet[instrTYPE].opcode[2]) || (D === "0")) {
             //CYCLE: FETCH OPERAND
+            
             didAccessMemory = true;
             destVal = getMemValue(getRegValue(RsM), W === "1" ? 2: 1);
             srcVal = imORaddCNV;
