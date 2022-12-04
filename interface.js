@@ -68,6 +68,7 @@ async function executeAll() {
     document.getElementById("asmbbtn").disabled = true;
     document.getElementById("execOnebtn").disabled = true;
     document.getElementById("resetbtn").disabled = true;
+    document.getElementById("tglBlocks").disabled = true;
 
     if(globalRuntimeError || globalCompilerError) return;
     resetError("");
@@ -82,6 +83,7 @@ async function executeAll() {
     document.getElementById("asmbbtn").disabled = false;
     document.getElementById("execOnebtn").disabled = false;
     document.getElementById("resetbtn").disabled = false;
+    document.getElementById("tglBlocks").disabled = false;
 }
 
 function executeNext() {

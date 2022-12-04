@@ -417,7 +417,7 @@ let regs = {
         length: 16,
     },
     "DS": {
-        code: "011",
+        code: "110",
         length: 16,
     },
     "alu0" :{
