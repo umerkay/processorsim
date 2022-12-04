@@ -285,16 +285,6 @@ After assembling and executing: Assembled binary is shown in the output box, whi
 - Complex problem solving due to issues that arose during creation of parsing and compiling
 - Github coordination in group, inclusing installation, setup
 
-## FAQ
-
-#### Question 1
-
-Answer 1
-
-#### Question 2
-
-Answer 2
-
 ## Acknowledgements
 
 - [The Intel Microprocessors 8086 ](https://userpages.umbc.edu/~squire/intel_book.pdf)
