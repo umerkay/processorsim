@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>About</title>
+</head>
+
+<body>
+    <h1 id="❓-about-the-project">❓ About the Project</h1>
+    <p>This project has been made as part of the coursework required for CS 235 Computer Organisation and Assembly
+        Language. It is a graded group assignment. The group members include:</p>
+    <ul>
+        <li>Muhammad Umer Khan</li>
+        <li>Manahil Ahmad</li>
+        <li>Faizyab Ali Shah</li>
+        <li>Hina Naeem</li>
+        <li>Shalina Riaz</li>
+    </ul>
+    <!-- <h1 id="project-live-here-🚀"><a href="https://umerkay.github.io/processorsim/">Project Live Here 🚀</a></h1> -->
+    <h3 id="project-goals-🥅">Project Goals 🥅</h3>
+    <h3 id="task-1">Task 1</h3>
+    <p>You need to write a program with easy to graphical use interface in the programming language of your choice that
+        will simulate the behavior of 8088/8086 processor. The program should include the conversion from assembly
+        language to machine code as per the book (implement at least 15 different instructions with different operands).
+        The program should show display the contents of the registers and memory (for simplicity you can use 8 registers
+        and 16 memory locations).
+        The program should also give error in case of not allowed instructions like size mismatch etc.</p>
+    <h3 id="task-2">Task 2</h3>
+    <p>Choose a simple circuit of 8086/88 (preferably circuit but you can also use block diagram) The simulator should
+        also highlight the cycles or modules (like ALU, Memory etc.) used in the current instruction.</p>
+    <h2 id="table-of-contents-📃">Table of contents 📃</h2>
+    <ul>
+        <li><a href="#About-the-8086-Processor">About the 8086 Processor</a></li>
+        <li><a href="#Setup-and-Usage">Setup and Usage</a></li>
+        <li><a href="#Implementation">Implementation</a></li>
+        <li><a href="#File-names-and-Description">File names and Description</a></li>
+        <li><a href="#Technologies">Technologies</a></li>
+        <li><a href="#Output-Screenshots">Output Screenshots</a></li>
+        <li><a href="#Lessons-Learnt">Lessons Learnt</a></li>
+        <li><a href="#FAQ">FAQ</a></li>
+        <li><a href="#Acknowledgements">Acknowledgements</a></li>
+        <li><a href="#Feedback">Feedback</a></li>
+    </ul>
+    <h2 id="about-the-8086-processor">About the 8086 Processor</h2>
+    <p>8086 is a 16-bit microprocessor. It has 20 bit address bus that can access upto 220 memory locations
+        (1 MB). It can support upto 64K input/output ports. It provides 14, 16-bit internal registers. It has
+        multiplexed address and data bus AD0 − AD15 and A16 − A19. It requires single phase clock with
+        33% duty cycle to provide internal cycle. 8086 is designed to operate in two modes- Minimum and
+        Maximum mode. Its improvements over 8085 microprocessor includes pipelining, instruction queue,
+        and segmentation. It can pre-fetch upto 6 instruction byte from memory and queue them in order
+        to speed up instruction execution (Pipelining). It usually requires +5V power supply. It is packaged
+        under a 40 pin dual inlined package.</p>
+    <h2 id="setup-and-usage">Setup and Usage</h2>
+    <p>This is a web project, so no setup or download is required. Simply visit the link at the top of this document.
+        However, if you wish to run this application locally, simply clone the repository and open index.html in any
+        browser.</p>
+    <p>The application is very intuitive to use. The main screen offers four sections.
+        The memory and register sections which display the contents of memory and registers respectively. Assembly code
+        is entered into the textarea input and any and all outputs are shown in the output box.
+        <img src="https://user-images.githubusercontent.com/20483712/205465014-3f889730-d48d-43bb-9966-7c67c856d511.png"
+            alt="image">
+        You can press &quot;Shift&quot; + &quot;T&quot; to toggle processor mode, which shows all animations and a
+        simple block diagram for 8086.
+        <img src="https://user-images.githubusercontent.com/20483712/205465105-2dc86fe8-ee1a-43b0-90b3-6dadadc7205c.png"
+            alt="image">
+    </p>
+    <p><img src="https://user-images.githubusercontent.com/20483712/205465219-faa8b14b-15d2-4efc-b56e-da15d00735b6.png"
+            alt="image"></p>
+    <table>
+        <thead>
+            <tr>
+                <th>Button</th>
+                <th>Purpose</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Assemble</td>
+                <td>Assembles the code into machine code and displays the contents in the output box.</td>
+            </tr>
+            <tr>
+                <td>Execute All</td>
+                <td>Resets PC and sequentially executes all instructions.</td>
+            </tr>
+            <tr>
+                <td>Execute Next</td>
+                <td>Executes a single instruction and increments PC.</td>
+            </tr>
+            <tr>
+                <td>Reset</td>
+                <td>Resets all registers and memory locations to default values.</td>
+            </tr>
+        </tbody>
+    </table>
+    <p>Here&#39;s the link to youtube video in which we presented the functionality of our program.
+        <a href="https://youtu.be/-TMFRTRN_Kk">https://youtu.be/-TMFRTRN_Kk</a>
+    </p>
+    <h2 id="implementation">Implementation</h2>
+    <h3 id="registers">Registers</h3>
+    <p>In our simulator, we have implemented the following eight registers:</p>
+    <ul>
+        <li>AX</li>
+        <li>BX</li>
+        <li>CX</li>
+        <li>DX</li>
+        <li>DS</li>
+        <li>DI</li>
+        <li>BP</li>
+        <li>SP</li>
+    </ul>
+    <p>All the above registers are 16-bits; however, the lower 8-bits of the first four registers, i.e., AL, BL, CL, DL
+        are addressable and accessible. The upper 8-bits of the same registers are not addressable.</p>
+    <h3 id="memory">Memory</h3>
+    <p>The simulator displays 16 memory locations, each of one byte. By default, these memory locations start at address
+        00000h till 0000Fh.</p>
+    <h3 id="immediate-values">Immediate Values</h3>
+    <p>In our simulator, the following possibilities of immediate values can be given in instructions:</p>
+    <table>
+        <thead>
+            <tr>
+                <th>Base</th>
+                <th>Representation</th>
+                <th>Example</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Binary</td>
+                <td>A binary number is followed by a &quot;b&quot;</td>
+                <td>1001b</td>
+            </tr>
+            <tr>
+                <td>Hexadecimal</td>
+                <td>A Hex number is followed by an &quot;h&quot;</td>
+                <td>FA37h</td>
+            </tr>
+            <tr>
+                <td>Decimal</td>
+                <td>A number with no base specified</td>
+                <td>385</td>
+            </tr>
+        </tbody>
+    </table>
+    <h3 id="adressing">Adressing</h3>
+    <p>In our simulator, a memory location can be accessed either by storing its address in a register and accessing it
+        (as [REG]); or, as is only allowed in two operands instructions, by putting the memory address in square
+        brackets directly (as [1234h]).
+        Segmentation has not been implemented in this simulator, therefore when accessing memory address using
+        registers, the address is internally appended with a “0” to the left.<br>Thus, if AX is 1234h, then [ax]
+        accesses the memory location 01234h. Moreover, in our implementation, displacement values are not allowed when
+        addressing memory.<br>Whenever performing two operands instructions on a register and a memory location, two
+        consecutive memory locations (16-bits) are addressed if the register is 16-bits register (such as AX); otherwise
+        only one memory location is addressed.</p>
+    <h4 id="allowed">Allowed</h4>
+    <pre><code>MOV [AX], BX
+MOV BX, [1234h]
+NEG [AX]
+</code></pre>
+    <h4 id="not-allowed">Not Allowed</h4>
+    <pre><code>MOV [AX + 5h], BX
+MOV [1000h + 5h], BX
+NEG [1234h]
+</code></pre>
+    <h2 id="file-names-and-description">File names and Description</h2>
+    <p>The following is a list of filenames along with their description.</p>
+    <table>
+        <thead>
+            <tr>
+                <th>File Name</th>
+                <th>Purpose</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>instructionSet8086.js</td>
+                <td>This file contains all of the configuration details of our specific implementation of 8086 Assembly.
+                    It describes registers, instructions, memory addresses and contains the code for conversion of
+                    individual instructions into binary format.</td>
+            </tr>
+            <tr>
+                <td>renderer.js</td>
+                <td>This file uses the register and memory information to construct HTML elements on the screen.
+                    Registers and memory locations are dynamically rendered through JavaScript code.</td>
+            </tr>
+            <tr>
+                <td>interface.js</td>
+                <td>This file contains many helper functions that sugarcoat the HTML syntax into useful functions. It
+                    acts as an interface between our HTML independant assembler code logic, and the very HTML dependant
+                    rendering and UI logic. Animations are defined here.</td>
+            </tr>
+            <tr>
+                <td>assembler.js</td>
+                <td>This file is where all of the assembly code is converted into machine code. It parses the operands,
+                    generates assembler errors and eventually forms the binary machine code. This code is then used to
+                    execute the actual instructions. Also handles displaying animations.</td>
+            </tr>
+        </tbody>
+    </table>
+    <h3 id="instructions">Instructions</h3>
+    <h4 id="mov">MOV</h4>
+    <p>The MOV instruction is a two operands instruction. It takes data from a source and copies it into a destination.
+        The general format of a MOV instruction is: MOV destination, source.
+        In our simulator, we have implemented the following variations of the mov instruction:</p>
+    <table>
+        <thead>
+            <tr>
+                <th>Variation(s)</th>
+                <th>Example</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>REG, REG</td>
+                <td>MOV AX, BX</td>
+            </tr>
+            <tr>
+                <td>REG, [REG]</td>
+                <td>MOV AX, [BX]</td>
+            </tr>
+            <tr>
+                <td>[REG], REG</td>
+                <td>MOV [AX], BX</td>
+            </tr>
+            <tr>
+                <td>REG, IMM</td>
+                <td>MOV AX, 1234h</td>
+            </tr>
+            <tr>
+                <td>[REG], IMM</td>
+                <td>MOV [AX], 1234h</td>
+            </tr>
+            <tr>
+                <td>REG, MEM</td>
+                <td>MOV AX, [1234h]</td>
+            </tr>
+            <tr>
+                <td>MEM, REG</td>
+                <td>MOV [1234h], BX</td>
+            </tr>
+        </tbody>
+    </table>
+    <h4 id="add">ADD</h4>
+    <p>The ADD instruction is a two operands instruction. The general format for this instruction is: ADD destination,
+        source. As its intuitive name suggests, this instruction adds the data in the source register to the data in the
+        destination register and saves it in the destination register.
+        We have implemented the same variations as <a href="#MOV">MOV</a>.</p>
+    <h4 id="sub">SUB</h4>
+    <p>The SUB instruction is a two operands instruction. Its general format is: SUB destination, source. This
+        instruction, again thanks to our intuitive naming system, subtracts the data in the source register from the
+        destination register and stores it in the destination register. In case the result of the operation is a
+        negative number, it is stored in 2’s complement form.
+        We have implemented the same variations as <a href="#MOV">MOV</a>.</p>
+    <h4 id="or">OR</h4>
+    <p>The OR operation is a two operands instruction. The general structure of OR instruction is: OR destination,
+        source. This instruction performs the bitwise OR operation on the corresponding bits of the destination and
+        source registers and stores the result in that specific bit of the destination register.
+        The variations implemented are the same as <a href="#MOV">MOV</a>.</p>
+    <h4 id="mul">MUL</h4>
+    <p>The MUL instruction stands for multiply. It takes only one operand, a register. The general formal for MUL
+        instruction is: MUL, REG. The MUL instruction multiplies the data in “al” register with the data of the register
+        given in the instruction.
+        This instruction only takes 8-bit registers as operands, such as “bl”, “cl”, etc.</p>
+    <h4 id="nop">NOP</h4>
+    <p>NOP stands for “No operation”. This instruction does nothing.</p>
+    <h4 id="neg">NEG</h4>
+    <p>The NEG instruction stands for “negate”, and it is a single operand instruction. The general format of this
+        instruction is NEG destination. This instruction multiplies the value in the destination with -1 (that is, it
+        negates the value) and stores it back in the destination.
+        The negative values are stored in 2’s complement form; whereas negative values, if negated again, are stored
+        back in normal form. The following variations have been implemented here:</p>
+    <table>
+        <thead>
+            <tr>
+                <th>Variation(s)</th>
+                <th>Example</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>NEG REG</td>
+                <td>NEG AX</td>
+            </tr>
+            <tr>
+                <td>NEG [REG]</td>
+                <td>NEG [BX]</td>
+            </tr>
+        </tbody>
+    </table>
+    <h4 id="rol">ROL</h4>
+    <p>ROL instruction stands for Rotate Left.The contents of the operand (register) are rotated left bit-wise by some
+        number of positions depending on the count value. During this rotation, the most significant bit (MSB) is moved
+        into the least significant bit (LSB) position.</p>
+    <table>
+        <thead>
+            <tr>
+                <th>Variation(s)</th>
+                <th>Example</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Reg, Imm</td>
+                <td>ROL AX, 4</td>
+            </tr>
+        </tbody>
+    </table>
+    <h4 id="ror">ROR</h4>
+    <p>ROR instruction stands for Rotate Right. The contents of the operand are rotated right bit-wise by some number of
+        positions depending on the count value. Since this instruction rotates the bits right, the least significant bit
+        (LSB) is moved into the most significant bit (MSB) position.</p>
+    <table>
+        <thead>
+            <tr>
+                <th>Variation(s)</th>
+                <th>Example</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Reg, Imm</td>
+                <td>ROR AX, 4</td>
+            </tr>
+        </tbody>
+    </table>
+    <h4 id="shr">SHR</h4>
+    <p>The SHR instruction is an abbreviation for ‘Shift Right’. The SHR instruction is used to shift the bits of the
+        operand destination to the right, by the number of bits specified in the count operand and is filled with
+        zeroes.</p>
+    <table>
+        <thead>
+            <tr>
+                <th>Variation(s)</th>
+                <th>Example</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Reg, Imm</td>
+                <td>SHR AX, 4</td>
+            </tr>
+        </tbody>
+    </table>
+    <h4 id="shl">SHL</h4>
+    <p>The SHL instruction is an abbreviation for ‘Shift Left’. This instruction simply shifts the mentioned bits in the
+        register to the left side one by one by inserting the same number (bits that are being shifted) of zeroes from
+        the right end.</p>
+    <table>
+        <thead>
+            <tr>
+                <th>Variation(s)</th>
+                <th>Example</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Reg, Imm</td>
+                <td>SHL AX, 4</td>
+            </tr>
+        </tbody>
+    </table>
+    <h4 id="inc">INC</h4>
+    <p>The INC instruction is used for incrementing an operand by one. It works on a single operand that can be either
+        in a register or in memory.</p>
+    <table>
+        <thead>
+            <tr>
+                <th>Variation(s)</th>
+                <th>Example</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Reg</td>
+                <td>Inc AX</td>
+            </tr>
+            <tr>
+                <td>Mem</td>
+                <td>Inc [AX]</td>
+            </tr>
+        </tbody>
+    </table>
+    <h4 id="dec">DEC</h4>
+    <p>The DEC instruction is used for decrementing an operand by one. It works on a single operand that can be either
+        in a register or in memory.</p>
+    <table>
+        <thead>
+            <tr>
+                <th>Variation(s)</th>
+                <th>Example</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Reg</td>
+                <td>Dec AX</td>
+            </tr>
+            <tr>
+                <td>Mem</td>
+                <td>Dec [AX]</td>
+            </tr>
+        </tbody>
+    </table>
+    <h4 id="not">NOT:</h4>
+    <p>NOT operation performs the 1s complement of the operand</p>
+    <table>
+        <thead>
+            <tr>
+                <th>Variation(s)</th>
+                <th>Example</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Reg</td>
+                <td>Not AX</td>
+            </tr>
+            <tr>
+                <td>Mem</td>
+                <td>Not [AX]</td>
+            </tr>
+        </tbody>
+    </table>
+    <h4 id="and">AND:</h4>
+    <p>The AND instruction performs a Boolean (bitwise) AND operation between each pair of matching bits in two operands
+        and places the result in the destination operand.</p>
+    <table>
+        <thead>
+            <tr>
+                <th>Variation(s)</th>
+                <th>Example</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Reg, Reg</td>
+                <td>AND AX, BX</td>
+            </tr>
+            <tr>
+                <td>Reg, Imm</td>
+                <td>AND AX, FF23h</td>
+            </tr>
+            <tr>
+                <td>Reg, Mem</td>
+                <td>AND AX, [BX]</td>
+            </tr>
+            <tr>
+                <td>Mem, Imm</td>
+                <td>AND [AX], FF23h</td>
+            </tr>
+            <tr>
+                <td>Mem, Reg</td>
+                <td>AND [AX], AX</td>
+            </tr>
+        </tbody>
+    </table>
+    <h4 id="xor">XOR</h4>
+    <p>Performs a bit-wise xor of the two operands, and stores the result in destination.</p>
+    <table>
+        <thead>
+            <tr>
+                <th>Variation(s)</th>
+                <th>Example</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>See <a href="#AND">AND</a></td>
+                <td></td>
+            </tr>
+        </tbody>
+    </table>
+    <h4 id="cbw">CBW</h4>
+    <p>The CBW (convert byte to word) instruction copies the sign (bit 7) in the source operand into every bit in the AH
+        register.
+        Example Usage:</p>
+    <pre><code>MOV AL, -9h
+CBW
+</code></pre>
+    <h2 id="technologies">Technologies</h2>
+    <p>Project is created using:</p>
+    <ul>
+        <li>JavaScript</li>
+        <li>HTML</li>
+        <li>SCSS</li>
+    </ul>
+    <h2 id="output-screenshots">Output Screenshots</h2>
+    <h3 id="task-1-1">Task 1</h3>
+    <h4 id="example-1">Example 1</h4>
+    <pre><code>mov [ax], 5432h
+mov bx, 3040h
+add [ax], bx
+</code></pre>
+    <p>Before assembling and executing
+        <img src="https://user-images.githubusercontent.com/20483712/205464862-c817a5e9-a450-4f99-9434-e3fbf6601b59.png"
+            alt="image">
+        After assembling and executing: Assembled binary is shown in the output box, while the relevant register values
+        and memory locations have been updated.
+        <img src="https://user-images.githubusercontent.com/20483712/205464886-98e8b415-e81f-457e-9b1c-14fd28115b09.png"
+            alt="image">
+    </p>
+    <h4 id="example-2">Example 2</h4>
+    <pre><code>inc ax
+inc ax
+mov [ax], 789h
+mov cx, 234h
+sub [ax], cx
+</code></pre>
+    <p>Before assembling and executing
+        <img src="https://user-images.githubusercontent.com/94801715/205486996-b24e40eb-1172-4111-bea4-4294567cc921.png"
+            alt="image">
+        After assembling and executing: Assembled binary is shown in the output box, while the relevant register values
+        and memory locations have been updated.
+        <img src="https://user-images.githubusercontent.com/94801715/205487013-815f52ee-7d74-4ee6-a5e2-cb56e6bb196a.png"
+            alt="image">
+    </p>
+    <h4 id="example-3">Example 3</h4>
+    <pre><code>inc ax
+inc ax
+mov [ax], 1011b
+mov dl, 1110b
+and [ax], dl
+</code></pre>
+    <p>Before assembling and executing
+        <img src="https://user-images.githubusercontent.com/94801715/205487033-644b828a-c073-4b97-bbf2-74f4ad6373e9.png"
+            alt="image">
+        After assembling and executing: Assembled binary is shown in the output box, while the relevant register values
+        and memory locations have been updated.
+        <img src="https://user-images.githubusercontent.com/94801715/205487081-93510d1b-7128-49d1-9a8b-6e7209aa37ef.png"
+            alt="image">
+    </p>
+    <h3 id="task-2-1">Task 2</h3>
+    <p>The following screenshots show the animation required for task 2.</p>
+    <p><img src="https://user-images.githubusercontent.com/94801715/205487399-3bf4abfe-fc87-4127-ad59-cd6421aa0865.jpg"
+            alt="WhatsApp Image 2022-12-04 at 16 13 51"></p>
+    <p><img src="https://user-images.githubusercontent.com/94801715/205487413-01fc5e81-e5f3-4430-8973-1dad7a1262ca.jpg"
+            alt="WhatsApp Image 2022-12-04 at 16 13 52"></p>
+    <p><img src="https://user-images.githubusercontent.com/94801715/205487431-64e0bd06-6b93-4f2b-bb0f-82fa367f95de.jpg"
+            alt="WhatsApp Image 2022-12-04 at 16 13 58"></p>
+    <p><img src="https://user-images.githubusercontent.com/94801715/205487438-44d282e1-6b97-46b2-b69d-7cf760b2c520.jpg"
+            alt="WhatsApp Image 2022-12-04 at 16 14 06"></p>
+    <h2 id="lessons-learnt">Lessons Learnt</h2>
+    <ul>
+        <li>8086 memory and register addressing</li>
+        <li>8086 machine code generation for each instruction</li>
+        <li>Assemby language instructions implementation back end logic</li>
+        <li>linking UI and code</li>
+        <li>Complex problem solving due to issues that arose during creation of parsing and compiling</li>
+        <li>Github coordination in group, including installation, setup</li>
+    </ul>
+    <h2 id="acknowledgements">Acknowledgements</h2>
+    <ul>
+        <li><a href="https://userpages.umbc.edu/~squire/intel_book.pdf">The Intel Microprocessors 8086 </a></li>
+    </ul>
+    <h2 id="feedback">Feedback</h2>
+    <p>If you have any feedback, please reach out to us at <a
+            href="mailto:&#x68;&#x6e;&#97;&#x65;&#x65;&#x6d;&#x2e;&#98;&#115;&#x63;&#x73;&#x32;&#49;&#x73;&#x65;&#x65;&#99;&#115;&#64;&#115;&#x65;&#101;&#x63;&#115;&#x2e;&#101;&#100;&#117;&#x2e;&#x70;&#x6b;">&#x68;&#x6e;&#97;&#x65;&#x65;&#x6d;&#x2e;&#98;&#115;&#x63;&#x73;&#x32;&#49;&#x73;&#x65;&#x65;&#99;&#115;&#64;&#115;&#x65;&#101;&#x63;&#115;&#x2e;&#101;&#100;&#117;&#x2e;&#x70;&#x6b;</a>
+    </p>
+
+
+</body>
+
+</html>

@@ -204,11 +204,9 @@ let instrSet = {
         opcode: ["000000","100000", "100000"],                                       
         opNo: 2,
         ALUfunction: (dest, source) => {
-            console.log(dest, source);
             // console.log(dest, source, hexToJSInt(dest), hexToJSInt(source), hexToJSInt(dest) + hexToJSInt(source))
             let res = operandTo8086Hex((hexToJSInt(dest) + hexToJSInt(source)).toString());
             if(res.length > 4) return res.slice(1);
-            return res.length <= 4 ? res : "FFFF";
             return res;
         },
     },
@@ -226,7 +224,6 @@ let instrSet = {
         opcode:["001000", "100000","100000"],
         opNo:2,
         ALUfunction: (dest, source) => {
-            console.log(dest, source);
             return (parseInt(dest, 16) & parseInt(source, 16)).toString(16)
         },
         // ALUfunction: console.log
@@ -257,14 +254,22 @@ let instrSet = {
         opcode:["111111"],
         opNo:1,
         ALUfunction: (dest) => {
-            return (parseInt(dest, 16) + 1).toString(16);
+            // return (parseInt(dest, 16) + 1).toString(16);
+            let res = operandTo8086Hex((hexToJSInt(dest) + 1).toString());
+            if(res.length > 4) return res.slice(1);
+            // if(res < 0) globalRuntimeError = "Negative value in result of SUB";
+            return res; 
         }
     }, //signed
     "DEC":{
         opcode: ["111111"],
         opNo:1,
         ALUfunction: (dest) => {
-            return (parseInt(dest, 16) - 1).toString(16);
+            // return (parseInt(dest, 16) + 1).toString(16);
+            let res = operandTo8086Hex((hexToJSInt(dest) - 1).toString());
+            if(res.length > 4) return res.slice(1);
+            // if(res < 0) globalRuntimeError = "Negative value in result of SUB";
+            return res; 
         }
     },//signed
     "SHL":{
@@ -292,9 +297,6 @@ let instrSet = {
         }
     
     },
-    "XCHG":{
-        opcode : ["99999"],
-    },
     "ROL":{
         opcode:["nan", "110100", "110100"],
         opNo: 2,
@@ -304,8 +306,8 @@ let instrSet = {
         ALUfunction: (dest,steps) => {
             steps = parseInt(steps, 16);
             let b16bit = dest.split("").map(x => parseInt(x, 16).toString(2).padStart(4, "0")).join("");
-            let newbits = b16bit.slice(0, steps);
-            let lostBits = b16bit.slice(steps);
+            let newbits = b16bit.slice(0, steps); 0
+            let lostBits = b16bit.slice(steps); 111
             return parseInt(lostBits + newbits, 2).toString(16);
         },
     },
@@ -316,7 +318,6 @@ let instrSet = {
         //TTT=RRR=001
         defReg: "001",
         ALUfunction: (dest,steps) => {
-            console.log(steps);
             steps = parseInt(steps, 16);
             let b16bit = dest.split("").map(x => parseInt(x, 16).toString(2).padStart(4, "0")).join("");
             let newbits = b16bit.slice(0, (dest.length*4)-steps);
@@ -331,22 +332,11 @@ let instrSet = {
         //needs to be implemented for no operand operation, 
         //also set value of AX to the val returned from ALU func
         ALUfunction: (dest)=> {
-            console.log(dest);
             let b16bit = dest.split("").map(x => parseInt(x, 16).toString(2).padStart(4, "0")).join("");
             return (b16bit[0] === "0" ? "00" : "FF") + dest;
         }
 
     },
-    "DAA":{
-        opcode: ["00100111"],
-    //     opNo: 0,
-    //     ALUfunction: (dest) => {
-    //         let res = parseInt(dest, 16);
-    //         if(res > 9) res += 6;
-    //         if(parseInt(res.toString(16)[0]) > 9) res += 6*16;
-    //         return res.toString(16);
-    //     }
-    }, 
     "NEG":{
         opcode: ["111101"],
         opNo: 1,

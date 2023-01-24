@@ -302,7 +302,7 @@ function operandTo8086Hex(op, length = 4) {
 
 function hexToJSInt(num) {
     let b16bit = num.split("").map(x => parseInt(x, 16));
-    if (b16bit[0] === "1") {
+    if (b16bit[0] >= 8) {
         return -1 * parseInt(twosComplement(parseInt(num, 16).toString(2)), 2);
     } else {
         return parseInt(parseInt(num, 16).toString(2), 2);
